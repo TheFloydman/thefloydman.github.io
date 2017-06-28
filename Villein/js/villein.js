@@ -10,17 +10,23 @@ function getURLParameter(name) {
 
 function convert10to4 () {
 	
-	canvasSingleDigit = document.createElement("CANVAS");
-	canvasSingleDigit.id = "canvasOne";
-	canvasSingleDigit.width = 100;
-	canvasSingleDigit.height = 100;
-	document.body.appendChild(canvasSingleDigit);
+	canvasFinal = document.createElement("CANVAS");
+	canvasFinal.id = "canvasFinal";
+	canvasFinal.width = Number(getURLParameter('panelwidth'));
+	canvasFinal.height = canvasFinal.width;
+	document.body.appendChild(canvasFinal);
 	
 	canvasAllDigits = document.createElement("CANVAS");
 	canvasAllDigits.id = "canvasTwo";
-	canvasAllDigits.width = 100;
-	canvasAllDigits.height = 100;
+	canvasAllDigits.width = canvasFinal.width/1.5;
+	canvasAllDigits.height = canvasFinal.height/1.5;
 	document.body.appendChild(canvasAllDigits);
+	
+	canvasSingleDigit = document.createElement("CANVAS");
+	canvasSingleDigit.id = "canvasOne";
+	canvasSingleDigit.width = canvasAllDigits.width/2;
+	canvasSingleDigit.height = canvasAllDigits.height/2;
+	document.body.appendChild(canvasSingleDigit);
 	
 	radiusCircle = canvasSingleDigit.width/5;
 	pinch = canvasSingleDigit.width*0.08;
@@ -114,7 +120,6 @@ function drawCanvasTwo () {
 }
 
 function drawCanvasFinal () {
-	var canvasFinal = document.getElementById("canvasFinal");
 	var ctx = canvasFinal.getContext("2d");
 	var img = document.getElementById("canvasTwo");
 	ctx.strokeStyle = "#66CAD9";
@@ -129,7 +134,7 @@ function drawCanvasFinal () {
 	ctx.translate(-canvasFinal.width/2,-canvasFinal.height/2)
 	ctx.clearRect(0,0,canvasFinal.width,canvasFinal.height);
 	ctx.drawImage(img,(canvasFinal.width-img.width)/2,(canvasFinal.height-img.height)/2);
-	ctx.lineWidth=4;
+	ctx.lineWidth=canvasAllDigits.width/50;
 	ctx.strokeRect((canvasFinal.width-img.width)/2,(canvasFinal.height-img.height)/2,img.width,img.height);
 	ctx.globalCompositeOperation="destination-over";
 	ctx.fillStyle="#345885";
