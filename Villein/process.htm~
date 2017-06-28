@@ -1,0 +1,30 @@
+<!-- Created by Dan Floyd (aka "Floydman"). -->
+
+<!DOCTYPE html>
+<html>
+
+<head>
+
+<script src="js/villein.js"></script>
+
+</head>
+
+<body>
+
+Number in Base 10:
+<input type="number" id="input" onkeyup="onPress_ENTER()">
+<input type="submit" value="Convert" id="submit" onclick="numberCheck()">
+
+<p id="base4">Number in Base 4:</p>
+<p id="digits">Number of Digits:</p>
+<p id="layers">Number of Layers:</p>
+
+<p><canvas id="canvasOne" height="100px" width="100px" style="border:1px solid #000000;"></canvas></p>
+
+<p><canvas id="canvasTwo" height="100px" width="100px" style="border:1px solid #000000;"></canvas></p>
+
+<p><canvas id="canvasFinal" height="150px" width="150px" style="border:1px solid #000000;"></canvas></p>
+
+</body>
+
+</html>
