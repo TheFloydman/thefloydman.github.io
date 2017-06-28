@@ -26,7 +26,7 @@ function convert10to4 () {
 	pinch = canvasSingleDigit.width*0.08;
 	
 	// Get the value of the input field.
-	var base10 = Number(getURLParameter('base10input'));
+	base10 = Number(getURLParameter('base10input'));
 	// Convert it to base 4.
 	base4 = base10.toString(4);
 	// Count the number of digits in the base 4 number.
