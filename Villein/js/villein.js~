@@ -2,32 +2,31 @@
 
 var rotated = false;
 
-function onPress_ENTER () {
-	
-        var keyPressed = event.keyCode || event.which;
+window.onload = convert10to4;
 
-        if(keyPressed == 13)
-        {
-        	numberCheck();
-        }
-}
-
-function numberCheck () {
-	
-	var inputNumber = document.getElementById("input")
-        if (Number(inputNumber.value) >= 0 && Number(inputNumber.value) <= 1023) {
-        	convert10to4();
-        } else {
-        	alert("Number must be between 0 and 1023.")
-        }
+function getURLParameter(name) {
+  return decodeURIComponent((new RegExp('[?|&]' + name + '=' + '([^&;]+?)(&|#|;|$)').exec(location.search) || [null, ''])[1].replace(/\+/g, '%20')) || null;
 }
 
 function convert10to4 () {
 	
-	canvasSingleDigit = document.getElementById("canvasOne");
+	canvasSingleDigit = document.createElement("CANVAS");
+	canvasSingleDigit.id = "canvasOne";
+	canvasSingleDigit.width = 100;
+	canvasSingleDigit.height = 100;
+	document.body.appendChild(canvasSingleDigit);
+	
+	canvasAllDigits = document.createElement("CANVAS");
+	canvasAllDigits.id = "canvasTwo";
+	canvasAllDigits.width = 100;
+	canvasAllDigits.height = 100;
+	document.body.appendChild(canvasAllDigits);
+	
+	radiusCircle = canvasSingleDigit.width/5;
+	pinch = canvasSingleDigit.width*0.08;
 	
 	// Get the value of the input field.
-	var base10 = Number(document.getElementById("input").value);
+	var base10 = Number(getURLParameter('base10input'));
 	// Convert it to base 4.
 	base4 = base10.toString(4);
 	// Count the number of digits in the base 4 number.
@@ -35,21 +34,13 @@ function convert10to4 () {
 	if (base4 == 0 && digits == 0) {
 		digits = digits + 1;
 	}
-	// Display converted number and digit count.
-	var baseTitle = "Number in Base 4: ";
-	var digitsTitle = "Number of Digits: ";
-	document.getElementById("base4").innerHTML = baseTitle.concat(String(base4));
-	document.getElementById("digits").innerHTML = digitsTitle.concat(String(digits));
-	// Add tooltip to canvas.
-	document.getElementById("canvasTwo").title = "\"".concat(String(base10),"\" in Base 10","\r","\"",String(base4),"\" in Base 4");
-	
-	var canvasAllDigits = document.getElementById("canvasTwo");
-	var ctx = canvasAllDigits.getContext("2d");
-	ctx.clearRect(0, 0, canvasAllDigits.width, canvasAllDigits.height);
 	roundCanvasTwo = 1;
 	calculateLayers();
 	checkInteger();
 	drawCanvasFinal();
+	
+	document.body.removeChild(canvasSingleDigit);
+	document.body.removeChild(canvasAllDigits);
 }
 
 function calculateLayers () {
@@ -67,8 +58,6 @@ function calculateLayers () {
 		s1 = s1 + (4*rounds);
 		rounds = rounds + 1;
 	}
-	var digitsTitle = "Number of Layers: ";
-	document.getElementById("layers").innerHTML = digitsTitle.concat(String(rounds));
 	
 }
 
@@ -149,7 +138,6 @@ function drawCanvasFinal () {
 
 function drawDigitZero () {
 	var ctx = canvasSingleDigit.getContext("2d");
-	var radiusCircle = canvasSingleDigit.width/5;
 	
 	// Clear the canvas and set settings.
 	ctx.clearRect(0, 0, canvasSingleDigit.width, canvasSingleDigit.height);
@@ -182,9 +170,7 @@ function drawDigitZero () {
 }
 
 function drawDigitOne () {
-	var ctx=canvasSingleDigit.getContext("2d");
-	var radiusCircle = canvasSingleDigit.width/5
-	var pinch = canvasSingleDigit.width*0.08;
+	var ctx = canvasSingleDigit.getContext("2d");
 	
 	// Clear the canvas and set settings.
 	ctx.clearRect(0, 0, canvasSingleDigit.width, canvasSingleDigit.height);
@@ -220,8 +206,6 @@ function drawDigitOne () {
 
 function drawDigitTwo () {
 	var ctx=canvasSingleDigit.getContext("2d");
-	var radiusCircle = canvasSingleDigit.width/5
-	var pinch = canvasSingleDigit.width*0.08;
 	
 	// Clear the canvas and set settings.
 	ctx.clearRect(0, 0, canvasSingleDigit.width, canvasSingleDigit.height);
@@ -258,8 +242,6 @@ function drawDigitTwo () {
 
 function drawDigitThree () {
 	var ctx=canvasSingleDigit.getContext("2d");
-	var radiusCircle = canvasSingleDigit.width/5
-	var pinch = canvasSingleDigit.width*0.08;
 	
 	// Clear the canvas and set settings.
 	ctx.clearRect(0, 0, canvasSingleDigit.width, canvasSingleDigit.height);

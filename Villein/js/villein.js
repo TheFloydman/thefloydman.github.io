@@ -134,6 +134,9 @@ function drawCanvasFinal () {
 	ctx.globalCompositeOperation="destination-over";
 	ctx.fillStyle="#345885";
 	ctx.fillRect((canvasFinal.width-img.width)/2,(canvasFinal.height-img.height)/2,img.width,img.height);
+	
+	// Add tooltip to canvas.
+	document.getElementById("canvasFinal").title = "\"".concat(String(base10),"\" in Base 10","\r","\"",String(base4),"\" in Base 4");
 }
 
 function drawDigitZero () {
