@@ -1,0 +1,311 @@
+/* Created by Dan Floyd (aka "Floydman"). */
+
+var rotated = false;
+var blobColor = "#66CAD9";
+var backColor = "#345885";
+
+window.onload = convert10to4;
+
+function getURLParameter(name) {
+  return decodeURIComponent((new RegExp('[?|&]' + name + '=' + '([^&;]+?)(&|#|;|$)').exec(location.search) || [null, ''])[1].replace(/\+/g, '%20')) || null;
+}
+
+function convert10to4 () {
+	
+	canvasFinal = document.createElement("CANVAS");
+	canvasFinal.id = "canvasFinal";
+	canvasFinal.width = Number(getURLParameter('panelwidth'));
+	canvasFinal.height = canvasFinal.width;
+	document.body.appendChild(canvasFinal);
+	
+	canvasAllDigits = document.createElement("CANVAS");
+	canvasAllDigits.id = "canvasTwo";
+	canvasAllDigits.width = canvasFinal.width/1.5;
+	canvasAllDigits.height = canvasFinal.height/1.5;
+	document.body.appendChild(canvasAllDigits);
+	
+	canvasSingleDigit = document.createElement("CANVAS");
+	canvasSingleDigit.id = "canvasOne";
+	if (Number(getURLParameter('layercount')) == 2) {
+		canvasSingleDigit.width = canvasAllDigits.width/2;
+		canvasSingleDigit.height = canvasAllDigits.height/2;
+	} else {
+		canvasSingleDigit.width = canvasAllDigits.width;
+		canvasSingleDigit.height = canvasAllDigits.height;
+	}
+	document.body.appendChild(canvasSingleDigit);
+	
+	radiusCircle = canvasSingleDigit.width/5;
+	pinch = canvasSingleDigit.width*0.08;
+	
+	// Get the value of the input field.
+	base10 = Number(getURLParameter('base10input'));
+	// Convert it to base 4.
+	base4 = base10.toString(4);
+	// Count the number of digits in the base 4 number.
+	digits = Math.log(base4) * Math.LOG10E + 1 | 0;
+	if (base4 == 0 && digits == 0) {
+		digits = digits + 1;
+	}
+	roundCanvasTwo = 1;
+	calculateLayers();
+	checkInteger();
+	drawCanvasFinal();
+	
+	document.body.removeChild(canvasSingleDigit);
+	document.body.removeChild(canvasAllDigits);
+}
+
+function checkInteger () {
+	
+	var DigitsLeft = digits;
+	
+	if (Number(getURLParameter('layercount')) == 2) {
+		while (DigitsLeft >= -4) {
+			var CurrentDigitString = String(base4).charAt(DigitsLeft-1);
+			CurrentDigit = Number(CurrentDigitString);
+			check4Value();
+			DigitsLeft = DigitsLeft - 1;
+		}
+	} else {
+		var CurrentDigitString = String(base4).charAt(DigitsLeft-1);
+		CurrentDigit = Number(CurrentDigitString);
+		check4Value();
+	}
+}
+
+function check4Value () {
+	
+	if (CurrentDigit == 0) {
+		drawDigitZero();
+	} else if (CurrentDigit == 1) {
+		drawDigitOne();
+	} else if (CurrentDigit == 2) {
+		drawDigitTwo();
+	} else if (CurrentDigit == 3) {
+		drawDigitThree();
+	} else {
+		drawDigitZero();
+	}
+	
+	if (Number(getURLParameter('layercount')) == 2) {
+		drawCanvasTwo5Digits();
+	} else {
+		drawCanvasTwo1Digit();
+	}
+			
+}
+
+function drawCanvasTwo5Digits () {
+	
+	var ctx = canvasAllDigits.getContext("2d");
+	var img = document.getElementById("canvasOne");
+	
+	// Place each digit in the correct place.
+	if (roundCanvasTwo == 1) {
+		ctx.drawImage(img,canvasAllDigits.width/4,canvasAllDigits.height/4,canvasAllDigits.width/2,canvasAllDigits.height/2);
+	} else if (roundCanvasTwo == 2) {
+		ctx.drawImage(img,0,canvasAllDigits.height/2,canvasAllDigits.width/2,canvasAllDigits.height/2);
+	} else if (roundCanvasTwo == 3) {
+		ctx.drawImage(img,canvasAllDigits.width/2,canvasAllDigits.height/2,canvasAllDigits.width/2,canvasAllDigits.height/2);
+	} else if (roundCanvasTwo == 4) {
+		ctx.drawImage(img,canvasAllDigits.width/2,0,canvasAllDigits.width/2,canvasAllDigits.height/2);
+	} else if (roundCanvasTwo == 5) {
+		ctx.drawImage(img,0,0,canvasAllDigits.width/2,canvasAllDigits.height/2);
+	}
+	
+	roundCanvasTwo = roundCanvasTwo + 1;
+}
+
+function drawCanvasTwo1Digit () {
+	
+	var ctx = canvasAllDigits.getContext("2d");
+	var img = document.getElementById("canvasOne");
+	
+	ctx.drawImage(img,0,0,canvasAllDigits.width,canvasAllDigits.height);
+}
+
+function drawCanvasFinal () {
+	var ctx = canvasFinal.getContext("2d");
+	var img = document.getElementById("canvasTwo");
+	ctx.strokeStyle = blobColor;
+	
+	ctx.clearRect(0,0,canvasFinal.width,canvasFinal.height);
+	ctx.drawImage(img,(canvasFinal.width-img.width)/2,(canvasFinal.height-img.height)/2);
+	ctx.translate(canvasFinal.width/2,canvasFinal.height/2)
+	if (rotated == false) {
+		ctx.rotate(-Math.PI/4);
+		rotated = true;
+	}
+	ctx.translate(-canvasFinal.width/2,-canvasFinal.height/2)
+	ctx.clearRect(0,0,canvasFinal.width,canvasFinal.height);
+	ctx.drawImage(img,(canvasFinal.width-img.width)/2,(canvasFinal.height-img.height)/2);
+	ctx.lineWidth = canvasAllDigits.width/25;
+	ctx.strokeRect((canvasFinal.width-img.width)/2,(canvasFinal.height-img.height)/2,img.width,img.height);
+	ctx.globalCompositeOperation="destination-over";
+	ctx.fillStyle = backColor;
+	ctx.fillRect((canvasFinal.width-img.width)/2,(canvasFinal.height-img.height)/2,img.width,img.height);
+	
+	// Add tooltip to canvas.
+	document.getElementById("canvasFinal").title = "\"".concat(String(base10),"\" in Base 10","\r","\"",String(base4),"\" in Base 4");
+}
+
+function drawDigitZero () {
+	var ctx = canvasSingleDigit.getContext("2d");
+	
+	// Clear the canvas and set settings.
+	ctx.clearRect(0, 0, canvasSingleDigit.width, canvasSingleDigit.height);
+	ctx.fillStyle = blobColor;
+	ctx.strokeStyle = "rgba(0,0,0,0)";
+	
+	// Draw the middle circle.
+	ctx.beginPath();
+	ctx.arc(canvasSingleDigit.width/2,canvasSingleDigit.height/2,radiusCircle,0,2*Math.PI,true);
+
+	// Draw the top circle.
+	ctx.moveTo((canvasSingleDigit.width/2)-radiusCircle,0);
+	ctx.arc(canvasSingleDigit.width/2,0,radiusCircle,Math.PI,2*Math.PI,true);
+
+	// Draw the left circle.
+	ctx.moveTo(0,(canvasSingleDigit.width/2)+radiusCircle);
+	ctx.arc(0,canvasSingleDigit.width/2,radiusCircle,(Math.PI)/2,3*((Math.PI)/2),true);
+
+	// Draw the bottom circle.
+	ctx.moveTo((canvasSingleDigit.width/2)-radiusCircle,canvasSingleDigit.height);
+	ctx.arc(canvasSingleDigit.width/2,canvasSingleDigit.height,radiusCircle,Math.PI,2*Math.PI,false);
+
+	// Draw the right circle.
+	ctx.moveTo(canvasSingleDigit.width,(canvasSingleDigit.width/2)-radiusCircle);
+	ctx.arc(canvasSingleDigit.width,canvasSingleDigit.width/2,radiusCircle,3*((Math.PI)/2),(Math.PI)/2,true);
+	
+	ctx.fill();
+	ctx.stroke();
+	
+}
+
+function drawDigitOne () {
+	var ctx = canvasSingleDigit.getContext("2d");
+	
+	// Clear the canvas and set settings.
+	ctx.clearRect(0, 0, canvasSingleDigit.width, canvasSingleDigit.height);
+	ctx.fillStyle = blobColor;
+	ctx.strokeStyle = "rgba(0,0,0,0)";
+	
+	// Draw the number one.
+	ctx.beginPath();
+	ctx.moveTo((canvasSingleDigit.width/2)-radiusCircle,0)
+	ctx.bezierCurveTo((canvasSingleDigit.width/2)-radiusCircle,canvasSingleDigit.height/8,((canvasSingleDigit.width/2)-radiusCircle)+pinch,canvasSingleDigit.height/8,((canvasSingleDigit.width/2)-radiusCircle)+pinch,canvasSingleDigit.height/4);
+	ctx.bezierCurveTo(((canvasSingleDigit.width/2)-radiusCircle)+pinch,(canvasSingleDigit.height/8)*3,(canvasSingleDigit.width/2)-radiusCircle,(canvasSingleDigit.height/8)*3,(canvasSingleDigit.width/2)-radiusCircle,canvasSingleDigit.height/2);
+	ctx.arc(canvasSingleDigit.width/2,canvasSingleDigit.height/2,radiusCircle,(Math.PI),0,true);
+	ctx.moveTo((canvasSingleDigit.width/2)+radiusCircle,canvasSingleDigit.height/2);
+	ctx.bezierCurveTo((canvasSingleDigit.width/2)+radiusCircle,(canvasSingleDigit.height/8)*3,((canvasSingleDigit.width/2)+radiusCircle)-pinch,(canvasSingleDigit.height/8)*3,((canvasSingleDigit.width/2)+radiusCircle)-pinch,canvasSingleDigit.height/4);
+	ctx.bezierCurveTo(((canvasSingleDigit.width/2)+radiusCircle)-pinch,canvasSingleDigit.height/8,(canvasSingleDigit.width/2)+radiusCircle,canvasSingleDigit.height/8,(canvasSingleDigit.width/2)+radiusCircle,0);
+	ctx.lineTo((canvasSingleDigit.width/2)-radiusCircle,0);
+	
+	// Draw the left circle.
+	ctx.moveTo(0,(canvasSingleDigit.width/2)+radiusCircle);
+	ctx.arc(0,canvasSingleDigit.width/2,radiusCircle,(Math.PI)/2,3*((Math.PI)/2),true);
+	
+	// Draw the bottom circle.
+	ctx.moveTo((canvasSingleDigit.width/2)-radiusCircle,canvasSingleDigit.height);
+	ctx.arc(canvasSingleDigit.width/2,canvasSingleDigit.height,radiusCircle,Math.PI,2*Math.PI,false);
+	
+	// Draw the right circle.
+	ctx.moveTo(canvasSingleDigit.width,(canvasSingleDigit.width/2)-radiusCircle);
+	ctx.arc(canvasSingleDigit.width,canvasSingleDigit.width/2,radiusCircle,3*((Math.PI)/2),(Math.PI)/2,true);
+	
+	ctx.fill();
+	ctx.stroke();
+}
+
+function drawDigitTwo () {
+	var ctx=canvasSingleDigit.getContext("2d");
+	
+	// Clear the canvas and set settings.
+	ctx.clearRect(0, 0, canvasSingleDigit.width, canvasSingleDigit.height);
+	ctx.fillStyle = blobColor;
+	ctx.strokeStyle = "rgba(0,0,0,0)";
+	
+	// Draw the number two.
+	ctx.beginPath();
+	ctx.moveTo((canvasSingleDigit.width/2)-radiusCircle,canvasSingleDigit.height);
+	ctx.bezierCurveTo((canvasSingleDigit.width/2)-radiusCircle,(canvasSingleDigit.height/8)*7,((canvasSingleDigit.width/2)-radiusCircle)+pinch,(canvasSingleDigit.height/8)*7,((canvasSingleDigit.width/2)-radiusCircle)+pinch,(canvasSingleDigit.height/4)*3);
+	ctx.bezierCurveTo(((canvasSingleDigit.width/2)-radiusCircle)+pinch,(canvasSingleDigit.height/8)*5,(canvasSingleDigit.width/2)-radiusCircle,(canvasSingleDigit.height/8)*5,(canvasSingleDigit.width/2)-radiusCircle,canvasSingleDigit.height/2);
+	ctx.arc(canvasSingleDigit.width/2,canvasSingleDigit.height/2,radiusCircle,Math.PI,3*(Math.PI)/2,false);
+	ctx.bezierCurveTo((canvasSingleDigit.width/8)*5,(canvasSingleDigit.height/2)-radiusCircle,(canvasSingleDigit.width/8)*5,((canvasSingleDigit.height/2)-radiusCircle)+pinch,(canvasSingleDigit.width/4)*3,((canvasSingleDigit.height/2)-radiusCircle)+pinch);
+	ctx.bezierCurveTo((canvasSingleDigit.width/8)*7,((canvasSingleDigit.height/2)-radiusCircle)+pinch,(canvasSingleDigit.width/8)*7,((canvasSingleDigit.height/2)-radiusCircle),canvasSingleDigit.width,(canvasSingleDigit.height/2)-radiusCircle);
+	ctx.lineTo(canvasSingleDigit.width,(canvasSingleDigit.height/2)+radiusCircle);
+	ctx.bezierCurveTo((canvasSingleDigit.width/8)*7,(canvasSingleDigit.height/2)+radiusCircle,(canvasSingleDigit.width/8)*7,((canvasSingleDigit.height/2)+radiusCircle)-pinch,(canvasSingleDigit.width/4)*3,((canvasSingleDigit.height/2)+radiusCircle)-pinch);
+	ctx.bezierCurveTo((canvasSingleDigit.width/8)*5,((canvasSingleDigit.height/2)+radiusCircle)-pinch,(canvasSingleDigit.width/8)*5,((canvasSingleDigit.height/2)+radiusCircle),canvasSingleDigit.width/2,(canvasSingleDigit.height/2)+radiusCircle);
+	ctx.lineTo((canvasSingleDigit.width/2)+radiusCircle,canvasSingleDigit/2);
+	ctx.bezierCurveTo((canvasSingleDigit.width/2)+radiusCircle,(canvasSingleDigit.height/8)*5,((canvasSingleDigit.width/2)+radiusCircle)-pinch,(canvasSingleDigit.height/8)*5,((canvasSingleDigit.width/2)+radiusCircle)-pinch,(canvasSingleDigit.height/4)*3);
+	ctx.bezierCurveTo(((canvasSingleDigit.width/2)+radiusCircle)-pinch,(canvasSingleDigit.height/8)*7,(canvasSingleDigit.width/2)+radiusCircle,(canvasSingleDigit.height/8)*7,(canvasSingleDigit.width/2)+radiusCircle,canvasSingleDigit.height);
+	ctx.lineTo((canvasSingleDigit.width/2)-radiusCircle,canvasSingleDigit.height);
+	
+	// Draw the left circle.
+	ctx.moveTo(0,(canvasSingleDigit.width/2)+radiusCircle);
+	ctx.arc(0,canvasSingleDigit.width/2,radiusCircle,(Math.PI)/2,3*((Math.PI)/2),true);
+	
+	// Draw the top circle.
+	ctx.moveTo((canvasSingleDigit.width/2)-radiusCircle,0);
+	ctx.arc(canvasSingleDigit.width/2,0,radiusCircle,Math.PI,2*Math.PI,true);
+	
+	ctx.fill();
+	ctx.stroke();
+}
+
+function drawDigitThree () {
+	var ctx=canvasSingleDigit.getContext("2d");
+	
+	// Clear the canvas and set settings.
+	ctx.clearRect(0, 0, canvasSingleDigit.width, canvasSingleDigit.height);
+	ctx.fillStyle = blobColor;
+	ctx.strokeStyle = "rgba(0,0,0,0)";
+	
+	// Draw the number three.
+	ctx.beginPath();
+	ctx.moveTo((canvasSingleDigit.width/2)-radiusCircle,0)
+	ctx.bezierCurveTo((canvasSingleDigit.width/2)-radiusCircle,canvasSingleDigit.height/8,((canvasSingleDigit.width/2)-radiusCircle)+pinch,canvasSingleDigit.height/8,((canvasSingleDigit.width/2)-radiusCircle)+pinch,canvasSingleDigit.height/4);
+	ctx.bezierCurveTo(((canvasSingleDigit.width/2)-radiusCircle)+pinch,(canvasSingleDigit.height/8)*3,(canvasSingleDigit.width/2)-radiusCircle,(canvasSingleDigit.height/8)*3,(canvasSingleDigit.width/2)-radiusCircle,canvasSingleDigit.height/2);
+	ctx.lineTo(canvasSingleDigit.width/2,(canvasSingleDigit.height/2)-radiusCircle);
+	ctx.bezierCurveTo((canvasSingleDigit.width/8)*3,(canvasSingleDigit.height/2)-radiusCircle,(canvasSingleDigit.width/8)*3,((canvasSingleDigit.height/2)-radiusCircle)+pinch,(canvasSingleDigit.width/4),((canvasSingleDigit.height/2)-radiusCircle)+pinch);
+	ctx.bezierCurveTo((canvasSingleDigit.width/8),((canvasSingleDigit.height/2)-radiusCircle)+pinch,(canvasSingleDigit.width/8),((canvasSingleDigit.height/2)-radiusCircle),0,(canvasSingleDigit.height/2)-radiusCircle);
+	ctx.lineTo(0,(canvasSingleDigit.height/2)+radiusCircle);
+	ctx.bezierCurveTo((canvasSingleDigit.width/8),(canvasSingleDigit.height/2)+radiusCircle,(canvasSingleDigit.width/8),((canvasSingleDigit.height/2)+radiusCircle)-pinch,(canvasSingleDigit.width/4),((canvasSingleDigit.height/2)+radiusCircle)-pinch);
+	ctx.bezierCurveTo((canvasSingleDigit.width/8)*3,((canvasSingleDigit.height/2)+radiusCircle)-pinch,(canvasSingleDigit.width/8)*3,((canvasSingleDigit.height/2)+radiusCircle),canvasSingleDigit.width/2,(canvasSingleDigit.height/2)+radiusCircle);
+	ctx.bezierCurveTo((canvasSingleDigit.width/8)*5,((canvasSingleDigit.height/2)+radiusCircle),(canvasSingleDigit.width/8)*5,((canvasSingleDigit.height/2)+radiusCircle)-pinch,(canvasSingleDigit.width/4)*3,((canvasSingleDigit.height/2)+radiusCircle)-pinch);
+	ctx.bezierCurveTo((canvasSingleDigit.width/8)*7,((canvasSingleDigit.height/2)+radiusCircle)-pinch,(canvasSingleDigit.width/8)*7,(canvasSingleDigit.height/2)+radiusCircle,canvasSingleDigit.width,(canvasSingleDigit.height/2)+radiusCircle);
+	ctx.lineTo(canvasSingleDigit.width,(canvasSingleDigit.height/2)-radiusCircle);
+	ctx.bezierCurveTo((canvasSingleDigit.width/8)*7,((canvasSingleDigit.height/2)-radiusCircle),(canvasSingleDigit.width/8)*7,((canvasSingleDigit.height/2)-radiusCircle)+pinch,(canvasSingleDigit.width/4)*3,((canvasSingleDigit.height/2)-radiusCircle)+pinch);
+	ctx.bezierCurveTo((canvasSingleDigit.width/8)*5,((canvasSingleDigit.height/2)-radiusCircle)+pinch,(canvasSingleDigit.width/8)*5,(canvasSingleDigit.height/2)-radiusCircle,canvasSingleDigit.width/2,(canvasSingleDigit.height/2)-radiusCircle);
+	ctx.lineTo((canvasSingleDigit.width/2)+radiusCircle,canvasSingleDigit.height/2);
+	ctx.bezierCurveTo((canvasSingleDigit.width/2)+radiusCircle,(canvasSingleDigit.height/8)*3,((canvasSingleDigit.width/2)+radiusCircle)-pinch,(canvasSingleDigit.height/8)*3,((canvasSingleDigit.width/2)+radiusCircle)-pinch,canvasSingleDigit.height/4);
+	ctx.bezierCurveTo(((canvasSingleDigit.width/2)+radiusCircle)-pinch,canvasSingleDigit.height/8,(canvasSingleDigit.width/2)+radiusCircle,canvasSingleDigit.height/8,(canvasSingleDigit.width/2)+radiusCircle,0);
+	ctx.lineTo((canvasSingleDigit.width/2)-radiusCircle,0)
+	
+	// Draw the bottom circle.
+	ctx.moveTo((canvasSingleDigit.width/2)-radiusCircle,canvasSingleDigit.height);
+	ctx.arc(canvasSingleDigit.width/2,canvasSingleDigit.height,radiusCircle,Math.PI,2*Math.PI,false);
+	
+	ctx.fill();
+	ctx.stroke();
+}
+
+// This function is currently unused.
+function calculateLayers () {
+	
+	/* Calculates and displays the number of layers necessary to display the number in Villein numerals.
+	Layers are added from the inside out, and the number of digits added to the increase
+	in digits per layer increases by 4 each time. This script will work for any positive
+	whole number input, but the whole tool is capped at 1023 because that is the largest number
+	that can be displayed on Obduction's Villein control panels. That means the largest output you'll
+	see is 2. */
+	
+	var s1 = 1;
+	var rounds = 1;
+	while (s1 < digits) {
+		s1 = s1 + (4*rounds);
+		rounds = rounds + 1;
+	}
+	
+}

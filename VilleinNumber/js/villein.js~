@@ -1,6 +1,8 @@
 /* Created by Dan Floyd (aka "Floydman"). */
 
 var rotated = false;
+var blobColor = "#66CAD9";
+var backColor = "#345885";
 
 window.onload = convert10to4;
 
@@ -24,8 +26,13 @@ function convert10to4 () {
 	
 	canvasSingleDigit = document.createElement("CANVAS");
 	canvasSingleDigit.id = "canvasOne";
-	canvasSingleDigit.width = canvasAllDigits.width/2;
-	canvasSingleDigit.height = canvasAllDigits.height/2;
+	if (Number(getURLParameter('layercount')) == 2) {
+		canvasSingleDigit.width = canvasAllDigits.width/2;
+		canvasSingleDigit.height = canvasAllDigits.height/2;
+	} else {
+		canvasSingleDigit.width = canvasAllDigits.width;
+		canvasSingleDigit.height = canvasAllDigits.height;
+	}
 	document.body.appendChild(canvasSingleDigit);
 	
 	radiusCircle = canvasSingleDigit.width/5;
@@ -49,33 +56,21 @@ function convert10to4 () {
 	document.body.removeChild(canvasAllDigits);
 }
 
-function calculateLayers () {
-	
-	/* Calculates and displays the number of layers necessary to display the number in Villein numerals.
-	Layers are added from the inside out, and the number of digits added to the increase
-	in digits per layer increases by 4 each time. This script will work for any positive
-	whole number input, but the whole tool is capped at 1023 because that is the largest number
-	that can be displayed on Obduction's Villein control panels. That means the largest output you'll
-	see is 2. */
-	
-	var s1 = 1;
-	var rounds = 1;
-	while (s1 < digits) {
-		s1 = s1 + (4*rounds);
-		rounds = rounds + 1;
-	}
-	
-}
-
 function checkInteger () {
 	
 	var DigitsLeft = digits;
 	
-	while (DigitsLeft >= -4) {
+	if (Number(getURLParameter('layercount')) == 2) {
+		while (DigitsLeft >= -4) {
+			var CurrentDigitString = String(base4).charAt(DigitsLeft-1);
+			CurrentDigit = Number(CurrentDigitString);
+			check4Value();
+			DigitsLeft = DigitsLeft - 1;
+		}
+	} else {
 		var CurrentDigitString = String(base4).charAt(DigitsLeft-1);
 		CurrentDigit = Number(CurrentDigitString);
 		check4Value();
-		DigitsLeft = DigitsLeft - 1;
 	}
 }
 
@@ -93,13 +88,16 @@ function check4Value () {
 		drawDigitZero();
 	}
 	
-	drawCanvasTwo();
+	if (Number(getURLParameter('layercount')) == 2) {
+		drawCanvasTwo5Digits();
+	} else {
+		drawCanvasTwo1Digit();
+	}
 			
 }
 
-function drawCanvasTwo () {
+function drawCanvasTwo5Digits () {
 	
-	var canvasAllDigits = document.getElementById("canvasTwo");
 	var ctx = canvasAllDigits.getContext("2d");
 	var img = document.getElementById("canvasOne");
 	
@@ -119,10 +117,18 @@ function drawCanvasTwo () {
 	roundCanvasTwo = roundCanvasTwo + 1;
 }
 
+function drawCanvasTwo1Digit () {
+	
+	var ctx = canvasAllDigits.getContext("2d");
+	var img = document.getElementById("canvasOne");
+	
+	ctx.drawImage(img,0,0,canvasAllDigits.width,canvasAllDigits.height);
+}
+
 function drawCanvasFinal () {
 	var ctx = canvasFinal.getContext("2d");
 	var img = document.getElementById("canvasTwo");
-	ctx.strokeStyle = "#66CAD9";
+	ctx.strokeStyle = blobColor;
 	
 	ctx.clearRect(0,0,canvasFinal.width,canvasFinal.height);
 	ctx.drawImage(img,(canvasFinal.width-img.width)/2,(canvasFinal.height-img.height)/2);
@@ -134,10 +140,10 @@ function drawCanvasFinal () {
 	ctx.translate(-canvasFinal.width/2,-canvasFinal.height/2)
 	ctx.clearRect(0,0,canvasFinal.width,canvasFinal.height);
 	ctx.drawImage(img,(canvasFinal.width-img.width)/2,(canvasFinal.height-img.height)/2);
-	ctx.lineWidth=canvasAllDigits.width/50;
+	ctx.lineWidth = canvasAllDigits.width/40;
 	ctx.strokeRect((canvasFinal.width-img.width)/2,(canvasFinal.height-img.height)/2,img.width,img.height);
 	ctx.globalCompositeOperation="destination-over";
-	ctx.fillStyle="#345885";
+	ctx.fillStyle = backColor;
 	ctx.fillRect((canvasFinal.width-img.width)/2,(canvasFinal.height-img.height)/2,img.width,img.height);
 	
 	// Add tooltip to canvas.
@@ -149,7 +155,7 @@ function drawDigitZero () {
 	
 	// Clear the canvas and set settings.
 	ctx.clearRect(0, 0, canvasSingleDigit.width, canvasSingleDigit.height);
-	ctx.fillStyle = "#66CAD9";
+	ctx.fillStyle = blobColor;
 	ctx.strokeStyle = "rgba(0,0,0,0)";
 	
 	// Draw the middle circle.
@@ -182,7 +188,7 @@ function drawDigitOne () {
 	
 	// Clear the canvas and set settings.
 	ctx.clearRect(0, 0, canvasSingleDigit.width, canvasSingleDigit.height);
-	ctx.fillStyle = "#66CAD9";
+	ctx.fillStyle = blobColor;
 	ctx.strokeStyle = "rgba(0,0,0,0)";
 	
 	// Draw the number one.
@@ -217,7 +223,7 @@ function drawDigitTwo () {
 	
 	// Clear the canvas and set settings.
 	ctx.clearRect(0, 0, canvasSingleDigit.width, canvasSingleDigit.height);
-	ctx.fillStyle = "#66CAD9";
+	ctx.fillStyle = blobColor;
 	ctx.strokeStyle = "rgba(0,0,0,0)";
 	
 	// Draw the number two.
@@ -253,7 +259,7 @@ function drawDigitThree () {
 	
 	// Clear the canvas and set settings.
 	ctx.clearRect(0, 0, canvasSingleDigit.width, canvasSingleDigit.height);
-	ctx.fillStyle = "#66CAD9";
+	ctx.fillStyle = blobColor;
 	ctx.strokeStyle = "rgba(0,0,0,0)";
 	
 	// Draw the number three.
@@ -283,4 +289,23 @@ function drawDigitThree () {
 	
 	ctx.fill();
 	ctx.stroke();
+}
+
+// This function is currently unused.
+function calculateLayers () {
+	
+	/* Calculates and displays the number of layers necessary to display the number in Villein numerals.
+	Layers are added from the inside out, and the number of digits added to the increase
+	in digits per layer increases by 4 each time. This script will work for any positive
+	whole number input, but the whole tool is capped at 1023 because that is the largest number
+	that can be displayed on Obduction's Villein control panels. That means the largest output you'll
+	see is 2. */
+	
+	var s1 = 1;
+	var rounds = 1;
+	while (s1 < digits) {
+		s1 = s1 + (4*rounds);
+		rounds = rounds + 1;
+	}
+	
 }
