@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Generator: Adobe Illustrator 19.0.0, SVG Export Plug-In . SVG Version: 6.00 Build 0)  -->
+<svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+	 viewBox="-51 140.4 508.5 513.6" style="enable-background:new -51 140.4 508.5 513.6;" xml:space="preserve">
+<style type="text/css">
+	.st0{fill:#FFFFFF;stroke:#000000;stroke-width:5;stroke-miterlimit:10;}
+	.st1{fill:none;stroke:#000000;stroke-width:5;stroke-miterlimit:10;}
+	.st2{fill:none;}
+	.st3{font-family:'MyriadPro-Regular';}
+	.st4{font-size:30px;}
+	.st5{font-size:58px;}
+</style>
+<path id="XMLID_1_" class="st0" d="M201.8,161c65.3,0,124.4,26.5,167.2,69.2s69.2,101.9,69.2,167.2S411.8,521.7,369,564.5
+	c-42.8,42.8-101.9,69.2-167.2,69.2S77.4,607.2,34.6,564.5s-69.2-101.9-69.2-167.2S-8.1,273,34.7,230.2S136.6,161,201.8,161z"/>
+<path id="XMLID_2_" class="st0" d="M323.3,473.3c-21,0-40-8.5-53.7-22.2s-22.2-32.7-22.2-53.7s8.5-40,22.2-53.7
+	c13.7-13.7,32.7-22.2,53.7-22.2s40,8.5,53.7,22.2c13.7,13.7,22.2,32.7,22.2,53.7s-8.5,40-22.2,53.7
+	C363.2,464.8,344.3,473.3,323.3,473.3z"/>
+<path id="XMLID_146_" class="st0" d="M125.9,518.8c0-21,8.5-40,22.2-53.7s32.7-22.2,53.7-22.2s40,8.5,53.7,22.2s22.2,32.7,22.2,53.7
+	c0,21-8.5,40-22.2,53.7c-13.7,13.7-32.7,22.2-53.7,22.2s-40-8.5-53.7-22.2C134.4,558.8,125.9,539.8,125.9,518.8z"/>
+<path id="XMLID_147_" class="st0" d="M80.4,321.4c21,0,40,8.5,53.7,22.2c13.7,13.7,22.2,32.7,22.2,53.7s-8.5,40-22.2,53.7
+	s-32.7,22.2-53.7,22.2s-40-8.5-53.7-22.2S4.5,418.3,4.5,397.3s8.5-40,22.2-53.7C40.4,329.9,59.4,321.4,80.4,321.4z"/>
+<path id="XMLID_148_" class="st0" d="M277.8,275.9c0,21-8.5,40-22.2,53.7c-13.7,13.7-32.7,22.2-53.7,22.2s-40-8.5-53.7-22.2
+	c-13.7-13.7-22.2-32.7-22.2-53.7s8.5-40,22.2-53.7s32.7-22.2,53.7-22.2s40,8.5,53.7,22.2S277.8,254.9,277.8,275.9z"/>
+<polyline id="XMLID_149_" class="st1" points="323.3,473.3 323.3,518.8 277.8,518.8 "/>
+<polyline id="XMLID_150_" class="st1" points="201.8,351.8 201.8,397.3 156.3,397.3 "/>
+<line id="XMLID_151_" class="st1" x1="438.2" y1="397.3" x2="399.2" y2="397.3"/>
+<line id="XMLID_152_" class="st1" x1="4.5" y1="397.3" x2="-34.6" y2="397.3"/>
+<line id="XMLID_153_" class="st1" x1="201.8" y1="161" x2="201.8" y2="200"/>
+<polyline id="XMLID_154_" class="st1" points="255.5,222.2 280.3,202.8 323.3,247.5 323.3,321.4 "/>
+<polyline id="XMLID_155_" class="st1" points="148.1,572.5 123.3,591.8 80.4,547.2 80.4,473.3 "/>
+<rect id="XMLID_156_" x="316.6" y="148.8" class="st2" width="132" height="29.3"/>
+<text id="XMLID_157_" transform="matrix(1 0 0 1 316.5587 170.1397)" class="st3 st4">Rotation 1</text>
+<rect id="XMLID_159_" x="-43.1" y="148.8" class="st2" width="132" height="29.3"/>
+<text id="XMLID_158_" transform="matrix(1 0 0 1 -43.108 170.1398)" class="st3 st4">Base</text>
+<rect x="190" y="255.1" class="st2" width="44" height="46.7"/>
+<text transform="matrix(1 0 0 1 190.0002 296.2462)" class="st3 st5">3</text>
+<rect x="311" y="377.4" class="st2" width="44" height="46.7"/>
+<text transform="matrix(1 0 0 1 311.0002 418.5796)" class="st3 st5">0</text>
+<rect x="190" y="498.1" class="st2" width="44" height="46.7"/>
+<text transform="matrix(1 0 0 1 190.0002 539.2462)" class="st3 st5">1</text>
+<rect x="66.9" y="376.6" class="st2" width="44" height="46.7"/>
+<text transform="matrix(1 0 0 1 66.9002 417.7462)" class="st3 st5">2</text>
+<rect x="395" y="590.9" class="st2" width="44" height="46.7"/>
+<text transform="matrix(1 0 0 1 395.0002 632.0462)" class="st3 st5">4</text>
+</svg>
