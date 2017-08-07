@@ -52,6 +52,9 @@ function initialize () {
 }
 
 function drawGraphics () {
+	
+	document.getElementById("solutionTD").innerHTML = "";
+	
 	stepNumber = 1;
 	originalInstructions = res14;
 	startPlace = 2;
