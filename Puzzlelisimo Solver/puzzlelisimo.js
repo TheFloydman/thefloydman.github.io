@@ -152,6 +152,9 @@ function buildDiv () {
 			
 	bigCell = document.createElement("div");
 	bigCell.style = "width:400px";
+	if (stepNumber == 1) {
+		bigCell.style = "width:400px; border-top: 1px solid black;";
+	}
 	bigCell.className = "step";
 	bigCell.appendChild(leftCell);
 	bigCell.appendChild(rightCell);
