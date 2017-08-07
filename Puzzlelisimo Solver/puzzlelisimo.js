@@ -113,13 +113,13 @@ function drawGraphics () {
 			buildDiv();
 		} else if (currentInstruction == "Go to triple-swap area and swap to Maray. Return to Puzzlelisimo.") {
 			stepImage = document.createElement("img");
-			stepImage.src = "graphics/TripleH.png";
+			stepImage.src = "graphics/TripleM.png";
 			stepImage.width = 100;
 			stepImage.height = 100;
 			buildDiv();
 		} else if (currentInstruction == "Go to triple-swap area and swap to Hunrath. Go to insert rotator.") {
 			stepImage = document.createElement("img");
-			stepImage.src = "graphics/TripleM.png";
+			stepImage.src = "graphics/TripleH.png";
 			stepImage.width = 100;
 			stepImage.height = 100;
 			buildDiv();
