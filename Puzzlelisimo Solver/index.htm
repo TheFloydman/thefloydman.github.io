@@ -2,7 +2,32 @@
 
 <head>
 
-<script src="puzzlelisimo.js"></script>
+	<script src="puzzlelisimo.js"></script>
+
+	<style>
+		div {
+			box-sizing: border-box;
+			border: 0px solid black;
+			display: inline;
+			align-items: center;
+		}
+		
+		div.step {
+			display: flex;
+			border-bottom: 1px solid black;
+		}
+		
+		div.instructions {
+			margin: 10px;
+		}
+		
+		div.wrapper {
+			border-left: 5px solid black;
+			border-top: 5px solid black;
+			border-right: 5px solid black;
+		}
+		
+	</style>
 
 </head>
 
@@ -58,11 +83,13 @@
 		<td><input id="insert4rotation" type="number" value="0"></td>
 	</tr>
 </table>
+
 <p><input id="submitButton" type="button" value="Submit" onclick="initialize();" /></p>
 </td>
 
 <td width="25%" valign="top">
-<textarea id="solutionarea" rows="40" cols="50">Your solution will be generated here.</textarea>
+<p><textarea id="solutionarea" rows="4" cols="50">Your solution will be generated here.</textarea></p>
+<span id="solutionTD"></span>
 </td>
 </tr>
 </table>
