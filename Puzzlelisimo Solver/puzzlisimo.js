@@ -160,9 +160,9 @@ function drawCanvases () {
 	initialize();
 }
 
-function canvasClicked () {
-	mouseX = event.clientX - finalCanvas.getBoundingClientRect().left;
-	mouseY = event.clientY - finalCanvas.getBoundingClientRect().top;
+function canvasClicked (evt) {
+	mouseX = evt.clientX - finalCanvas.getBoundingClientRect().left;
+	mouseY = evt.clientY - finalCanvas.getBoundingClientRect().top;
 	
 	clickedOnLocation(mouseX,mouseY);
 }
@@ -928,10 +928,10 @@ function drawGraphics () {
 	document.getElementById("solutionTD").innerHTML = "";
 	
 	stepNumber = 1;
-	originalInstructions = res14;
+	originalInstructions = resFinal;
 	startPlace = 2;
-	fullInstructions = res14;
-	restOfInstructions = res14;
+	fullInstructions = resFinal;
+	restOfInstructions = resFinal;
 	
 	for (i = 0; i < 50; i++) {
 		
@@ -1236,12 +1236,12 @@ function solvePath1Insert1 (item) {
 	if (item.solveLocation == 0) {
 		rotateBaseTo(2);
 		swapToHunrath(item);
-		rotateInsertTo(item,1);
+		rotateInsertTo(item,2);
 		swapToMaray(item);
 	} else if (item.solveLocation == 3) {
 		rotateBaseTo(3);
 		swapToHunrath(item);
-		rotateInsertTo(item,1);
+		rotateInsertTo(item,2);
 		hunrathGauntletMaray();
 		rotateBaseTo(2);
 		swapToHunrath(item);
@@ -1249,7 +1249,7 @@ function solvePath1Insert1 (item) {
 	} else if (item.solveLocation == 2) {
 		rotateBaseTo(0);
 		swapToHunrath(item);
-		rotateInsertTo(item,1);
+		rotateInsertTo(item,2);
 		hunrathGauntletMaray();
 		rotateBaseTo(2);
 		swapToHunrath(item);
@@ -1257,7 +1257,7 @@ function solvePath1Insert1 (item) {
 	} else if (item.solveLocation == 1) {
 		rotateBaseTo(1);
 		swapToHunrath(item);
-		rotateInsertTo(item,1);
+		rotateInsertTo(item,2);
 		hunrathGauntletMaray();
 		rotateBaseTo(2);
 		swapToHunrath(item);
@@ -1265,7 +1265,7 @@ function solvePath1Insert1 (item) {
 	} else if (item.solveLocation == 4) {
 		rotateBaseTo(2);
 		marayGauntletHunrath();
-		rotateInsertTo(item,1);
+		rotateInsertTo(item,2);
 		swapToMaray(item);
 	}
 	
@@ -1530,6 +1530,11 @@ function correctSolveRotation (item) {
 		item.solveRotation = Number(item.solveRotation) - 4;
 	} else if (item.solveRotation <= -1) {
 		item.solveRotation = Number(item.solveRotation) + 4;
+	}
+	if (item == insert0) {
+		if (item.solveRotation >= 2) {
+		item.solveRotation = Number(item.solveRotation) - 2;
+		}
 	}
 }
 
@@ -1835,20 +1840,46 @@ function cleanupTextArea () {
 	// Remove groups of instructions that essentially do nothing.
 	
 	var str = document.getElementById("solutionarea").value;
-	var res1 = str.replace("\n\n- Rotate insert twice either clockwise or counterclockwise.\n\n","\n\n");
-	var res2 = res1.replace("\n\n- Rotate insert once counterclockwise.\n\n","\n\n");
-	var res3 = res2.replace("\n\n- Rotate insert once clockwise.\n\n","\n\n");
-	var res4 = res3.replace("\n\n- Go to triple-swap area and swap to Hunrath.\n- Go to insert rotator.\n\n","\n\n");
-	var res5 = res4.replace("\n\n- Go to triple-swap area and swap to Maray.\n- Return to Puzzlelisimo.\n\n","\n\n");
-	var res6 = res5.replace("\n\n- Go to basement and swap to Maray.\n\n","\n\n");
-	var res7 = res6.replace("\n\n- Go to basement and swap to Hunrath.\n\n","\n\n");
-	var res8 = res7.replace("\n\n- Rotate base twice either clockwise or counterclockwise.\n\n","\n\n");
-	var res9 = res8.replace("\n\n- Rotate base once counterclockwise.\n\n","\n\n");
-	var res10 = res9.replace("\n\n- Rotate base once clockwise.\n\n","\n\n");
-	var res11 = res10.replace("\n\n- Rotate base twice either clockwise or counterclockwise.\n\n","\n\n");
-	var res12 = res11.replace("- Go to basement and swap to Maray.\n- Go to basement and swap to Hunrath.","");
-	var res13 = res12.replace("- Go to basement and swap to Hunrath.\n- Go to basement and swap to Maray.","");
-	res14 = res13.replace("\n\n\n","\n\n");
+	var res1 = str.replace("- Rotate insert twice either clockwise or counterclockwise.\n- Rotate insert once counterclockwise.","- Rotate insert once clockwise.");
+	var res2 = res1.replace("- Rotate insert twice either clockwise or counterclockwise.\n- Rotate insert once clockwise.","- Rotate insert once counterclockwise.");
+	var res3 = res2.replace("- Rotate insert once counterclockwise.\n- Rotate insert twice either clockwise or counterclockwise.","- Rotate insert once clockwise.");
+	var res4 = res3.replace("- Rotate insert once clockwise.\n- Rotate insert twice either clockwise or counterclockwise.","- Rotate insert once counterclockwise.");
+	var res5 = res4.replace("- Rotate insert once clockwise.\n- Rotate insert once counterclockwise.","");
+	var res6 = res5.replace("- Rotate insert once counterclockwise.\n- Rotate insert once clockwise.","");
+	var res7 = res6.replace("- Rotate base twice either clockwise or counterclockwise.\n- Rotate base once counterclockwise.","- Rotate base once clockwise.");
+	var res8 = res7.replace("- Rotate base twice either clockwise or counterclockwise.\n- Rotate base once clockwise.","- Rotate base once counterclockwise.");
+	var res9 = res8.replace("- Rotate base once counterclockwise.\n- Rotate base twice either clockwise or counterclockwise.","- Rotate base once clockwise.");
+	var res10 = res9.replace("- Rotate base once clockwise.\n- Rotate base twice either clockwise or counterclockwise.","- Rotate base once counterclockwise.");
+	var res11 = res10.replace("- Rotate base once clockwise.\n- Rotate base once counterclockwise.","");
+	var res12 = res11.replace("- Rotate base once counterclockwise.\n- Rotate base once clockwise.","");
+	var res13 = res12.replace("- Go to basement and swap to Maray.\n- Go to basement and swap to Hunrath.","");
+	var res14 = res13.replace("- Go to basement and swap to Hunrath.\n- Go to basement and swap to Maray.","");
+	var res15 = res14.replace("- Rotate base once clockwise.\n- Rotate base once clockwise.","- Rotate base twice either clockwise or counterclockwise.");
+	var res16 = res15.replace("- Rotate base once counterclockwise.\n- Rotate base once counterclockwise.","- Rotate base twice either clockwise or counterclockwise.");
+	var res17 = res16.replace("- Rotate insert twice either clockwise or counterclockwise.\n- Rotate insert twice either clockwise or counterclockwise.","");
+	resFinal = res17.replace("\n\n","\n");
+	document.getElementById("solutionarea").value = resFinal;
 	
-	document.getElementById("solutionarea").value = res14;
+	// Remove extra line breaks at beginnning.
+	var str2 = document.getElementById("solutionarea").value;
+	var strLength = document.getElementById("solutionarea").value.length;
+	if (str2.indexOf("\n") == 0) {
+		var str3 = str2.slice(1);
+		document.getElementById("solutionarea").value = str3;
+	}
+	
+	removeSingleRotations("- Rotate insert twice either clockwise or counterclockwise.");
+	removeSingleRotations("- Rotate insert once counterclockwise.");
+	removeSingleRotations("- Rotate insert once clockwise.");
+	removeSingleRotations("- Rotate base twice either clockwise or counterclockwise.");
+	removeSingleRotations("- Rotate base once counterclockwise.");
+	removeSingleRotations("- Rotate base once clockwise.");
+	removeSingleRotations("- Go to basement and swap to Maray.");
+	removeSingleRotations("- Go to basement and swap to Hunrath.");
+}
+
+function removeSingleRotations (item) {
+	if (document.getElementById("solutionarea").value == item + "\n") {
+		document.getElementById("solutionarea").value = "";
+	}
 }
