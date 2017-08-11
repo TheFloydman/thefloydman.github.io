@@ -1108,8 +1108,6 @@ function solvePath0Insert1 (item) {
 		rotateInsertTo(item,2);
 		swapToMaray(item);
 	}
-	
-	addLineBreak();
 }
 
 function solvePath0Insert4 (item) {
@@ -1148,8 +1146,6 @@ function solvePath0Insert4 (item) {
 		rotateInsertTo(item,1);
 		swapToMaray(item);
 	}
-	
-	addLineBreak();
 }
 
 function solvePath0Insert2 (item) {
@@ -1188,8 +1184,6 @@ function solvePath0Insert2 (item) {
 		rotateInsertTo(item,0);
 		swapToMaray(item);
 	}
-	
-	addLineBreak();
 }
 
 function solvePath0Insert0 (item) {
@@ -1228,8 +1222,6 @@ function solvePath0Insert0 (item) {
 		rotateInsertTo(item,0);
 		swapToMaray(item);
 	}
-	
-	addLineBreak();
 }
 
 function solvePath1Insert1 (item) {
@@ -1268,8 +1260,6 @@ function solvePath1Insert1 (item) {
 		rotateInsertTo(item,2);
 		swapToMaray(item);
 	}
-	
-	addLineBreak();
 }
 
 function solvePath1Insert4 (item) {
@@ -1308,8 +1298,6 @@ function solvePath1Insert4 (item) {
 		rotateInsertTo(item,1);
 		swapToMaray(item);
 	}
-	
-	addLineBreak();
 }
 
 function solvePath1Insert2 (item) {
@@ -1348,8 +1336,6 @@ function solvePath1Insert2 (item) {
 		rotateInsertTo(item,1);
 		swapToMaray(item);
 	}
-	
-	addLineBreak();
 }
 
 function solvePath2Insert1 (item) {
@@ -1388,8 +1374,6 @@ function solvePath2Insert1 (item) {
 		rotateInsertTo(item,1);
 		swapToMaray(item);
 	}
-	
-	addLineBreak();
 }
 
 function solvePath2Insert3 (item) {
@@ -1428,8 +1412,6 @@ function solvePath2Insert3 (item) {
 		rotateInsertTo(item,0);
 		swapToMaray(item);
 	}
-	
-	addLineBreak();
 }
 
 function solvePath2Insert0 (item) {
@@ -1468,8 +1450,6 @@ function solvePath2Insert0 (item) {
 		rotateInsertTo(item,0);
 		swapToMaray(item);
 	}
-	
-	addLineBreak();
 }
 
 // End of functions that solve for a specific path and insert.
@@ -1880,6 +1860,10 @@ function cleanupTextArea () {
 
 function removeSingleRotations (item) {
 	if (document.getElementById("solutionarea").value == item + "\n") {
+		document.getElementById("solutionarea").value = "";
+	} else if (document.getElementById("solutionarea").value == item + "\n\n") {
+		document.getElementById("solutionarea").value = "";
+	} else if (document.getElementById("solutionarea").value == item + "\n\n\n") {
 		document.getElementById("solutionarea").value = "";
 	}
 }
