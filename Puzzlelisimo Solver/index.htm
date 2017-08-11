@@ -57,12 +57,14 @@ Select "Rotate" and click any insert or the base to rotate them once clockwise. 
 <br/>
 Select "Swap" to swap the positions of any two inserts. The first insert you click on will be swapped with the second insert you click on. Their rotations will be preserved.<br/>
 <br/>
-Finally, select the path you want to create. Once it is created in-game, you may need to rotate the base to move the entry and exit points where you want them.<br/><br/></div>
+Finally, select the path you want to create. Once it is created in-game, you may need to rotate the base to move the entry and exit points where you want them.<br/>
+<br/>
+<b>Note:</b> This program treats both corner pieces as completely different, even though they are identical. This may lead to some extra steps, but the solution will be correct.</div>
 	<div id="mainDiv"></div>
 	<div id="pathDiv">
-		<div class="radioButton" id="leftPathDiv"><input id="radioPath0" type="radio" name="path" checked onclick="drawCanvases();"></input></div>
-		<div class="radioButton" id="middlePathDiv"><input id="radioPath1" type="radio" name="path" onclick="drawCanvases();"></input></div>
-		<div class="radioButton" id="rightPathDiv"><input id="radioPath2" type="radio" name="path" onclick="drawCanvases();"></input></div>
+		<label><div class="radioButton" id="leftPathDiv"><input id="radioPath0" type="radio" name="path" checked onclick="drawCanvases();"></input></div></label>
+		<label><div class="radioButton" id="middlePathDiv"><input id="radioPath1" type="radio" name="path" onclick="drawCanvases();"></input></div></label>
+		<label><div class="radioButton" id="rightPathDiv"><input id="radioPath2" type="radio" name="path" onclick="drawCanvases();"></input></div></label>
 	</div>
 </div>
 <div id="middleDiv" style="float:left; width:20px">&nbsp;</div>
