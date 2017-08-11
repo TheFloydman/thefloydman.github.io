@@ -2,94 +2,76 @@
 
 <head>
 
-	<script src="puzzlelisimo.js"></script>
+<style>
 
-	<style>
-		div {
-			box-sizing: border-box;
-			border: 0px solid black;
-			display: inline;
-			align-items: center;
-		}
-		
-		div.step {
-			display: flex;
-			border-bottom: 1px solid black;
-			border-right: 1px solid black;
-			border-left: 1px solid black;
-		}
-		
-		div.instructions {
-			margin: 10px;
-		}
-		
-	</style>
+div.radioButton {
+	display: flex;
+	align-items: top;
+	box-sizing: border-box;
+	border: 1px solid black;
+	width: 200px;
+	height: 200px;
+	float: left;
+}
+
+div.plain {
+	box-sizing: border-box;
+	border: 0px solid black;
+	display: inline;
+	align-items: center;
+}
+	
+div.step {
+	display: flex;
+	border-bottom: 1px solid black;
+	border-right: 1px solid black;
+	border-left: 1px solid black;
+}
+
+div.instructions {
+	margin: 10px;
+}
+
+#leftPathDiv {
+	background-image: url("graphics/Path0.png")
+}
+
+#middlePathDiv {
+	background-image: url("graphics/Path1.png")
+}
+
+#rightPathDiv {
+	background-image: url("graphics/Path2.png")
+}
+
+</style>
 
 </head>
 
 <body>
 
-<table width="75%">
-<tr>
-<td>Please use <a href="graphics/inputreference.htm" target="_blank">this reference</a> to determine input values.</td>
-</tr>
-<tr>
-<td valign="top" width="50%">
+<div id="leftDiv" style="float:left">
+<div id="helpDiv" style="width:600"><b>Instructions:</b> Recreate the Maray Maze ("Puzzlisimo") as it appears in <i>Obduction</i>. Step-by-step instructions are generated on the right and will update with every change you make.<br/>
+<br/>
+Select "Rotate" and click any insert or the base to rotate them once clockwise. To help you better recreate the maze as it appears in your game, inserts will not move when the base is rotated.<br/>
+<br/>
+Select "Swap" to swap the positions of any two inserts. The first insert you click on will be swapped with the second insert you click on. Their rotations will be preserved.<br/>
+<br/>
+Finally, select the path you want to create. Once it is created in-game, you may need to rotate the base to move the entry and exit points where you want them.<br/><br/></div>
+	<div id="mainDiv"></div>
+	<div id="pathDiv">
+		<div class="radioButton" id="leftPathDiv"><input id="radioPath0" type="radio" name="path" checked onclick="drawCanvases();"></input></div>
+		<div class="radioButton" id="middlePathDiv"><input id="radioPath1" type="radio" name="path" onclick="drawCanvases();"></input></div>
+		<div class="radioButton" id="rightPathDiv"><input id="radioPath2" type="radio" name="path" onclick="drawCanvases();"></input></div>
+	</div>
+</div>
+<div id="middleDiv" style="float:left; width:20px">&nbsp;</div>
+<div id="rightDiv" style="float:left">
+<textarea id="solutionarea" rows="4" cols="50">Your solution will be generated here.</textarea>
+<p><span id="solutionTD"></span></p>
+</div>
 
-<table>
-	<tr>
-		<td align="right">Base Rotation:</td>
-		<td><input id="baserotation" type="number" value="0"></td>
-	</tr>
-	<tr>
-		<td align="right">Path:</td>
-		<td><input id="pathnumber" type="number" value="0"></td>
-	</tr>
-</table>
-
-<table>
-	<tr>
-		<th>Insert</th>
-		<th>Location</th>
-		<th>Rotation</th>
-	</tr>
-	<tr>
-		<td>Insert 0</td>
-		<td><input id="insert0location" type="number" value="0"></td>
-		<td><input id="insert0rotation" type="number" value="0"></td>
-	</tr>
-	<tr>
-		<td>Insert 1</td>
-		<td><input id="insert1location" type="number" value="1"></td>
-		<td><input id="insert1rotation" type="number" value="0"></td>
-	</tr>
-	<tr>
-		<td>Insert 2</td>
-		<td><input id="insert2location" type="number" value="2"></td>
-		<td><input id="insert2rotation" type="number" value="0"></td>
-	</tr>
-	<tr>
-		<td>Insert 3</td>
-		<td><input id="insert3location" type="number" value="3"></td>
-		<td><input id="insert3rotation" type="number" value="0"></td>
-	</tr>
-	<tr>
-		<td>Insert 4</td>
-		<td><input id="insert4location" type="number" value="4"></td>
-		<td><input id="insert4rotation" type="number" value="0"></td>
-	</tr>
-</table>
-
-<p><input id="submitButton" type="button" value="Submit" onclick="initialize();" /></p>
-</td>
-
-<td width="25%" valign="top">
-<p><textarea id="solutionarea" rows="4" cols="50">Your solution will be generated here.</textarea></p>
-<span id="solutionTD"></span>
-</td>
-</tr>
-</table>
-
+<script src="puzzlisimo.js"></script>
 
 </body>
 
