@@ -1,0 +1,32 @@
+var recipes = [
+{
+	"properName" : "Sugar Rush",
+	"ingredients" : "Butter,Granulated Sugar,Eggs,Pure Vanilla Extract,Baking Soda,Salt,Cream of Tartar,All-purpose Flour",
+	"quantities" : "12,14,1,1.5,1.5,.75,1.5,17",
+	"units" : "oz,oz,one,tsp,tsp,tsp,tsp,oz",
+	"minicookies" : "",
+	"regularcookies" : "28",
+	"cafecookies" : "20",
+	"largecookies" : "12"
+},
+{
+	"properName" : "Chock-full o' Chocolate (with Wheat)",
+	"ingredients" : "Butter,Granulated Sugar,Brown Sugar,Eggs,Pure Vanilla Extract,Baking Soda,Baking Powder,Salt,All-purpose Flour,Semisweet Chocolate Chips",
+	"quantities" : "10,7,9,2,2,1.25,1.5,1.5,17,20",
+	"units" : "oz,oz,oz,one,tsp,tsp,tsp,tsp,oz,oz",
+	"minicookies" : "",
+	"regularcookies" : "40",
+	"cafecookies" : "29",
+	"largecookies" : "16"
+},
+{
+	"properName" : "",
+	"ingredients" : "",
+	"quantities" : "",
+	"units" : "",
+	"minicookies" : "",
+	"regularcookies" : "",
+	"cafecookies" : "",
+	"largecookies" : ""
+}
+];

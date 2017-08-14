@@ -1,0 +1,12 @@
+<html>
+
+<head>
+<script src="recipes.json"></script>
+</head>
+
+<body>
+<div id="mainDiv"></div>
+<script src="recipeprogram.js"></script>
+</body>
+
+</html>
