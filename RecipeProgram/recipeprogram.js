@@ -1,12 +1,12 @@
 declareGlobalVariables();
 getNames();
 makeNameDropdown();
-//makeNumberInput();
-makeSizeDropdown();
+makeBatchInput();
 refreshAll();
 
 function refreshAll () {
 	determineSelectedRecipe();
+	fillSizeCells();
 	makeTable();
 }
 
@@ -34,47 +34,33 @@ function makeNameDropdown () {
 	}
 	document.getElementById('nameDiv').appendChild(nameList);
 }
-/*
-function makeNumberInput () {
+
+function makeBatchInput () {
 	var numberInput = document.createElement('input');
 	numberInput.id = 'numberInput';
 	numberInput.type = 'number';
 	numberInput.min = 0;
-	numberInput.value = 24;
+	numberInput.value = 1;
 	numberInput.onchange = refreshAll;
-	document.getElementById('mainDiv').appendChild(numberInput);
+	document.getElementById('sizeDiv').appendChild(numberInput);
 }
-*/
-function makeSizeDropdown () {
-	var sizeList = document.createElement('select');
-	sizeList.id = 'sizeList';
-	sizeList.onchange = refreshAll;
+
+function fillSizeCells () {
+	document.getElementById('miniCell').innerHTML = "<b>Mini: </b>";
+	var miniNumber = document.createTextNode(recipes[selectedRecipe].minicookies * numberInput.value);
+	document.getElementById('miniCell').appendChild(miniNumber);
 	
-	var miniOption = document.createElement('option');
-	miniOption.value = 'Mini (1/2 oz)';
-	miniOption.id = 'miniOption';
-	miniOption.innerHTML = 'Mini (1/2 oz)';
-	sizeList.appendChild(miniOption);
+	document.getElementById('regularCell').innerHTML = "<b>Reg: </b>";
+	var regularNumber = document.createTextNode(recipes[selectedRecipe].regularcookies * numberInput.value);
+	document.getElementById('regularCell').appendChild(regularNumber);
 	
-	var regularOption = document.createElement('option');
-	regularOption.value = 'Regular (1 1/2 oz)';
-	regularOption.id = 'regularOption';
-	regularOption.innerHTML = 'Regular (1 1/2 oz)';
-	sizeList.appendChild(regularOption);
+	document.getElementById('cafeCell').innerHTML = "<b>Cafe: </b>";
+	var cafeNumber = document.createTextNode(recipes[selectedRecipe].cafecookies * numberInput.value);
+	document.getElementById('cafeCell').appendChild(cafeNumber);
 	
-	var cafeOption = document.createElement('option');
-	cafeOption.value = 'Cafe (2 oz)';
-	cafeOption.id = 'cafeOption';
-	cafeOption.innerHTML = 'Cafe (2 oz)';
-	sizeList.appendChild(cafeOption);
-	
-	var largeOption = document.createElement('option');
-	largeOption.value = 'Large (4 oz)';
-	largeOption.id = 'largeOption';
-	largeOption.innerHTML = 'Large (4 oz)';
-	sizeList.appendChild(largeOption);
-	
-	document.getElementById('sizeDiv').appendChild(sizeList);
+	document.getElementById('largeCell').innerHTML = "<b>Large: </b>";
+	var largeNumber = document.createTextNode(recipes[selectedRecipe].largecookies * numberInput.value);
+	document.getElementById('largeCell').appendChild(largeNumber);
 }
 
 function determineSelectedRecipe () {
@@ -96,11 +82,14 @@ function makeTable () {
 	var quantityCell = [];
 	var selectedIngredients = recipes[selectedRecipe].ingredients.split(',');
 	var selectedQuantities = recipes[selectedRecipe].quantities.split(',');
+	for (i = 0; i < selectedQuantities.length; i++) {
+		selectedQuantities[i] = selectedQuantities[i] * numberInput.value;
+	}
 	var selectedUnits = recipes[selectedRecipe].units.split(',');
 		
 	recipeTable = document.createElement('table');
 	recipeTable.border = 1;
-	recipeTable.width = 300;
+	recipeTable.width = 400;
 	
 	// Ingredients and quantities columns.
 	for (i = 0; i < selectedIngredients.length; i++) {
@@ -125,6 +114,8 @@ function fillQuantityCell (itemNumber,selectedUnits,selectedQuantities) {
 		var fullQuantity = String("(" + selectedQuantities[itemNumber]) + ")";
 	} else if (selectedUnits[itemNumber] == "tsp") {
 		var fullQuantity = String(selectedQuantities[itemNumber]) + " tsp";
+	} else {
+		alert('Error in function fillQuantityCell.');
 	}
 	return fullQuantity;
 }
