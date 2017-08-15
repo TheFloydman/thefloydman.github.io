@@ -41,7 +41,6 @@ function makeBatchInput () {
 	numberInput.type = 'number';
 	numberInput.min = 0;
 	numberInput.value = 1;
-	numberInput.width = 100;
 	numberInput.onchange = refreshAll;
 	document.getElementById('sizeDiv').appendChild(numberInput);
 }

@@ -1,0 +1,33 @@
+div {
+	float: left;
+}
+
+div.buffer {
+	height:10px;
+}
+
+div.main {
+	width:100%;
+}
+
+table {
+	width:100%;
+}
+
+body * {
+	font-size: 20px;
+}
+
+input {
+	width: 100px;
+}
+
+@media (min-width:800px) {
+	table {
+		width: 400px;
+	}
+	
+	body * {
+		font-size: medium;
+	}
+}
