@@ -47,19 +47,19 @@ function makeBatchInput () {
 
 function fillSizeCells () {
 	document.getElementById('miniCell').innerHTML = "<b>Mini: </b>";
-	var miniNumber = document.createTextNode(recipes[selectedRecipe].minicookies * numberInput.value);
+	var miniNumber = document.createTextNode(Math.floor(recipes[selectedRecipe].minicookies * numberInput.value));
 	document.getElementById('miniCell').appendChild(miniNumber);
 	
 	document.getElementById('regularCell').innerHTML = "<b>Reg: </b>";
-	var regularNumber = document.createTextNode(recipes[selectedRecipe].regularcookies * numberInput.value);
+	var regularNumber = document.createTextNode(Math.floor(recipes[selectedRecipe].regularcookies * numberInput.value));
 	document.getElementById('regularCell').appendChild(regularNumber);
 	
 	document.getElementById('cafeCell').innerHTML = "<b>Cafe: </b>";
-	var cafeNumber = document.createTextNode(recipes[selectedRecipe].cafecookies * numberInput.value);
+	var cafeNumber = document.createTextNode(Math.floor(recipes[selectedRecipe].cafecookies * numberInput.value));
 	document.getElementById('cafeCell').appendChild(cafeNumber);
 	
 	document.getElementById('largeCell').innerHTML = "<b>Large: </b>";
-	var largeNumber = document.createTextNode(recipes[selectedRecipe].largecookies * numberInput.value);
+	var largeNumber = document.createTextNode(Math.floor(recipes[selectedRecipe].largecookies * numberInput.value));
 	document.getElementById('largeCell').appendChild(largeNumber);
 }
 
@@ -96,7 +96,7 @@ function makeTable () {
 		recipeRow[i] = document.createElement('tr');
 		ingredientCell[i] = document.createElement('td');
 		ingredientCell[i].innerHTML = selectedIngredients[i];
-		ingredientCell[i].width = 200;
+		ingredientCell[i].width = '75%';
 		quantityCell[i] = document.createElement('td');
 		quantityCell[i].innerHTML = fillQuantityCell(i,selectedUnits,selectedQuantities);
 		recipeRow[i].appendChild(ingredientCell[i]);
@@ -109,15 +109,26 @@ function makeTable () {
 
 function fillQuantityCell (itemNumber,selectedUnits,selectedQuantities) {
 	if (selectedUnits[itemNumber] == "oz") {
-		var fullQuantity = String(selectedQuantities[itemNumber]) + " oz";
-	} else if (selectedUnits[itemNumber] == "one") {
-		var fullQuantity = String("(" + selectedQuantities[itemNumber]) + ")";
+		var fullQuantity = convertOunces(selectedQuantities[itemNumber]);
+	} else if (selectedUnits[itemNumber] == "egg") {
+		var fullQuantity = String("(" + parseFloat(selectedQuantities[itemNumber].toFixed(2))) + ") or " + convertEggs(selectedQuantities[itemNumber]);
 	} else if (selectedUnits[itemNumber] == "tsp") {
 		var fullQuantity = String(selectedQuantities[itemNumber]) + " tsp";
 	} else {
 		alert('Error in function fillQuantityCell.');
 	}
 	return fullQuantity;
+}
+
+function convertOunces (ounces) {
+	// For these 2 variables, toFixed rounds to 2 decimal places, and parseFloat removes any trailing 0s.
+	var wholePounds = parseFloat((Math.floor(ounces/16)).toFixed(2));
+	var remainingOunces = parseFloat((ounces % 16).toFixed(2));
+	return String(wholePounds) + '-' + String(remainingOunces);
+}
+
+function convertEggs (eggs) {
+	return convertOunces(eggs*(5/3));
 }
 
 function makeFraction (numerator,denominator) {
