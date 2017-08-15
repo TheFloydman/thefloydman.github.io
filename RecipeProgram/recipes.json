@@ -90,6 +90,16 @@ var recipes = [
 		"largecookies" : "12"
 	},
 	{
+		"properName" : "Gluten-free Flour",
+		"ingredients" : "White Rice Flour,Cornstarch,Brown Rice Flour,Tapioca Flour/Starch,Milk Powder,Potato Starch,Xanthan Gum",
+		"quantities" : "31,18,17,15,14,2,2",
+		"units" : "oz,oz,oz,oz,oz,oz,oz",
+		"minicookies" : "",
+		"regularcookies" : "",
+		"cafecookies" : "",
+		"largecookies" : ""
+	},
+	{
 		"properName" : "Macadamia Mania",
 		"ingredients" : "Butter,Granulated Sugar,Brown Sugar,Eggs,Pure Vanilla Extract,Baking Soda,Baking Powder,Salt,All-purpose Flour,White Chocolate Chips,Macadamia Nuts",
 		"quantities" : "5,3.5,4.5,1,1,.625,.75,.75,8.5,8,2",
