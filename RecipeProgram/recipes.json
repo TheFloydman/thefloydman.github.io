@@ -92,7 +92,7 @@ var recipes = [
 	{
 		"properName" : "Gluten-free Flour",
 		"ingredients" : "White Rice Flour,Cornstarch,Brown Rice Flour,Tapioca Flour/Starch,Milk Powder,Potato Starch,Xanthan Gum",
-		"quantities" : "31,18,17,15,14,2,2",
+		"quantities" : "31,18,17,15,14,3,2",
 		"units" : "oz,oz,oz,oz,oz,oz,oz",
 		"minicookies" : "",
 		"regularcookies" : "",
