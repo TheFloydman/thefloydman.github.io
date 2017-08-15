@@ -12,18 +12,40 @@
 		div.buffer {
 			height:10px;
 		}
+		
+		div.main {
+			width:100%;
+		}
+		
+		table {
+			width:100%;
+		}
+		
+		body * {
+			font-size: 120%
+		}
+		
+		@media (min-width:800px) {
+			table {
+				width: 400px;
+			}
+			
+			body * {
+				font-size: 100%
+			}
+		}
 	</style>
 
 </head>
 
 <body>
 
-	<div id="nameDiv" style="width:100%"><b>Product: </b></div>
-	<div class="buffer" style="width:100%"></div>
-	<div id="sizeDiv" style="width:100%"><b>Size: </b></div>
-	<div class="buffer" style="width:100%"></div>
-	<div id="numbersDiv" style="width:100%">
-	<table style="width:400">
+	<div id="nameDiv" class="main"><b>Product: </b></div>
+	<div class="main buffer"></div>
+	<div id="sizeDiv" class="main"><b>Size: </b></div>
+	<div class="main buffer"></div>
+	<div id="numbersDiv" class="main">
+	<table>
 	<tr>
 	<td id="miniCell" style="width:25%"><b>Mini: </b></td>
 	<td id="regularCell" style="width:25%"><b>Reg: </b></td>

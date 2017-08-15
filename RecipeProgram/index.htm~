@@ -22,6 +22,17 @@
 	<div class="buffer" style="width:100%"></div>
 	<div id="sizeDiv" style="width:100%"><b>Size: </b></div>
 	<div class="buffer" style="width:100%"></div>
+	<div id="numbersDiv" style="width:100%">
+	<table style="width:400">
+	<tr>
+	<td id="miniCell" style="width:25%"><b>Mini: </b></td>
+	<td id="regularCell" style="width:25%"><b>Reg: </b></td>
+	<td id="cafeCell" style="width:25%"><b>Cafe: </b></td>
+	<td id="largeCell" style="width:25%"><b>Lar: </b></td>
+	</tr>
+	</table>
+	</div>
+	<div class="buffer" style="width:100%"></div>
 	<div id="tableDiv" style="width:100%"></div>
 	
 	<script src="recipeprogram.js"></script>

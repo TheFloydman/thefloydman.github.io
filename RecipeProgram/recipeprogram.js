@@ -96,7 +96,7 @@ function makeTable () {
 		recipeRow[i] = document.createElement('tr');
 		ingredientCell[i] = document.createElement('td');
 		ingredientCell[i].innerHTML = selectedIngredients[i];
-		ingredientCell[i].width = '75%';
+		ingredientCell[i].width = '60%';
 		quantityCell[i] = document.createElement('td');
 		quantityCell[i].innerHTML = fillQuantityCell(i,selectedUnits,selectedQuantities);
 		recipeRow[i].appendChild(ingredientCell[i]);
