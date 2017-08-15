@@ -112,8 +112,10 @@ function fillQuantityCell (itemNumber,selectedUnits,selectedQuantities) {
 		var fullQuantity = convertOunces(selectedQuantities[itemNumber]);
 	} else if (selectedUnits[itemNumber] == "egg") {
 		var fullQuantity = String("(" + parseFloat(selectedQuantities[itemNumber].toFixed(2))) + ") or " + convertEggs(selectedQuantities[itemNumber]);
+	} else if (selectedUnits[itemNumber] == "yolk") {
+		var fullQuantity = String("(" + parseFloat(selectedQuantities[itemNumber].toFixed(2))) + ") or " + convertYolks(selectedQuantities[itemNumber]);
 	} else if (selectedUnits[itemNumber] == "tsp") {
-		var fullQuantity = String(selectedQuantities[itemNumber]) + " tsp";
+		var fullQuantity = convertTsp(selectedQuantities[itemNumber]);
 	} else {
 		alert('Error in function fillQuantityCell.');
 	}
@@ -131,6 +133,39 @@ function convertEggs (eggs) {
 	return convertOunces(eggs*(5/3));
 }
 
+function convertYolks (yolks) {
+	return convertOunces(yolks*(2/3));
+}
+
 function makeFraction (numerator,denominator) {
 	return '<sup>' + String(numerator) + '</sup>/<sub>' + String(denominator) + '</sub>';
+}
+
+function convertTsp (tsp) {
+	var wholeCups = parseFloat((Math.floor(tsp/48)).toFixed(2));
+	var wholeTbsp = parseFloat((Math.floor((tsp-(wholeCups*48))/3)).toFixed(2));
+	var remainingTsp = parseFloat(((tsp-(wholeCups*48)) % 3).toFixed(2));
+	if (wholeCups != 0) {
+		wholeCupsString = String(wholeCups) + " Cups + ";
+	} else {
+		wholeCupsString = "";
+	}
+	if (wholeTbsp != 0) {
+		wholeTbspString = String(wholeTbsp) + " Tbsp + ";
+	} else {
+		wholeTbspString = "";
+	}
+	if (remainingTsp != 0) {
+		remainingTspString = String(remainingTsp) + " tsp";
+	} else {
+		remainingTspString = "";
+	}
+	
+	completeTspString =  wholeCupsString + wholeTbspString + remainingTspString;
+	
+	if (completeTspString.lastIndexOf(' +') == completeTspString.length-3) {
+		completeTspString = completeTspString.slice(0,completeTspString.length-2);
+	}
+	
+	return completeTspString;
 }
