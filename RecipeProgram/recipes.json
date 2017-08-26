@@ -81,9 +81,9 @@ var recipes = [
 	},
 	{
 		"properName" : "Ermehgerd, Strurburries!",
-		"ingredients" : "Butter,Strawberry Powder,Granulated Sugar,Eggs,Baking Soda,Salt,Cream of Tartar,All-purpose Flour",
-		"quantities" : "12,2,10,1,1.5,.75,.5,14",
-		"units" : "oz,oz,oz,egg,tsp,tsp,tsp,oz",
+		"ingredients" : "Butter,Strawberry Powder,Granulated Sugar,Lemon Extract,Eggs,Baking Soda,Salt,Cream of Tartar,All-purpose Flour",
+		"quantities" : "12,2,10,.25,1,1.5,.75,.5,14",
+		"units" : "oz,oz,oz,tsp,egg,tsp,tsp,tsp,oz",
 		"minicookies" : "84",
 		"regularcookies" : "28",
 		"cafecookies" : "20",

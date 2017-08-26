@@ -82,7 +82,7 @@ var recipes = [
 	{
 		"properName" : "Ermehgerd, Strurburries!",
 		"ingredients" : "Butter,Strawberry Powder,Granulated Sugar,Eggs,Baking Soda,Salt,Cream of Tartar,All-purpose Flour",
-		"quantities" : "12,2,10,1,1.5,.75,1.5,14",
+		"quantities" : "12,2,10,1,1.5,.75,.5,14",
 		"units" : "oz,oz,oz,egg,tsp,tsp,tsp,oz",
 		"minicookies" : "84",
 		"regularcookies" : "28",
@@ -221,7 +221,7 @@ var recipes = [
 	},
 	{
 		"properName" : "The Perfect Pair",
-		"ingredients" : "Shortening,Butter,Peanut Butter,Granulated Sugar,Brown Sugar,Eggs,Baking Soda,Baking Powder,Salt,All-purpose Flour",
+		"ingredients" : "Shortening,Butter,Peanut Butter,Granulated Sugar,Brown Sugar,Eggs,Baking Soda,Baking Powder,Salt,All-purpose Flour,Semisweet Chocolate Chips",
 		"quantities" : "1.166667,1.66667,3,3.33333,3,1,.58333,.58333,.25,4.16667,4",
 		"units" : "oz,oz,oz,oz,oz,egg,tsp,tsp,tsp,oz,oz",
 		"minicookies" : "39",
