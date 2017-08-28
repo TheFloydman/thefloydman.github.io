@@ -151,9 +151,9 @@ var recipes = [
 	},
 	{
 		"properName" : "Ooey Gooey Chocolate Chewy",
-		"ingredients" : "Butter,Cocoa,Granulated Sugar,Eggs,Pure Vanilla Extract,All-purpose Flour,Semisweet Chocolate Chips",
-		"quantities" : "7.5,2.5,12.5,2,2.25,7,8",
-		"units" : "oz,oz,oz,egg,tsp,oz,oz",
+		"ingredients" : "Butter,Cocoa,Granulated Sugar,Eggs,Pure Vanilla Extract,Salt,All-purpose Flour,Semisweet Chocolate Chips",
+		"quantities" : "7.5,2.5,12.5,2,2.25,.5,7,8",
+		"units" : "oz,oz,oz,egg,tsp,tsp,oz,oz",
 		"minicookies" : "60",
 		"regularcookies" : "20",
 		"cafecookies" : "15",
