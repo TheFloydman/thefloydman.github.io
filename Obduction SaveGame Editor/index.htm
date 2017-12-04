@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title>Obduction SaveGame Editor</title>
+    <link href="default.css" rel="stylesheet" />
+    <script src="FileSaver.js"></script>
+    <script src="Blob.js"></script>
+    <script src="polyfill-arrayfrom.js"></script>
+    <script src="gameproperties.js"></script>
+    <script src="main.js"></script>
+</head>
+<body onload="fillPage();">
+	<input type="file" id="loadFile" accept=".sav" onchange="loadButtonPressed()" /><br/>
+	<p id="gameversion">Game Version: </p>
+	<p>License Plate Solution:
+	<select id="LicensePlateSolution" onchange="editStringVariable(this.id,[0x00,0x14,0x00,0x00,0x00])">
+		<option value="Arizona">Arizona</value>
+		<option value="California">California</value>
+		<option value="Colorado">Colorado</value>
+		<option value="DC">D.C. (District of Columbia)</value>
+		<option value="Florida">Florida</value>
+		<option value="Minnesota">Minnesota</value>
+		<option value="Missouri">Missouri</value>
+		<option value="Montana">Montana</value>
+		<option value="New York">New York</value>
+		<option value="North Carolina">North Carolina</value>
+		<option value="Ohio">Ohio</value>
+		<option value="Pennsylvania">Pennsylvania</value>
+		<option value="Rhode Island">Rhode Island</value>
+		<option value="Texas">Texas</value>
+		<option value="Washington">Washington</value>
+	</select></p>
+	<p>Minecart Disabler Beam Color:
+	<select id="CWMinecartBeamColor" onchange="editStringVariable(this.id,[0x00,0x19,0x00,0x00,0x00])">
+		<option value="0">Green</value>
+		<option value="1">Cyan</value>
+		<option value="2">Blue (Default)</value>
+		<option value="3">Purple</value>
+		<option value="4">Black</value>
+	</select></p>
+	<p>Workshop Disabler Beam Color:
+	<select id="HunrathCWWorkshopBeamColor" onchange="editStringVariable(this.id,[0x00,0x21,0x00,0x00,0x00])">
+		<option value="0">Green</value>
+		<option value="1">Cyan</value>
+		<option value="2">Blue (Default)</value>
+		<option value="3">Purple</value>
+		<option value="4">Black</value>
+	</select></p>
+	<p>Maray Building Disabler Beam Color:
+	<select id="SwampBeamBuildingBeamColor" onchange="editStringVariable(this.id,[0x00,0x1E,0x00,0x00,0x00])">
+		<option value="0">Green</value>
+		<option value="1">Cyan</value>
+		<option value="2">Blue (Default)</value>
+		<option value="3">Purple</value>
+		<option value="4">Black</value>
+	</select></p>
+	<p>Maray WMD Disabler Beam Color:
+	<select id="SwampWMDBeamColor" onchange="editStringVariable(this.id,[0x00,0x15,0x00,0x00,0x00])">
+		<option value="0">Green</value>
+		<option value="1">Cyan</value>
+		<option value="2">Blue (Default)</value>
+		<option value="3">Purple</value>
+		<option value="4">Black</value>
+	</select></p>
+	<div id="booleanSection"></div>
+	<button type="button" onmouseup="saveButtonPressed();">Save</button>
+</body>
+</html>
