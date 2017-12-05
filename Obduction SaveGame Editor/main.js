@@ -3,7 +3,7 @@ function fillPage () {
 	for (var i = 0; i < stringProperties.length; i++) {
 		var newSelect = document.createElement('select');
 		newSelect.id = stringProperties[i].id;
-		newSelect.setAttribute('onchange', 'editStringVariable(this.id,[' + String(stringProperties[i].after) + ']');
+		newSelect.setAttribute('onchange', 'editStringVariable(this.id,[' + String(stringProperties[i].after) + '])');
 
 		for (var j = 0; j < stringProperties[i].options.length; j++) {
 			var newOption = document.createElement('option');
