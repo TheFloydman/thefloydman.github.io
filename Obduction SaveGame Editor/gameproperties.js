@@ -2,35 +2,35 @@ var stringProperties = [
 	{
 		'identifier' : 'License Plate Solution',
 		'id' : 'LicensePlateSolution',
-		'after' : [0x00,0x14,0x00,0x00,0x00],
+		'after' : [0x00,0x14],
 		'options' : ['Arizona','California','Colorado','DC','Florida','Minnesota','Missouri','Montana','New York','North Carolina','Ohio','Pennsylvania','Rhode Island','Texas','Washington'],
 		'altOptions' : ['Arizona (259742)','California (259167)','Colorado (244153)','D.C. (164965)','Florida (629415)','Minnesota (172958)','Missouri (325247)','Montana (155520)','New York (441693)','North Carolina (686403)','Ohio (163107)','Pennsylvania (323961)','Rhode Island (258287)','Texas (787932)','Washington (356807)']
 	},
 	{
 		'identifier' : 'Minecart Disabler Beam Color',
 		'id' : 'CWMinecartBeamColor',
-		'after' : [0x00,0x19,0x00,0x00,0x00],
+		'after' : [0x00,0x19],
 		'options' : ['0','1','2','3','4'],
 		'altOptions' : ['Green','Cyan','Blue (Default)','Purple','Black']
 	},
 	{
 		'identifier' : 'Workshop Disabler Beam Color',
 		'id' : 'HunrathCWWorkshopBeamColor',
-		'after' : [0x00,0x21,0x00,0x00,0x00],
+		'after' : [0x00,0x21],
 		'options' : ['0','1','2','3','4'],
 		'altOptions' : ['Green','Cyan','Blue (Default)','Purple','Black']
 	},
 	{
 		'identifier' : 'Maray Building Disabler Beam Color',
 		'id' : 'SwampBeamBuildingBeamColor',
-		'after' : [0x00,0x1E,0x00,0x00,0x00],
+		'after' : [0x00,0x1E],
 		'options' : ['0','1','2','3','4'],
 		'altOptions' : ['Green','Cyan','Blue (Default)','Purple','Black']
 	},
 	{
 		'identifier' : 'Maray WMD Disabler Beam Color',
 		'id' : 'SwampWMDBeamColor',
-		'after' : [0x00,0x15,0x00,0x00,0x00],
+		'after' : [0x00,0x15],
 		'options' : ['0','1','2','3','4'],
 		'altOptions' : ['Green','Cyan','Blue (Default)','Purple','Black']
 	}
