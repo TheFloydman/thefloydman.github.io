@@ -1,4 +1,27 @@
 function fillPage () {
+	// Create dropdown lists for string properties.
+	for (var i = 0; i < stringProperties.length; i++) {
+		var newSelect = document.createElement('select');
+		newSelect.id = stringProperties[i].id;
+		newSelect.setAttribute('onchange', 'editStringVariable(this.id,[' + String(stringProperties[i].after) + ']');
+
+		for (var j = 0; j < stringProperties[i].options.length; j++) {
+			var newOption = document.createElement('option');
+			newOption.value = stringProperties[i].options[j];
+			newOption.innerHTML = stringProperties[i].altOptions[j];
+			newSelect.appendChild(newOption);
+		}
+
+		var textNodeIdentifier = document.createTextNode(stringProperties[i].identifier + ': ');
+
+		var newP = document.createElement('p');
+		newP.id = 'stringP' + String(i);
+
+		newP.appendChild(textNodeIdentifier);
+		newP.appendChild(newSelect);
+		document.getElementById('stringSection').appendChild(newP);
+	}
+
 	// Create radio buttons for boolean properties.
 	for (var i = 0; i < booleanProperties.length; i++) {
 		var newInput1 = document.createElement('input');
@@ -13,14 +36,14 @@ function fillPage () {
 		newInput2.value = '0';
 		newInput1.setAttribute('onchange', 'editBooleanVariable(this.name,this.value)');
 		newInput2.setAttribute('onchange', 'editBooleanVariable(this.name,this.value)');
-		
+
 		var textNodeIdentifier = document.createTextNode(booleanProperties[i].identifier + ': ');
 		var textNodeTrue = document.createTextNode(' ' + booleanProperties[i].trueText + ' ');
 		var textNodeFalse = document.createTextNode(' ' + booleanProperties[i].falseText + ' ');
-		
+
 		var newP = document.createElement('p');
 		newP.id = 'booleanP' + String(i);
-		
+
 		newP.appendChild(textNodeIdentifier);
 		newP.appendChild(newInput1);
 		newP.appendChild(textNodeTrue);
@@ -43,7 +66,7 @@ function loadButtonPressed() {
 		loadGameVersion();
 		// Load string variables.
 		for (var i = 0; i < stringProperties.length; i++) {
-			document.getElementById(stringProperties[i].name).value = loadStringVariable(stringProperties[i].name,stringProperties[i].after);
+			document.getElementById(stringProperties[i].id).value = loadStringVariable(stringProperties[i].id,stringProperties[i].after);
 		}
 		// Load boolean variables.
 		for (var i = 0; i < booleanProperties.length; i++) {
