@@ -54,6 +54,8 @@ function fillPage () {
 }
 
 function loadButtonPressed() {
+	fillPage();
+
 	// Load a file the user chooses from the computer.
 	var chosenFile = document.getElementById('loadFile').files;
 	var loadedFile = chosenFile[0];
