@@ -1,9 +1,13 @@
 function fillPage () {
+	// Clear any existing variables.
+	document.getElementById('stringSection').innerHTML = '';
+	document.getElementById('booleanSection').innerHTML = '';
+
 	// Create dropdown lists for string properties.
 	for (var i = 0; i < stringProperties.length; i++) {
 		var newSelect = document.createElement('select');
 		newSelect.id = stringProperties[i].id;
-		newSelect.setAttribute('onchange', 'editStringVariable(this.id,[' + String(stringProperties[i].after) + '])');
+		newSelect.setAttribute('onchange', 'editStringVariable(this.id,[0])');
 
 		for (var j = 0; j < stringProperties[i].options.length; j++) {
 			var newOption = document.createElement('option');
@@ -68,7 +72,7 @@ function loadButtonPressed() {
 		loadGameVersion();
 		// Load string variables.
 		for (var i = 0; i < stringProperties.length; i++) {
-			document.getElementById(stringProperties[i].id).value = loadStringVariable(stringProperties[i].id,stringProperties[i].after);
+			document.getElementById(stringProperties[i].id).value = loadStringVariable(stringProperties[i].id);
 		}
 		// Load boolean variables.
 		for (var i = 0; i < booleanProperties.length; i++) {
@@ -77,7 +81,7 @@ function loadButtonPressed() {
 			} else if (loadBooleanVariable(booleanProperties[i].name) == 1) {
 				document.getElementById(booleanProperties[i].trueId).checked = true;
 			} else {
-				console.log('Boolean is not 0 or 1.');
+				console.log('Error: Boolean \'' + booleanProperties[i].name + '\' is not 0 or 1.');
 			}
 		}
 	};
@@ -99,12 +103,11 @@ function loadGameVersion () {
 	}
 }
 
-function loadStringVariable (varName,varAfter) {
+function loadStringVariable (varName) {
 	var varLoc = varName.length + 30;
 	var stringArray = convertStringToDecArray(varName);
-	var decArray = varAfter;
 	var varIndex = searchArray(stringArray,fileView);
-	var afterIndex = searchArray(decArray,fileView,varIndex + varLoc);
+	var afterIndex = searchArray([0],fileView,varIndex + varLoc);
 	var answerArray = [];
 	for (var i = varIndex + varLoc, j = 0; i < afterIndex; i++, j++) {
 		answerArray[j] = fileView[i]
