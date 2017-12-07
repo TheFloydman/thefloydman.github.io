@@ -2,8 +2,15 @@ function fillPage () {
 	// Clear any existing variables.
 	document.getElementById('stringSection').innerHTML = '';
 	document.getElementById('booleanSection').innerHTML = '';
+	document.getElementById('stringSection').style.borderBottom = '1px black solid';
+	document.getElementById('booleanSection').style.borderBottom = '1px black solid';
 
 	// Create dropdown lists for string properties.
+	var stringTitleDiv = document.createElement('div');
+	stringTitleDiv.className = 'sectionTitle';
+	stringTitleDiv.appendChild(document.createTextNode('String Properties'));
+	document.getElementById('stringSection').appendChild(stringTitleDiv);
+
 	for (var i = 0; i < stringProperties.length; i++) {
 		var newSelect = document.createElement('select');
 		newSelect.id = stringProperties[i].id;
@@ -18,15 +25,32 @@ function fillPage () {
 
 		var textNodeIdentifier = document.createTextNode(stringProperties[i].identifier + ': ');
 
-		var newP = document.createElement('p');
-		newP.id = 'stringP' + String(i);
-
-		newP.appendChild(textNodeIdentifier);
-		newP.appendChild(newSelect);
-		document.getElementById('stringSection').appendChild(newP);
+		var stringDivMain = document.createElement('div');
+		stringDivMain.id = 'stringDivMain' + String(i);
+		stringDivMain.className = 'main';
+		var stringDivIdentifier = document.createElement('div');
+		stringDivIdentifier.id = 'stringDivIdentifier' + String(i);
+		stringDivIdentifier.className = 'identifier';
+		var stringSpanIdentifier = document.createElement('span');
+		stringSpanIdentifier.id = 'stringSpanIdentifier' + String(i);
+		stringSpanIdentifier.className = 'identifier';
+		var stringDivChoices = document.createElement('div');
+		stringDivChoices.id = 'stringDivChoices' + String(i);
+		stringDivChoices.className = 'choices';
+		stringSpanIdentifier.appendChild(textNodeIdentifier);
+		stringDivIdentifier.appendChild(stringSpanIdentifier);
+		stringDivChoices.appendChild(newSelect);
+		stringDivMain.appendChild(stringDivIdentifier);
+		stringDivMain.appendChild(stringDivChoices);
+		document.getElementById('stringSection').appendChild(stringDivMain);
 	}
 
 	// Create radio buttons for boolean properties.
+	var booleanTitleDiv = document.createElement('div');
+	booleanTitleDiv.className = 'sectionTitle';
+	booleanTitleDiv.appendChild(document.createTextNode('Boolean Properties'));
+	document.getElementById('booleanSection').appendChild(booleanTitleDiv);
+
 	for (var i = 0; i < booleanProperties.length; i++) {
 		var newInput1 = document.createElement('input');
 		var newInput2 = document.createElement('input');
@@ -45,15 +69,35 @@ function fillPage () {
 		var textNodeTrue = document.createTextNode(' ' + booleanProperties[i].trueText + ' ');
 		var textNodeFalse = document.createTextNode(' ' + booleanProperties[i].falseText + ' ');
 
-		var newP = document.createElement('p');
-		newP.id = 'booleanP' + String(i);
-
-		newP.appendChild(textNodeIdentifier);
-		newP.appendChild(newInput1);
-		newP.appendChild(textNodeTrue);
-		newP.appendChild(newInput2);
-		newP.appendChild(textNodeFalse);
-		document.getElementById('booleanSection').appendChild(newP);
+		var booleanDivMain = document.createElement('div');
+		booleanDivMain.id = 'booleanDivMain' + String(i);
+		booleanDivMain.className = 'main';
+		var booleanDivIdentifier = document.createElement('div');
+		booleanDivIdentifier.id = 'booleanDivIdentifier' + String(i);
+		booleanDivIdentifier.className = 'identifier';
+		var booleanSpanIdentifier = document.createElement('span');
+		booleanSpanIdentifier.id = 'booleanSpanIdentifier' + String(i);
+		booleanSpanIdentifier.className = 'identifier';
+		var booleanDivChoices = document.createElement('div');
+		booleanDivChoices.id = 'booleanDivChoices' + String(i);
+		booleanDivChoices.className = 'choices';
+		var booleanDivFirstChoice = document.createElement('div');
+		booleanDivFirstChoice.id = 'booleanFirstChoice' + String(i);
+		booleanDivFirstChoice.className = 'firstChoice'
+		var booleanDivSecondChoice = document.createElement('div');
+		booleanDivSecondChoice.id = 'booleanSecondChoice' + String(i);
+		booleanDivSecondChoice.className = 'secondChoice'
+		booleanSpanIdentifier.appendChild(textNodeIdentifier);
+		booleanDivIdentifier.appendChild(booleanSpanIdentifier);
+		booleanDivFirstChoice.appendChild(newInput1);
+		booleanDivFirstChoice.appendChild(textNodeTrue);
+		booleanDivSecondChoice.appendChild(newInput2);
+		booleanDivSecondChoice.appendChild(textNodeFalse);
+		booleanDivChoices.appendChild(booleanDivFirstChoice);
+		booleanDivChoices.appendChild(booleanDivSecondChoice);
+		booleanDivMain.appendChild(booleanDivIdentifier);
+		booleanDivMain.appendChild(booleanDivChoices);
+		document.getElementById('booleanSection').appendChild(booleanDivMain);
 	}
 }
 

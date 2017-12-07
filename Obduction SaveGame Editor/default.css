@@ -1,3 +1,80 @@
 #introSection {
-  margin-bottom: 1em;
+  margin-left: -1px;
+  margin-top: -1px;
+  margin-right: -1px;
+  margin-bottom: calc(1em - 1px);
+  width: calc(40em - 2em);
+  border: 1px;
+  border-color: black;
+  border-style: solid;
+  padding: 1em;
+}
+
+#stringSection {
+  width: 30em;
+  border-left: 0px;
+  border-top: 0px;
+  border-right: 0px;
+  border-bottom: 0px;
+  border-color: black;
+  border-style: solid;
+  margin-bottom: calc(1em - 1px);
+}
+
+#booleanSection {
+  width: 30em;
+  border-left: 0px;
+  border-top: 0px;
+  border-right: 0px;
+  border-bottom: 0px;
+  border-color: black;
+  border-style: solid;
+  margin-bottom: calc(1em - 1px);
+}
+
+div.main {
+  width: 100%;
+  height: 3em;
+  border-left: 1px;
+  border-top: 1px;
+  border-right: 1px;
+  border-bottom: 0px;
+  border-color: black;
+  border-style: solid;
+}
+
+div.identifier {
+  width: calc(60% - 0.5em);
+  height: 100%;
+  display: inline-block;
+  *display: inline;
+  vertical-align: top;
+  text-align: right;
+  padding-right: 0.5em;
+}
+
+div.choices {
+  width: 40%;
+  height: 100%;
+  display: inline-block;
+  *display: inline;
+  vertical-align: top;
+  border-left: 1px;
+  border-top: 0px;
+  border-right: 0px;
+  border-bottom: 0px;
+  border-color: black;
+  border-style: solid;
+  margin-left: -1px;
+}
+
+span.identifier {
+  vertical-align: middle;
+}
+
+.sectionTitle {
+  text-align: center;
+  margin-bottom: 0.5em;
+  font-weight: bold;
+  text-decoration: underline;
 }
