@@ -33,6 +33,9 @@
 }
 
 div.main {
+  display: flex;
+  flex-wrap: nowrap;
+  flex-direction: row;
   width: 100%;
   height: 3em;
   border-left: 1px;
@@ -44,21 +47,20 @@ div.main {
 }
 
 div.identifier {
-  width: calc(60% - 0.5em);
-  height: 100%;
-  display: inline-block;
-  *display: inline;
-  vertical-align: top;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  width: 60%;
   text-align: right;
   padding-right: 0.5em;
 }
 
 div.choices {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
   width: 40%;
   height: 100%;
-  display: inline-block;
-  *display: inline;
-  vertical-align: top;
   border-left: 1px;
   border-top: 0px;
   border-right: 0px;
@@ -66,10 +68,12 @@ div.choices {
   border-color: black;
   border-style: solid;
   margin-left: -1px;
+  padding-left: 0.5em;
+  padding-right: 0.5em;
 }
 
 span.identifier {
-  vertical-align: middle;
+
 }
 
 .sectionTitle {

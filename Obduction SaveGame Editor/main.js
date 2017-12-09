@@ -5,6 +5,14 @@ function fillPage () {
 	document.getElementById('stringSection').style.borderBottom = '1px black solid';
 	document.getElementById('booleanSection').style.borderBottom = '1px black solid';
 
+	// Add 'Save' button.
+	var getSaveP = document.getElementById('saveP');
+	getSaveP.innerHTML = '';
+	var newSaveButton = document.createElement('button');
+	newSaveButton.setAttribute('onmouseup', 'saveButtonPressed();');
+	newSaveButton.innerHTML = 'Save';
+	getSaveP.appendChild(newSaveButton);
+
 	// Create dropdown lists for string properties.
 	var stringTitleDiv = document.createElement('div');
 	stringTitleDiv.className = 'sectionTitle';
