@@ -4,6 +4,7 @@ function fillPage () {
 	document.getElementById('booleanSection').innerHTML = '';
 	document.getElementById('stringSection').style.borderBottom = '1px black solid';
 	document.getElementById('booleanSection').style.borderBottom = '1px black solid';
+	document.getElementById('integerSection').style.borderBottom = '1px black solid';
 
 	// Add 'Save' button.
 	var getSaveP = document.getElementById('saveP');
@@ -107,6 +108,46 @@ function fillPage () {
 		booleanDivMain.appendChild(booleanDivChoices);
 		document.getElementById('booleanSection').appendChild(booleanDivMain);
 	}
+
+	// Create dropdown lists for integer properties.
+	var integerTitleDiv = document.createElement('div');
+	integerTitleDiv.className = 'sectionTitle';
+	integerTitleDiv.appendChild(document.createTextNode('Integer Properties'));
+	document.getElementById('integerSection').appendChild(integerTitleDiv);
+
+	for (var i = 0; i < integerProperties.length; i++) {
+		var newSelect = document.createElement('select');
+		newSelect.id = integerProperties[i].id;
+		newSelect.setAttribute('onchange', 'editIntegerVariable(this.id,this.value)');
+
+		for (var j = 0; j < integerProperties[i].options.length; j++) {
+			var newOption = document.createElement('option');
+			newOption.value = integerProperties[i].options[j];
+			newOption.innerHTML = integerProperties[i].altOptions[j];
+			newSelect.appendChild(newOption);
+		}
+
+		var textNodeIdentifier = document.createTextNode(integerProperties[i].identifier + ': ');
+
+		var integerDivMain = document.createElement('div');
+		integerDivMain.id = 'integerDivMain' + String(i);
+		integerDivMain.className = 'main';
+		var integerDivIdentifier = document.createElement('div');
+		integerDivIdentifier.id = 'integerDivIdentifier' + String(i);
+		integerDivIdentifier.className = 'identifier';
+		var integerSpanIdentifier = document.createElement('span');
+		integerSpanIdentifier.id = 'integerSpanIdentifier' + String(i);
+		integerSpanIdentifier.className = 'identifier';
+		var integerDivChoices = document.createElement('div');
+		integerDivChoices.id = 'integerDivChoices' + String(i);
+		integerDivChoices.className = 'choices';
+		integerSpanIdentifier.appendChild(textNodeIdentifier);
+		integerDivIdentifier.appendChild(integerSpanIdentifier);
+		integerDivChoices.appendChild(newSelect);
+		integerDivMain.appendChild(integerDivIdentifier);
+		integerDivMain.appendChild(integerDivChoices);
+		document.getElementById('integerSection').appendChild(integerDivMain);
+	}
 }
 
 function loadButtonPressed() {
@@ -135,6 +176,10 @@ function loadButtonPressed() {
 			} else {
 				console.log('Error: Boolean \'' + booleanProperties[i].name + '\' is not 0 or 1.');
 			}
+		}
+		// Load integer variables.
+		for (var i = 0; i < integerProperties.length; i++) {
+			document.getElementById(integerProperties[i].id).value = loadIntegerVariable(integerProperties[i].id);
 		}
 	};
 }
@@ -177,6 +222,14 @@ function loadBooleanVariable (varName) {
 	return answerArray[0];
 }
 
+function loadIntegerVariable (varName) {
+	var varLoc = varName.length + 26;
+	var stringArray = convertStringToDecArray(varName);
+	var varIndex = searchArray(stringArray,fileView);
+	var answer = fileView[varIndex + varLoc]
+	return answer;
+}
+
 function editStringVariable (varName,varAfter) {
 	var varLoc = varName.length + 30;
 	var stringArray = convertStringToDecArray(varName);
@@ -198,6 +251,13 @@ function editStringVariable (varName,varAfter) {
 }
 
 function editBooleanVariable (varName,varValue) {
+	var varLoc = varName.length + 26;
+	var stringArray = convertStringToDecArray(varName);
+	var varIndex = searchArray(stringArray,fileView);
+	fileView[varIndex + varLoc] = varValue;
+}
+
+function editIntegerVariable (varName,varValue) {
 	var varLoc = varName.length + 26;
 	var stringArray = convertStringToDecArray(varName);
 	var varIndex = searchArray(stringArray,fileView);
@@ -232,26 +292,3 @@ function searchArray (varString,varArray,startNumber) {
 	}
 	return startIndex;
 }
-
-/*function convertArrayFromDecToHex (decName) {
-	var hexName = [];
-	for (var i = 0; i < decName.length; i++) {
-		hexName[i] = decName[i].toString(16);
-	}
-	return hexName;
-}*/
-
-/*function convertArrayFromHexToDec (hexName) {
-	for (var i = 0; i < hexName.length; i++) {
-		hexName[i] = parseInt(hexName[i], 16);
-	}
-	return hexName;
-}*/
-
-/*function convertStringToHexArray (plainString) {
-	var convertedArray = [];
-	for (var i = 0; i < plainString.length; i++) {
-			convertedArray[i] = plainString.charCodeAt(i).toString(16);
-	}
-	return convertedArray;
-}*/

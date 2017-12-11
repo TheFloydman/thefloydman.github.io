@@ -429,11 +429,44 @@ var booleanProperties = [
 		'trueText' : 'True'
 	},
 	{
-		'identifier' : 'bCanBeDamage (EXPERIMENTAL)',
-		'name' : 'bCanBeDamaged',
-		'falseId' : 'bCannotBeDamaged',
-		'trueId' : 'bCanBeDamaged',
-		'falseText' : 'Cannot',
-		'trueText' : 'Can'
+		'identifier' : 'TreeDeviceVisitedHunrathHub (EXPERIMENTAL)',
+		'name' : 'TreeDeviceVisitedHunrathHub',
+		'falseId' : 'treeDeviceVisitedHunrathHubFalse',
+		'trueId' : 'treeDeviceVisitedHunrathHubTrue',
+		'falseText' : 'False',
+		'trueText' : 'True'
+	},
+	{
+		'identifier' : 'TreeDeviceVisitedChainHive (EXPERIMENTAL)',
+		'name' : 'TreeDeviceVisitedChainHive',
+		'falseId' : 'treeDeviceVisitedChainHiveFalse',
+		'trueId' : 'treeDeviceVisitedChainHiveTrue',
+		'falseText' : 'False',
+		'trueText' : 'True'
+	},
+	{
+		'identifier' : 'TreeDeviceVisitedSwampCryo (EXPERIMENTAL)',
+		'name' : 'TreeDeviceVisitedSwampCryo',
+		'falseId' : 'treeDeviceVisitedSwampCryoFalse',
+		'trueId' : 'treeDeviceVisitedSwampCryoTrue',
+		'falseText' : 'False',
+		'trueText' : 'True'
+	},
+	{
+		'identifier' : 'TreeDeviceVisitedSoariaGroundZero (EXPERIMENTAL)',
+		'name' : 'TreeDeviceVisitedSoariaGroundZero',
+		'falseId' : 'treeDeviceVisitedSoariaGroundZero',
+		'trueId' : 'treeDeviceVisitedSoariaGroundZero',
+		'falseText' : 'False',
+		'trueText' : 'True'
+	}
+];
+
+var integerProperties = [
+	{
+		'identifier' : 'Hunrath Tree Swapper Progress',
+		'id' : 'HunrathTreeDeviceProgress',
+		'options' : ['0','1','2','3','4','5','6','7','8','10'],
+		'altOptions' : ['0%','10%','20%','30%','40%','50%','60%','70%','80%','100%']
 	}
 ];
