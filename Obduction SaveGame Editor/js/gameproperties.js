@@ -237,6 +237,14 @@ var booleanProperties = [
 		'trueText' : 'Unlocked'
 	},
 	{
+		'identifier' : 'Upper Workshop Door',
+		'name' : 'HunrathCWWorkshopBackdoorEnabled',
+		'falseId' : 'hunrathCWWorkshopBackdoorDisabled',
+		'trueId' : 'hunrathCWWorkshopBackdoorEnabled',
+		'falseText' : 'Cannot Interact With',
+		'trueText' : 'Can Interact With'
+	},
+	{
 		'identifier' : 'Slide Projector',
 		'name' : 'ProjectorSwitchOn',
 		'falseId' : 'projectorSwitchOff',
@@ -291,14 +299,6 @@ var booleanProperties = [
 		'trueId' : 'hunrathEntrySphereLanternLit',
 		'falseText' : 'Unlit',
 		'trueText' : 'Lit'
-	},
-	{
-		'identifier' : 'HunrathCWWorkshopBackdoor (EXPERIMENTAL)',
-		'name' : 'HunrathCWWorkshopBackdoorEnabled',
-		'falseId' : 'hunrathCWWorkshopBackdoorDisabled',
-		'trueId' : 'hunrathCWWorkshopBackdoorEnabled',
-		'falseText' : 'Disabled',
-		'trueText' : 'Enabled'
 	},
 	{
 		'identifier' : 'Entry Canyon Imager',
@@ -459,6 +459,22 @@ var booleanProperties = [
 		'trueId' : 'treeDeviceVisitedSoariaGroundZero',
 		'falseText' : 'False',
 		'trueText' : 'True'
+	},
+	{
+		'identifier' : 'SuppressDomeUpdate (EXPERIMENTAL)',
+		'name' : 'SuppressDomeUpdate',
+		'falseId' : 'suppressDomeUpdateFalse',
+		'trueId' : 'suppressDomeUpdateTrue',
+		'falseText' : 'False',
+		'trueText' : 'True'
+	},
+	{
+		'identifier' : 'Battery',
+		'name' : 'CWBatteryConnectedToTree',
+		'falseId' : 'cWBatteryConnectedToTree',
+		'trueId' : 'cWBatteryDisconnectedFromTree',
+		'falseText' : 'Disconnected from Tree',
+		'trueText' : 'Connected to Tree'
 	}
 ];
 
@@ -466,7 +482,22 @@ var integerProperties = [
 	{
 		'identifier' : 'Hunrath Tree Swapper Progress',
 		'id' : 'HunrathTreeDeviceProgress',
-		'options' : ['0','1','2','3','4','5','6','7','8','10'],
-		'altOptions' : ['0%','10%','20%','30%','40%','50%','60%','70%','80%','100%']
+		'options' : ['0','1','2','3','4','5','6','7','8','9','10'],
+		'altOptions' : ['0%','10%','20%','30%','40%','50%','60%','70%','80%','90%','100%']
+	}
+];
+
+var floatProperties = [
+	{
+		'identifier' : 'Hunrath Swing Bridge Rotation',
+		'id' : 'HunrathSwingBridgeYaw',
+		'options' : ['0000803F','0000003f','00000000'],
+		'altOptions' : ['Mine Side','Across River','Downtown Side']
+	},
+	{
+		'identifier' : 'Hunrath Swing Bridge Propellor Rotation',
+		'id' : 'HunrathSwingBridgePaddleRotation',
+		'options' : ['0000803f','bcc3043f','00000000'],
+		'altOptions' : ['Left Side Up','Level','Right Side Up']
 	}
 ];
