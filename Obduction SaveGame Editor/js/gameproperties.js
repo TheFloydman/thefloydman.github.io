@@ -357,7 +357,7 @@ var booleanProperties = [
 		'trueText' : 'On'
 	},
 	{
-		'identifier' : 'Hunrath Connected to Hub? (EXPERIMENTAL)',
+		'identifier' : 'Has Hunrath Tree Been Watered?',
 		'name' : 'HunrathConnectedToHub',
 		'falseId' : 'hunrathDisonnectedToHub',
 		'trueId' : 'hunrathConnectedToHub',
@@ -365,7 +365,7 @@ var booleanProperties = [
 		'trueText' : 'Yes'
 	},
 	{
-		'identifier' : 'Kaptar Connected to Hub? (EXPERIMENTAL)',
+		'identifier' : 'Has Kaptar Tree Been Watered?',
 		'name' : 'ChainConnectedToHub',
 		'falseId' : 'chainDisconnectedToHub',
 		'trueId' : 'chainConnectedToHub',
@@ -373,7 +373,7 @@ var booleanProperties = [
 		'trueText' : 'Yes'
 	},
 	{
-		'identifier' : 'Maray Connected to Hub? (EXPERIMENTAL)',
+		'identifier' : 'Has Maray Tree Been Watered?',
 		'name' : 'SwampConnectedToHub',
 		'falseId' : 'swampDisconnectedToHub',
 		'trueId' : 'swampConnectedToHub',
@@ -381,7 +381,7 @@ var booleanProperties = [
 		'trueText' : 'Yes'
 	},
 	{
-		'identifier' : 'Soria Connected to Hub? (EXPERIMENTAL)',
+		'identifier' : 'Has Soria Tree Been Watered?',
 		'name' : 'SoariaConnectedToHub',
 		'falseId' : 'soariaConnectedToHub',
 		'trueId' : 'soariaConnectedToHub',

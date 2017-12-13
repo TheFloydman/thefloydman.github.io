@@ -22,7 +22,7 @@ function fillPage () {
 	// Create inputs for player position.
 	var positionTitleDiv = document.createElement('div');
 	positionTitleDiv.className = 'sectionTitle';
-	positionTitleDiv.appendChild(document.createTextNode('Player Position (NOT YET WORKING)'));
+	positionTitleDiv.appendChild(document.createTextNode('Player Position (This should not be used to move long distances, as the ground might not be loaded, and you will fall through. If you find yourself trapped somewhere, and you already have access to the Tree in your area, set the position to (0,0,0) to move to the Tree.)'));
 	document.getElementById('positionSection').appendChild(positionTitleDiv);
 
 	for (var i = 0; i < 3; i++) {
@@ -239,6 +239,11 @@ function fillPage () {
 }
 
 function loadButtonPressed() {
+	// Do nothing if no file was selected.
+	if (document.getElementById('loadFile').value == '') {
+		return;
+	}
+
 	fillPage();
 
 	// Load a file the user chooses from the computer.
@@ -412,7 +417,7 @@ function editPlayerPosition (varName, positionLetter) {
 	} else if (positionLetter == 'Z') {
 		var varLoc = varName.length + 63;
 	}
-	console.log(positionLetter);
+
 	var inputValue = document.getElementById(varName).value;
 	var stringArray = convertStringToDecArray(hexName);
 	var varIndex = searchArray(stringArray,fileView);
@@ -512,8 +517,9 @@ function editPlayerPosition (varName, positionLetter) {
 
 	var flippedFinalArray = flipArray(finalArray);
 
+
 	for (var i = 0; i < 4; i++) {
-		fileView[varIndex + varLoc + i] = finalArray[i];
+		fileView[varIndex + varLoc + i] = flippedFinalArray[i];
 	}
 }
 
