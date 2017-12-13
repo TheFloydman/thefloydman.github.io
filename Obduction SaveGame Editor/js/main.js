@@ -22,7 +22,7 @@ function fillPage () {
 	// Create inputs for player position.
 	var positionTitleDiv = document.createElement('div');
 	positionTitleDiv.className = 'sectionTitle';
-	positionTitleDiv.appendChild(document.createTextNode('Player Position'));
+	positionTitleDiv.appendChild(document.createTextNode('Player Position (NOT YET WORKING)'));
 	document.getElementById('positionSection').appendChild(positionTitleDiv);
 
 	for (var i = 0; i < 3; i++) {
@@ -406,12 +406,13 @@ function convertDecArrayToFilledBinArray (startingArray) {
 function editPlayerPosition (varName, positionLetter) {
 	var hexName = 'PlayerPosition';
 	if (positionLetter == 'X') {
-		var varLoc = varName.length + 56;
+		var varLoc = varName.length + 55;
 	} else if (positionLetter == 'Y') {
-		var varLoc = varName.length + 60;
+		var varLoc = varName.length + 59;
 	} else if (positionLetter == 'Z') {
-		var varLoc = varName.length + 64;
+		var varLoc = varName.length + 63;
 	}
+	console.log(positionLetter);
 	var inputValue = document.getElementById(varName).value;
 	var stringArray = convertStringToDecArray(hexName);
 	var varIndex = searchArray(stringArray,fileView);
