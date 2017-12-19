@@ -317,7 +317,7 @@ function loadGameVersion () {
 	}
 }
 
-function loadPlayerPosition (axis,relLoc) {
+function loadPlayerPosition (axis, relLoc) {
 	var varName = 'PlayerPosition';
 	var varLoc = varName.length + relLoc;
 	var stringArray = convertStringToDecArray(varName);
