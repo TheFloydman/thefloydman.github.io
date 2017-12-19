@@ -327,37 +327,15 @@ function loadPlayerPosition (axis,relLoc) {
 		currentArray[j] = fileView[i];
 	}
 	if (currentArray[0] == 0 && currentArray[1] == 0 && currentArray[2] == 0 && currentArray[3] == 0) {
-		currentPosition = 0;
-		return currentPosition;
+		return 0;
 	}
-	var flippedArray = flipArray(currentArray);
+	var flippedArray = currentArray.reverse();
 	var binaryFlippedArray = convertDecArrayToFilledBinArray(flippedArray);
 	var currentFloat = '';
 	for (var i = 0; i < 4; i++) {
 		currentFloat += binaryFlippedArray[i];
 	}
-	if (currentFloat[0] == 0) {
-		var floatSign = 1;
-	} else {
-		var floatSign = -1;
-	}
-	var binaryExponent = '';
-	for (var i = 1; i < 9; i++) {
-		binaryExponent += String(currentFloat[i]);
-	}
-	var floatExponent = convertNumberToDec(binaryExponent, 2) - 127;
-	var binaryMantissa = '';
-	for (var i = 9; i < 32; i++) {
-		binaryMantissa += String(currentFloat[i]);
-	}
-	binaryMantissa = '1.' + binaryMantissa;
-	var floatMantissa = convertNumberToDec(binaryMantissa, 2);
-	if (floatExponent >= 0) {
-		var currentPosition = floatSign * Math.pow(2, floatExponent) * floatMantissa;
-	} else {
-		var currentPosition = floatSign * (1/Math.pow(2, Math.abs(floatExponent))) * floatMantissa;
-	}
-	return currentPosition;
+	return Number(float32Convert(currentFloat, false, 2));
 }
 
 function convertNumberToDec (inputNumber, inputBase) {
@@ -387,14 +365,6 @@ function convertNumberToDec (inputNumber, inputBase) {
 	return decimalNumber;
 }
 
-function flipArray (startingArray) {
-	var endingArray = [];
-	for (var i = 0, j = startingArray.length - 1; i < startingArray.length; i++, j--) {
-		endingArray[i] = startingArray[j];
-	}
-	return endingArray;
-}
-
 function convertDecArrayToFilledBinArray (startingArray) {
 	var endingArray = [];
 	for (var i = 0; i < startingArray.length; i++) {
@@ -422,7 +392,8 @@ function editPlayerPosition (varName, positionLetter) {
 	var stringArray = convertStringToDecArray(hexName);
 	var varIndex = searchArray(stringArray,fileView);
 
-	// A zero position is a special exception. If a position is 0, the 32-bit float should be 00000000000000000000000000000000.
+	/* A zero position is a special exception. If a position is 0, the 32-bit
+	float should be 00000000000000000000000000000000 or 0x00000000. */
 	if (inputValue == 0) {
 		for (var i = 0; i < 4; i++) {
 			fileView[varIndex + varLoc + i] = 0;
@@ -430,93 +401,13 @@ function editPlayerPosition (varName, positionLetter) {
 		return;
 	}
 
-	// Determine if number is positive or negative. Removing the sign now avoids problems down the line.
-	var adjustedSign = (inputValue >= 0) ? 0:1;
-	inputValue = Math.abs(inputValue);
-
-	// Determine binary integral.
-	var integralValue = Math.floor(inputValue);
-	var integralBits = [];
-	for (var i = 0; integralValue != 0; i++) {
-		integralBits[i] = (integralValue/2 == Math.floor(integralValue/2)) ? 0:1;
-		integralValue = Math.floor(integralValue/2)
-	}
-	var integralBitsFlipped = flipArray(integralBits);
-	var integralBitsString = '';
-	for (var i = 0; i < integralBitsFlipped.length; i++) {
-		integralBitsString += String(integralBitsFlipped[i]);
-	}
-	if (integralBitsString.charAt(0) == '') { integralBitsString = '0' }
-
-	// Determine binary fraction.
-	var fractionValue = inputValue - Math.floor(inputValue);
-	var fractionBits = [];
-	for (var i = 0; i < 24 - integralBits.length; i++) {
-		if (fractionValue * 2 > 1) {
-			fractionBits[i] = 1;
-		} else if (fractionValue * 2 == 1) {
-			fractionBits[i] = 1;
-			break;
-		} else {
-			fractionBits[i] = 0;
-		}
-		fractionValue = fractionValue * 2 - Math.floor(fractionValue * 2);
-	}
-	var fractionBitsString = '';
-	for (var i = 0; i < fractionBits.length; i++) {
-		fractionBitsString += String(fractionBits[i]);
-	}
-
-	// Normalize the binary number.
-	var wholeBitsString = integralBitsString + '.' + fractionBitsString;
-	var wholeBitsNumber = Number(integralBitsString + '.' + fractionBitsString);
-	var decimalIndex = wholeBitsString.indexOf('.');
-	if (Number(wholeBitsString) == 0) {
-		wholeBitsString = '0';
-		var normalizedBitsString = wholeBitsString;
-		var binaryExponent = 0;
-	} else if (decimalIndex > 1) {
-		var binaryExponent = decimalIndex - 1;
-		var normalizedBitsString = wholeBitsString[0];
-		normalizedBitsString += '.';
-		for (var i = 1; i < wholeBitsString.length; i++) {
-			if (i == decimalIndex) { continue; }
-			normalizedBitsString += wholeBitsString[i];
-		}
-	} else if (decimalIndex == 1 && wholeBitsString.charAt(0) == '0') {
-		var binaryExponent = wholeBitsString.indexOf('1') - 1;
-		var normalizedBitsString = '1.';
-		for (var i = wholeBitsString.indexOf('1') + 1; i < wholeBitsString.length; i++) {
-			normalizedBitsString += wholeBitsString[i];
-		}
-	} else {
-		var normalizedBitsString = wholeBitsString;
-		var binaryExponent = 0;
-	}
-	if (normalizedBitsString.charAt(normalizedBitsString.length - 1) == '.') {
-		normalizedBitsString = normalizedBitsString.slice(0, -1);
-	}
-
-	var adjustedExponent = (binaryExponent + 127).toString(2);
-	for (var i = 0; adjustedExponent.length < 8; i++) {
-		adjustedExponent = '0' + adjustedExponent;
-	}
-	var slicedString = normalizedBitsString.slice(2);
-	for (var i = 0; slicedString.length < 23; i++) {
-		slicedString = '0' + slicedString;
-	}
-	//adjustedSign = (Number(normalizedBitsString) >= 0) ? 0:1;
-
-	var finalBinary = String(adjustedSign) + adjustedExponent + slicedString;
-
+	var finalBinary = float32Convert(inputValue, true, 2);
 	var finalArray = [];
-	finalArray[0] = parseInt(Number(finalBinary.slice(0,8)), 2).toString(10);
-	finalArray[1] = parseInt(Number(finalBinary.slice(8,16)), 2).toString(10);
-	finalArray[2] = parseInt(Number(finalBinary.slice(16,24)), 2).toString(10);
-	finalArray[3] = parseInt(Number(finalBinary.slice(24)), 2).toString(10);
+	for (var i = 0; i < 4; i ++) {
+		finalArray[i] = parseInt(finalBinary.slice(i * 8, (i * 8) + 8), 2);
+	}
 
-	var flippedFinalArray = flipArray(finalArray);
-
+	var flippedFinalArray = finalArray.reverse();
 
 	for (var i = 0; i < 4; i++) {
 		fileView[varIndex + varLoc + i] = flippedFinalArray[i];
