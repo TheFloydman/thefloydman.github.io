@@ -183,9 +183,19 @@ function drawConnection(svg, coords) {
   var y2 = coords[3];
   var element = document.createElementNS("http://www.w3.org/2000/svg", "path");
   if (x1 == x2) {
-    element.setAttribute("d", "M " + (x1 - circleSize) + " " + y1 + " Q " + (x2 - circleSize + (circleSize / 2)) + " " + ((y2 + y1) / 2) + " " + (x2 - circleSize) + " " + y2 + " L " + (x2 + circleSize) + " " + y2 + " Q " + (x2 + circleSize - (circleSize / 2)) + " " + ((y2 + y1) / 2) + " " + (x1 + circleSize) + " " + y1);
+	  if (y1 < y2) {
+		  var y22 = y2;
+		  y2 = y1;
+		  y1 = y22;
+	  }
+	  element.setAttribute("d", "M " + (x1 - Math.sqrt(Math.pow(circleSize, 2) / 2)) + " " + (y1 - Math.sqrt(Math.pow(circleSize, 2) / 2)) + " Q " + (x2 - (circleSize / 4)) + " " + ((y2 + y1) / 2) + " " + (x2 - Math.sqrt(Math.pow(circleSize, 2) / 2)) + " " + (y2 + Math.sqrt(Math.pow(circleSize, 2) / 2)) + " L " + (x2 + Math.sqrt(Math.pow(circleSize, 2) / 2)) + " " + (y2 + Math.sqrt(Math.pow(circleSize, 2) / 2)) + " Q " + (x2 + (circleSize / 4)) + " " + ((y2 + y1) / 2) + " " + (x1 + Math.sqrt(Math.pow(circleSize, 2) / 2)) + " " + (y1 - Math.sqrt(Math.pow(circleSize, 2) / 2)));
   } else {
-    element.setAttribute("d", "M " + x1 + " " + (y1 - circleSize) + " Q " + ((x1 + x2) / 2) + " " + (y2 - circleSize + (circleSize / 2)) + " " + x2 + " " + (y2 - circleSize) + " L " + x2 + " " + (y2 + circleSize) + " Q " + ((x2 + x1) / 2) + " " + (y2 + circleSize - (circleSize / 2)) + " " + x1 + " " + (y1 + circleSize));
+	  if (x1 < x2) {
+		  var x22 = x2;
+		  x2 = x1;
+		  x1 = x22;
+	  }
+      element.setAttribute("d", "M " + (x1 - Math.sqrt(Math.pow(circleSize, 2) / 2)) + " " + (y1 - Math.sqrt(Math.pow(circleSize, 2) / 2)) + " Q " + ((x1 + x2) / 2) + " " + (y2 - (circleSize / 4)) + " " + (x2 + Math.sqrt(Math.pow(circleSize, 2) / 2)) + " " + (y2 - Math.sqrt(Math.pow(circleSize, 2) / 2)) + " L " + (x2 + Math.sqrt(Math.pow(circleSize, 2) / 2)) + " " + (y2 + Math.sqrt(Math.pow(circleSize, 2) / 2)) + " Q " + ((x2 + x1) / 2) + " " + (y2 + (circleSize / 4)) + " " + (x1 - Math.sqrt(Math.pow(circleSize, 2) / 2)) + " " + (y1 + Math.sqrt(Math.pow(circleSize, 2) / 2)));
   }
   element.setAttribute("fill", "black");
   element.setAttribute("stroke", "none");
