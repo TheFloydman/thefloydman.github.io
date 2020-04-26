@@ -21,11 +21,7 @@ var circleSize;
 var svgMain;
 
 function onPageLoad() {
-  document.getElementById("sizeField").addEventListener("change", function() {
-    var currentVillein = getValueOfBoard();
-    var currentArabic = document.getElementById("inputField").value;
-    textfieldChanged();
-  });
+  document.getElementById("sizeField").addEventListener("change", textFieldChanged);
   document.getElementById("layersField").addEventListener("change", textFieldChanged);
   document.getElementById("inputField").addEventListener("change", arabicToVillein);
   document.getElementById("svgMain").addEventListener("mousemove", mouseMoved);
