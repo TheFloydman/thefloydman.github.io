@@ -1,3 +1,4 @@
+var colorBackground = "white";
 var colorNormal = "black";
 var colorHighlight = "gray";
 var colorConnection = "black";
@@ -19,6 +20,7 @@ var digitMap;
 var connectionArray;
 var circleSize;
 var svgMain;
+var div;
 
 function onPageLoad() {
   document.getElementById("sizeField").addEventListener("change", textFieldChanged);
@@ -39,7 +41,7 @@ function textFieldChanged() {
   }
   currentSize = newSize;
 
-  var div = document.getElementById("divSvg");
+  div = document.getElementById("divSvg");
   div.style.height = div.style.width = (Math.floor(Math.sqrt(Math.pow(newSize, 2) * 2)) - ((Math.floor(Math.sqrt(Math.pow(newSize, 2) * 2)) - newSize) / 2) + 4) + "px";
   div.style.paddingTop = div.style.paddingLeft = ((Math.floor(Math.sqrt(Math.pow(newSize, 2) * 2)) - newSize) / 2) + "px";
   div.style.paddingRight = div.style.paddingBottom = -div.style.paddingTop;
@@ -48,6 +50,7 @@ function textFieldChanged() {
   svgMain.innerHTML = "";
   svgMain.setAttribute("width", currentSize)
   svgMain.setAttribute("height", currentSize);
+  svgMain.setAttribute("style", "border: 2px solid black; transform: rotate(45deg); background-color: " + colorBackground + ";");
 
   layers = document.getElementById("layersField").value;
   if (layers < 1) {
@@ -413,47 +416,42 @@ function correctDigits() {
 function getValueOfBoard() {
   correctDigits();
 
-  var iterator = digitMap.values();
-  var done = false
+  var digitArray = Array.from(digitMap.values());
   var value = 0;
-  while (done == false) {
-    var next = iterator.next();
-    if (next.done == true) {
-      done = true;
-      break;
-    }
-    var digit = next.value;
+  for (var i = 0; i < digitArray.length; i++) {
+    var digit = digitArray[i];
     value += (digit.up + digit.right + digit.down + digit.left) * Math.pow(4, digit.place);
   }
   return value;
 }
 
+/**
+ * Given a base-10 integer, sets all the correct connections on the board.
+ * @param value A base-10 integer.
+ */
+function setValueOfBoard(value) {
+	var base4 = value.toString(4);
+	  var digits = Math.log(base4) * Math.LOG10E + 1 | 0;
+	  if (base4 == 0 && digits == 0) {
+	    digits += 1;
+	  }
+
+	  var digitArray = Array.from(digitMap.values());
+	  for (var i = 0; i < digitArray.length; i++) {
+	    setDigit(digitArray[i], base4.charAt(base4.length - 1 - i))
+	  }
+
+	  connectionArray = [];
+	  generate();
+}
+
 function villeinToArabic() {
-  var value = getValueOfBoard();
-  document.getElementById("inputField").value = value;
+  document.getElementById("inputField").value = getValueOfBoard();
 }
 
 function arabicToVillein() {
   var base10 = +document.getElementById("inputField").value;
-  var base4 = base10.toString(4);
-  var digits = Math.log(base4) * Math.LOG10E + 1 | 0;
-  if (base4 == 0 && digits == 0) {
-    digits += 1;
-  }
-
-  var iterator = digitMap.values();
-  var done = false;
-  for (var i = 0; done == false; i++) {
-    var next = iterator.next();
-    if (next.done == true) {
-      done = true;
-      break;
-    }
-    setDigit(next.value, base4.charAt(base4.length - 1 - i))
-  }
-
-  connectionArray = [];
-  generate();
+  setValueOfBoard(base10);
 }
 
 function setDigit(digit, value) {
@@ -477,10 +475,42 @@ function setDigit(digit, value) {
 }
 
 function saveImage() {
-  html2canvas(document.getElementById("divSvg")).then(canvas => {
-    var link = document.createElement('a');
-    link.download = 'villein.png';
-    link.href = canvas.toDataURL()
-    link.click();
-  });
+	var canvas = document.createElement("CANVAS");
+	var svgWidth = svgMain.getAttribute("width");
+	var realWidth = Math.sqrt(Math.pow(svgWidth, 2) * 2);
+	canvas.width = canvas.height = realWidth + 10;
+	
+	var svg = document.createElementNS("http://www.w3.org/2000/svg", "svg");
+	svg.innerHTML = svgMain.innerHTML;
+	svg.setAttribute("width", svgWidth);
+	svg.setAttribute("height", svgWidth);
+	
+	var ctx = canvas.getContext("2d");
+	var data = (new XMLSerializer()).serializeToString(svg);
+	var DOMURL = window.URL || window.webkitURL || window;
+	
+	var img = new Image();
+	var svgBlob = new Blob([data], {type: "image/svg+xml;charset=utf-8"});
+	var url = DOMURL.createObjectURL(svgBlob);
+	
+	var imgURI;
+	img.onload = function () {
+		ctx.lineWidth = 4;
+		ctx.translate(canvas.width / 2, canvas.width / 2);
+		ctx.rotate(45*Math.PI/180);
+		ctx.translate(- canvas.width / 2, - canvas.width / 2);
+	    ctx.drawImage(img, (canvas.width - svgWidth) / 2, (canvas.height - svgWidth) / 2);
+	    ctx.strokeRect((canvas.width - svgWidth) / 2, (canvas.height - svgWidth) / 2,
+	    		svgWidth, svgWidth);
+	    DOMURL.revokeObjectURL(url);
+	    imgURI = canvas
+	        .toDataURL('image/png')
+	        .replace('image/png', 'image/octet-stream');
+	    var link = document.createElement('a');
+	    link.download = "villein.png";
+	    link.href = imgURI;
+	    link.click();
+	  };
+	  
+	  img.src = url;
 }

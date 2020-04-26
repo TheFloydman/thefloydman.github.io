@@ -1,17 +1,23 @@
-function Circle(x, y, r, fill, type) {
-  this.x = x;
-  this.y = y;
-  this.r = r;
-  this.fill = fill;
-  this.type = type;
+class Circle {
+  constructor(x, y, r, fill, type) {
+    this.x = x;
+    this.y = y;
+    this.r = r;
+    this.fill = fill;
+    this.type = type;
+  }
 }
 
-function Digit(place) {
-  this.place = place;
-  this.up = this.right = this.down = this.left = false;
+class Digit {
+  constructor(place) {
+    this.place = place;
+    this.up = this.right = this.down = this.left = false;
+  }
 }
 
-function GridPos(x, y) {
-  this.x = x;
-  this.y = y;
+class GridPos {
+  constructor(x, y){
+    this.x = x;
+    this.y = y;
+  }
 }
