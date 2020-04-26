@@ -1,3 +1,7 @@
+var colorNormal = "black";
+var colorHighlight = "gray";
+var colorConnection = "black";
+
 var currentSize;
 var currentNumber;
 var circleArray;
@@ -17,7 +21,11 @@ var circleSize;
 var svgMain;
 
 function onPageLoad() {
-  document.getElementById("sizeField").addEventListener("change", textFieldChanged);
+  document.getElementById("sizeField").addEventListener("change", function() {
+    var currentVillein = getValueOfBoard();
+    var currentArabic = document.getElementById("inputField").value;
+    textfieldChanged();
+  });
   document.getElementById("layersField").addEventListener("change", textFieldChanged);
   document.getElementById("inputField").addEventListener("change", arabicToVillein);
   document.getElementById("svgMain").addEventListener("mousemove", mouseMoved);
@@ -25,6 +33,8 @@ function onPageLoad() {
 }
 
 function textFieldChanged() {
+
+  var oldDigitMap = digitMap == null ? new Map() : digitMap;
 
   var newSize = document.getElementById("sizeField").value;
   if (newSize < 1) {
@@ -69,7 +79,11 @@ function textFieldChanged() {
   circleArray = [];
   connectionArray = [];
   for (var i = 0; i < totalDigits; i++) {
-    digitMap.set(placeToCoords(i, currentSize).toString(), new Digit(i));
+    var digit = new Digit(i);
+    if (i < Array.from(oldDigitMap.values()).length) {
+      digit = Array.from(oldDigitMap.values())[i];
+    }
+    digitMap.set(placeToCoords(i, currentSize).toString(), digit);
   }
 
   var inputField = document.getElementById("inputField");
@@ -102,15 +116,9 @@ function generate() {
   connection.setAttribute("stroke-width", circleSize / 2);
   svgMain.appendChild(connection);
 
-  var iterator = digitMap.values();
-  var done = false
-  while (done == false) {
-    var next = iterator.next();
-    if (next.done == true) {
-      done = true;
-      break;
-    }
-    drawDigit(svgMain, next.value);
+  var array = Array.from(digitMap.values());
+  for (var i = 0; i < array.length; i++) {
+    drawDigit(svgMain, array[i]);
   }
 
   for (var i = 0; i < connectionArray.length; i++) {
@@ -133,17 +141,22 @@ function drawCircle(svg, circle) {
   element.addEventListener("click", function() {
     digitClicked(circle);
   });
+  element.addEventListener("mouseenter", function() {
+    element.setAttribute("fill", colorHighlight);
+  });
+  element.addEventListener("mouseleave", function() {
+    element.setAttribute("fill", colorNormal);
+  });
   svg.appendChild(element);
 }
 
 function drawDigit(svg, digit) {
   var coords = placeToCoords(digit.place, currentSize);
-  var fill = "black";
-  var circle = [new Circle(coords[0], coords[1], circleSize, fill, "digit"),
-    new Circle(coords[0], coords[1] - spacing, circleSize, fill, "circle"),
-    new Circle(coords[0] + spacing, coords[1], circleSize, fill, "circle"),
-    new Circle(coords[0], coords[1] + spacing, circleSize, fill, "circle"),
-    new Circle(coords[0] - spacing, coords[1], circleSize, fill, "circle")
+  var circle = [new Circle(coords[0], coords[1], circleSize, colorNormal, "digit"),
+    new Circle(coords[0], coords[1] - spacing, circleSize, colorNormal, "circle"),
+    new Circle(coords[0] + spacing, coords[1], circleSize, colorNormal, "circle"),
+    new Circle(coords[0], coords[1] + spacing, circleSize, colorNormal, "circle"),
+    new Circle(coords[0] - spacing, coords[1], circleSize, colorNormal, "circle")
   ];
   for (var i = 0; i < circle.length; i++) {
     var hasCircle = false;
@@ -183,21 +196,21 @@ function drawConnection(svg, coords) {
   var y2 = coords[3];
   var element = document.createElementNS("http://www.w3.org/2000/svg", "path");
   if (x1 == x2) {
-	  if (y1 < y2) {
-		  var y22 = y2;
-		  y2 = y1;
-		  y1 = y22;
-	  }
-	  element.setAttribute("d", "M " + (x1 - Math.sqrt(Math.pow(circleSize, 2) / 2)) + " " + (y1 - Math.sqrt(Math.pow(circleSize, 2) / 2)) + " Q " + (x2 - (circleSize / 4)) + " " + ((y2 + y1) / 2) + " " + (x2 - Math.sqrt(Math.pow(circleSize, 2) / 2)) + " " + (y2 + Math.sqrt(Math.pow(circleSize, 2) / 2)) + " L " + (x2 + Math.sqrt(Math.pow(circleSize, 2) / 2)) + " " + (y2 + Math.sqrt(Math.pow(circleSize, 2) / 2)) + " Q " + (x2 + (circleSize / 4)) + " " + ((y2 + y1) / 2) + " " + (x1 + Math.sqrt(Math.pow(circleSize, 2) / 2)) + " " + (y1 - Math.sqrt(Math.pow(circleSize, 2) / 2)));
+    if (y1 < y2) {
+      var y22 = y2;
+      y2 = y1;
+      y1 = y22;
+    }
+    element.setAttribute("d", "M " + (x1 - Math.sqrt(Math.pow(circleSize, 2) / 2)) + " " + (y1 - Math.sqrt(Math.pow(circleSize, 2) / 2)) + " Q " + (x2 - (circleSize / 4)) + " " + ((y2 + y1) / 2) + " " + (x2 - Math.sqrt(Math.pow(circleSize, 2) / 2)) + " " + (y2 + Math.sqrt(Math.pow(circleSize, 2) / 2)) + " L " + (x2 + Math.sqrt(Math.pow(circleSize, 2) / 2)) + " " + (y2 + Math.sqrt(Math.pow(circleSize, 2) / 2)) + " Q " + (x2 + (circleSize / 4)) + " " + ((y2 + y1) / 2) + " " + (x1 + Math.sqrt(Math.pow(circleSize, 2) / 2)) + " " + (y1 - Math.sqrt(Math.pow(circleSize, 2) / 2)));
   } else {
-	  if (x1 < x2) {
-		  var x22 = x2;
-		  x2 = x1;
-		  x1 = x22;
-	  }
-      element.setAttribute("d", "M " + (x1 - Math.sqrt(Math.pow(circleSize, 2) / 2)) + " " + (y1 - Math.sqrt(Math.pow(circleSize, 2) / 2)) + " Q " + ((x1 + x2) / 2) + " " + (y2 - (circleSize / 4)) + " " + (x2 + Math.sqrt(Math.pow(circleSize, 2) / 2)) + " " + (y2 - Math.sqrt(Math.pow(circleSize, 2) / 2)) + " L " + (x2 + Math.sqrt(Math.pow(circleSize, 2) / 2)) + " " + (y2 + Math.sqrt(Math.pow(circleSize, 2) / 2)) + " Q " + ((x2 + x1) / 2) + " " + (y2 + (circleSize / 4)) + " " + (x1 - Math.sqrt(Math.pow(circleSize, 2) / 2)) + " " + (y1 + Math.sqrt(Math.pow(circleSize, 2) / 2)));
+    if (x1 < x2) {
+      var x22 = x2;
+      x2 = x1;
+      x1 = x22;
+    }
+    element.setAttribute("d", "M " + (x1 - Math.sqrt(Math.pow(circleSize, 2) / 2)) + " " + (y1 - Math.sqrt(Math.pow(circleSize, 2) / 2)) + " Q " + ((x1 + x2) / 2) + " " + (y2 - (circleSize / 4)) + " " + (x2 + Math.sqrt(Math.pow(circleSize, 2) / 2)) + " " + (y2 - Math.sqrt(Math.pow(circleSize, 2) / 2)) + " L " + (x2 + Math.sqrt(Math.pow(circleSize, 2) / 2)) + " " + (y2 + Math.sqrt(Math.pow(circleSize, 2) / 2)) + " Q " + ((x2 + x1) / 2) + " " + (y2 + (circleSize / 4)) + " " + (x1 - Math.sqrt(Math.pow(circleSize, 2) / 2)) + " " + (y1 + Math.sqrt(Math.pow(circleSize, 2) / 2)));
   }
-  element.setAttribute("fill", "black");
+  element.setAttribute("fill", colorConnection);
   element.setAttribute("stroke", "none");
   element.setAttribute("stroke-width", 0);
   element.setAttribute("id", coords);
@@ -217,7 +230,7 @@ function generatePosMap() {
   var i = 0;
   while (i < totalDigits) {
     if (i == 0) {
-      posMap.push(new DigitPos(0, 0));
+      posMap.push(new GridPos(0, 0));
       i++;
     }
     if (currentLayer != layerMap[i]) {
@@ -226,7 +239,7 @@ function generatePosMap() {
       currentPos[1] -= 1;
     }
     while (currentPos[1] <= layerMap[i] && currentPos[1] >= -layerMap[i]) {
-      posMap.push(new DigitPos(currentPos[0], currentPos[1]))
+      posMap.push(new GridPos(currentPos[0], currentPos[1]))
       if (currentPos[1] == -layerMap[i]) {
         currentPos[0] += 2;
         i++;
@@ -237,7 +250,7 @@ function generatePosMap() {
       i++;
     }
     while (currentPos[0] <= layerMap[i] && currentPos[0] >= -layerMap[i]) {
-      posMap.push(new DigitPos(currentPos[0], currentPos[1]))
+      posMap.push(new GridPos(currentPos[0], currentPos[1]))
       if (currentPos[0] == layerMap[i]) {
         currentPos[1] += 2;
         i++;
@@ -248,7 +261,7 @@ function generatePosMap() {
       i++;
     }
     while (currentPos[1] <= layerMap[i] && currentPos[1] >= -layerMap[i]) {
-      posMap.push(new DigitPos(currentPos[0], currentPos[1]))
+      posMap.push(new GridPos(currentPos[0], currentPos[1]))
       if (currentPos[1] == layerMap[i]) {
         currentPos[0] -= 2;
         i++;
@@ -259,7 +272,7 @@ function generatePosMap() {
       i++;
     }
     while (currentPos[0] <= layerMap[i] && currentPos[0] >= -layerMap[i]) {
-      posMap.push(new DigitPos(currentPos[0], currentPos[1]))
+      posMap.push(new GridPos(currentPos[0], currentPos[1]))
       if (currentPos[0] == -layerMap[i]) {
         i++;
         break;
@@ -401,7 +414,7 @@ function correctDigits() {
   generate();
 }
 
-function villeinToArabic() {
+function getValueOfBoard() {
   correctDigits();
 
   var iterator = digitMap.values();
@@ -416,7 +429,11 @@ function villeinToArabic() {
     var digit = next.value;
     value += (digit.up + digit.right + digit.down + digit.left) * Math.pow(4, digit.place);
   }
+  return value;
+}
 
+function villeinToArabic() {
+  var value = getValueOfBoard();
   document.getElementById("inputField").value = value;
 }
 
