@@ -11,7 +11,7 @@ function Digit(place) {
   this.up = this.right = this.down = this.left = false;
 }
 
-function DigitPos(x, y) {
+function GridPos(x, y) {
   this.x = x;
   this.y = y;
 }
