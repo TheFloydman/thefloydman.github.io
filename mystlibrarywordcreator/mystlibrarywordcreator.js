@@ -1,8 +1,7 @@
 var colorDisabled = "gray";
 var colorEnabled = "black";
 var colorHighlight = "yellow";
-var circleList = [];
-var arcList = new Map();
+var arcList = [];
 
 function startup(svg, disabledColor, enabledColor, highlightColor) {
 	colorDisabled = disabledColor;
@@ -10,7 +9,7 @@ function startup(svg, disabledColor, enabledColor, highlightColor) {
 	colorHighlight = highlightColor;
 	var mainWidth = +svg.getAttribute("width");
 	
-	circleList = [];
+	var circleList = [];
 	circleList.push(new Circle(mainWidth / 2, mainWidth / 2, mainWidth / 2, 4));
 	circleList.push(new Circle((mainWidth / 2) + Math.sqrt(Math.pow(mainWidth / 4, 2) / 2),
 			(mainWidth / 2) - Math.sqrt(Math.pow(mainWidth / 4, 2) / 2),
@@ -30,34 +29,39 @@ function startup(svg, disabledColor, enabledColor, highlightColor) {
 	circleList.push(new Circle((mainWidth / 2) - (mainWidth / 4), mainWidth / 2, mainWidth / 4, 36));
 	circleList.push(new Circle(mainWidth / 2, mainWidth / 2, mainWidth / 4, 40));
 	
-	arcList = new Map();
-	for (var i = 0; i < circleList.length; i++) {
-		var arcId = circleList[i].startInt;
-		arcList.set(arcId, new Arc(circleList[i].x - Math.sqrt(2 * Math.pow(circleList[i].r / 2, 2)),
-				circleList[i].y - Math.sqrt(2 * Math.pow(circleList[i].r / 2, 2)),
-				circleList[i].x + Math.sqrt(2 * Math.pow(circleList[i].r / 2, 2)),
-				circleList[i].y - Math.sqrt(2 * Math.pow(circleList[i].r / 2, 2)), circleList[i].r, arcId++));
-		arcList.set(arcId, new Arc(circleList[i].x + Math.sqrt(2 * Math.pow(circleList[i].r / 2, 2)),
-				circleList[i].y - Math.sqrt(2 * Math.pow(circleList[i].r / 2, 2)),
-				circleList[i].x + Math.sqrt(2 * Math.pow(circleList[i].r / 2, 2)),
-				circleList[i].y + Math.sqrt(2 * Math.pow(circleList[i].r / 2, 2)), circleList[i].r, arcId++));
-		arcList.set(arcId, new Arc(circleList[i].x + Math.sqrt(2 * Math.pow(circleList[i].r / 2, 2)),
-				circleList[i].y + Math.sqrt(2 * Math.pow(circleList[i].r / 2, 2)),
-				circleList[i].x - Math.sqrt(2 * Math.pow(circleList[i].r / 2, 2)),
-				circleList[i].y + Math.sqrt(2 * Math.pow(circleList[i].r / 2, 2)), circleList[i].r, arcId++));
-		arcList.set(arcId, new Arc(circleList[i].x - Math.sqrt(2 * Math.pow(circleList[i].r / 2, 2)),
-				circleList[i].y + Math.sqrt(2 * Math.pow(circleList[i].r / 2, 2)),
-				circleList[i].x - Math.sqrt(2 * Math.pow(circleList[i].r / 2, 2)),
-				circleList[i].y - Math.sqrt(2 * Math.pow(circleList[i].r / 2, 2)), circleList[i].r, arcId++));
-	}
+	arcList = [];
+	circleList.forEach(function(circle, index, arr) {
+		var arcId = circle.startInt;
+		arcList.push(new Arc(circle.x - Math.sqrt(2 * Math.pow(circle.r / 2, 2)),
+				circle.y - Math.sqrt(2 * Math.pow(circle.r / 2, 2)),
+				circle.x + Math.sqrt(2 * Math.pow(circle.r / 2, 2)),
+				circle.y - Math.sqrt(2 * Math.pow(circle.r / 2, 2)), circle.r, arcId++));
+		arcList.push(new Arc(circle.x + Math.sqrt(2 * Math.pow(circle.r / 2, 2)),
+				circle.y - Math.sqrt(2 * Math.pow(circle.r / 2, 2)),
+				circle.x + Math.sqrt(2 * Math.pow(circle.r / 2, 2)),
+				circle.y + Math.sqrt(2 * Math.pow(circle.r / 2, 2)), circle.r, arcId++));
+		arcList.push(new Arc(circle.x + Math.sqrt(2 * Math.pow(circle.r / 2, 2)),
+				circle.y + Math.sqrt(2 * Math.pow(circle.r / 2, 2)),
+				circle.x - Math.sqrt(2 * Math.pow(circle.r / 2, 2)),
+				circle.y + Math.sqrt(2 * Math.pow(circle.r / 2, 2)), circle.r, arcId++));
+		arcList.push(new Arc(circle.x - Math.sqrt(2 * Math.pow(circle.r / 2, 2)),
+				circle.y + Math.sqrt(2 * Math.pow(circle.r / 2, 2)),
+				circle.x - Math.sqrt(2 * Math.pow(circle.r / 2, 2)),
+				circle.y - Math.sqrt(2 * Math.pow(circle.r / 2, 2)), circle.r, arcId++));
+	});
 	
-	var arcListValues =  Array.from(arcList.values());
-	arcListValues.forEach(function(arc, index, arr) {
+	refresh(svg);
+		
+}
+
+function refresh(svg) {
+	svg.innerHTML = "";
+	arcList.forEach(function(arc, index, arr) {
 		var element = document.createElementNS("http://www.w3.org/2000/svg", "path");
 		element.setAttribute("id", arc.id)
 		element.setAttribute("d", "M " + arc.startX + " " + arc.startY + "A " + arc.r + " " + arc.r + " 0 0 1 " + arc.endX + " " + arc.endY);
 		element.setAttribute("fill", "none");
-		element.setAttribute("stroke-width", "0.35em");
+		element.setAttribute("stroke-width", svg.getAttribute("width") / 64);
 		element.setAttribute("stroke", arc.getColor());
 		element.setAttribute("opacity", arc.getOpacity());
 		element.addEventListener("mouseenter", function() {
@@ -73,7 +77,27 @@ function startup(svg, disabledColor, enabledColor, highlightColor) {
 		  });
 		svg.appendChild(element);
 	});
-		
+}
+
+function save() {
+	
+	var word = document.getElementById("word").value.toLowerCase();
+	var array = [];
+	arcList.forEach(function(arc, index, arr) {
+		if (arc.enabled && arc.visible) {
+			array.push(arc.id);
+		}
+	});
+	
+	var data = {word: word, arcs: array};
+	var jsonData = JSON.stringify(data, null, 4);
+
+	var a = document.createElement("a");
+    var file = new Blob([jsonData], {type: "text/plain"});
+    a.href = URL.createObjectURL(file);
+    a.download = "mystcraft_word_" + word + ".json";
+    a.click();
+    
 }
 
 class Circle {
@@ -95,6 +119,7 @@ class Arc {
 		this.r = r;
 		this.id = id;
 		this.enabled = false;
+		this.visible = true;
 	}
 	
 	getColor() {
