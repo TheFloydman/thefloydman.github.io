@@ -6,13 +6,21 @@
 		<script src="main.js" type="text/javascript"></script>
 	</head>
 	<body onload="onPageLoad()">
-		<div id="divSvg" style="margin-left: auto; margin-right: auto; display: block; width: 256px;">
-			<svg id="svg" width="512" height="512">
-			</svg>
-		</div>
-		<div>
-		<input type="text" id="word"><br><br>
-		<input type="button" value="Save" onclick="save()">
+		<div id="divSvg" style="margin-left: auto; margin-right: auto; display: block; width: 512px;">
+			<svg id="svg" width="512" height="512" overflow="visible">
+			</svg><br><br>
+			<div id="divField" style="margin-left: auto; margin-right: auto; display: block; text-align: center;">
+				<input type="text" id="word">
+				<input type="button" value="Save" onclick="save()"><br><br>
+				<div style="text-align: left;">
+					<input type="checkbox" id="showCircleBig" name="showCircleBig" value="showCircleBig" checked>
+					<label for="showCircleBig">Big Circle</label><br>
+					<input type="checkbox" id="showCirclesSmallCanon" name="showCirclesSmallCanon" value="showCirclesSmallCanon" checked>
+					<label for="showCirclesSmallCanon">Small Circles</label><br>
+					<input type="checkbox" id="showCirclesSmallNonCanon" name="showCirclesSmallNonCanon" value="showCirclesSmallNonCanon">
+					<label for="showCirclesSmallNonCanon">Extra Small Circles</label>
+				</div>
+			</div>
 		</div>
 	</body>
 </html>
