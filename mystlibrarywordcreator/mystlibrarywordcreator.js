@@ -130,8 +130,8 @@ function save() {
 		}
 	});
 	
-	var data = [{word: word, arcs: idArray, colors: colorArray}];
-	var jsonData = JSON.stringify(data, null, 4);
+	var data = "[\r\n  {\r\n    \"word\": \"" + word + "\",\r\n    \"arcs\": " + JSON.stringify(idArray).replace(/,/g, ", ") + ",\r\n    \"colors\": " + JSON.stringify(colorArray).replace(/,/g, ", ") + "\r\n  }\r\n]";
+	var jsonData = data;
 
 	var a = document.createElement("a");
     var file = new Blob([jsonData], {type: "text/plain"});
