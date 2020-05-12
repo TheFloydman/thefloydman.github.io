@@ -7,7 +7,7 @@
 	</head>
 	<body onload="onPageLoad()">
 		<div id="divSvg" style="margin-left: auto; margin-right: auto; display: block; width: 512px;">
-			<svg id="svg" width="512" height="512" overflow="visible">
+			<svg id="svg" width="512" height="512" overflow="visible" style="background-color: #f7e2bf;">
 			</svg><br><br>
 			<div id="divField" style="margin-left: auto; margin-right: auto; display: block; text-align: center;">
 				<input type="text" id="word">
@@ -18,8 +18,18 @@
 					<input type="checkbox" id="showCirclesSmallCanon" name="showCirclesSmallCanon" value="showCirclesSmallCanon" checked>
 					<label for="showCirclesSmallCanon">Small Circles</label><br>
 					<input type="checkbox" id="showCirclesSmallNonCanon" name="showCirclesSmallNonCanon" value="showCirclesSmallNonCanon">
-					<label for="showCirclesSmallNonCanon">Extra Small Circles</label>
+					<label for="showCirclesSmallNonCanon">Extra Small Circles</label><br><br>
 				</div>
+			</div>
+			<div id="picker">
+			<div id="black" style="background-color: #000000; width: 64px; height: 64px; float: left; outline: 2px solid black; outline-offset: -2px; margin: 0px -1px 0px -1px" onclick="colorPicked('black')"></div>
+			<div id="red" style="background-color: #FF0000; width: 64px; height: 64px; float: left; outline: 2px solid black; outline-offset: -2px; margin: 0px -1px 0px -1px" onclick="colorPicked('red')"></div>
+			<div id="yellow" style="background-color: #FFFF00; width: 64px; height: 64px; float: left; outline: 2px solid black; outline-offset: -2px; margin: 0px -1px 0px -1px" onclick="colorPicked('yellow')"></div>
+			<div id="green" style="background-color: #00FF00; width: 64px; height: 64px; float: left; outline: 2px solid black; outline-offset: -2px; margin: 0px -1px 0px -1px" onclick="colorPicked('green')"></div>
+			<div id="cyan" style="background-color: #00FFFF; width: 64px; height: 64px; float: left; outline: 2px solid black; outline-offset: -2px; margin: 0px -1px 0px -1px" onclick="colorPicked('cyan')"></div>
+			<div id="blue" style="background-color: #0000FF; width: 64px; height: 64px; float: left; outline: 2px solid black; outline-offset: -2px; margin: 0px -1px 0px -1px" onclick="colorPicked('blue')"></div>
+			<div id="purple" style="background-color: #FF00FF; width: 64px; height: 64px; float: left; outline: 2px solid black; outline-offset: -2px; margin: 0px -1px 0px -1px" onclick="colorPicked('purple')"></div>
+			<div id="white" style="background-color: #FFFFFF; width: 64px; height: 64px; float: left; outline: 2px solid black; outline-offset: -2px; margin: 0px -1px 0px -1px" onclick="colorPicked('white')"></div>
 			</div>
 		</div>
 	</body>
