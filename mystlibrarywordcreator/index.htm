@@ -2,17 +2,24 @@
 <!DOCTYPE html>
 <html>
 	<head>
+		<link rel="stylesheet" type="text/css" href="style.css">
 		<script src="mystlibrarywordcreator.js" type="text/javascript"></script>
 		<script src="main.js" type="text/javascript"></script>
 	</head>
 	<body onload="onPageLoad()">
-		<div id="divSvg" style="margin-left: auto; margin-right: auto; display: block; width: 512px;">
+		<div id="divSvg" style="margin-left: auto; margin-right: auto; display: block; width: 512px; text-align: center;">
 			<svg id="svg" width="512" height="512" overflow="visible" style="background-color: #f7e2bf;">
 			</svg><br><br>
-			<div id="divField" style="margin-left: auto; margin-right: auto; display: block; text-align: center;">
-				<input type="text" id="word">
-				<input type="button" value="Save" onclick="save()"><br><br>
-				<div style="text-align: left;">
+			<div id="divForm" style="text-align: center;">
+			<form onsubmit="save(); return false;">
+				<div class="combo"><div class="label">Word:</div>
+				<div class="field"><input label="word" type="text" id="word" style="width: 100%;"></div></div>
+				<div class="combo"><div class="label">Texture ResourceLocation:</div>
+				<div class="field"><input label="texture" type="text" id="texture" value="mystcraft:textures/symbolcomponents.png" style="width: 100%;"></div></div>
+				<div style="float: left; width: 100%;"><input type="submit" value="Save" style="width: 64px;"></div>
+				</form>
+				</div><br><br>
+				<div style="text-align: left; float: left">
 					<input type="checkbox" id="showCircleBig" name="showCircleBig" value="showCircleBig" checked>
 					<label for="showCircleBig">Big Circle</label><br>
 					<input type="checkbox" id="showCirclesSmallCanon" name="showCirclesSmallCanon" value="showCirclesSmallCanon" checked>
@@ -20,16 +27,15 @@
 					<input type="checkbox" id="showCirclesSmallNonCanon" name="showCirclesSmallNonCanon" value="showCirclesSmallNonCanon">
 					<label for="showCirclesSmallNonCanon">Extra Small Circles</label><br><br>
 				</div>
-			</div>
-			<div id="picker">
-			<div id="black" style="background-color: #000000; width: 64px; height: 64px; float: left; outline: 2px solid black; outline-offset: -2px; margin: 0px -1px 0px -1px" onclick="colorPicked('black')"></div>
-			<div id="red" style="background-color: #FF0000; width: 64px; height: 64px; float: left; outline: 2px solid black; outline-offset: -2px; margin: 0px -1px 0px -1px" onclick="colorPicked('red')"></div>
-			<div id="yellow" style="background-color: #FFFF00; width: 64px; height: 64px; float: left; outline: 2px solid black; outline-offset: -2px; margin: 0px -1px 0px -1px" onclick="colorPicked('yellow')"></div>
-			<div id="green" style="background-color: #00FF00; width: 64px; height: 64px; float: left; outline: 2px solid black; outline-offset: -2px; margin: 0px -1px 0px -1px" onclick="colorPicked('green')"></div>
-			<div id="cyan" style="background-color: #00FFFF; width: 64px; height: 64px; float: left; outline: 2px solid black; outline-offset: -2px; margin: 0px -1px 0px -1px" onclick="colorPicked('cyan')"></div>
-			<div id="blue" style="background-color: #0000FF; width: 64px; height: 64px; float: left; outline: 2px solid black; outline-offset: -2px; margin: 0px -1px 0px -1px" onclick="colorPicked('blue')"></div>
-			<div id="purple" style="background-color: #FF00FF; width: 64px; height: 64px; float: left; outline: 2px solid black; outline-offset: -2px; margin: 0px -1px 0px -1px" onclick="colorPicked('purple')"></div>
-			<div id="white" style="background-color: #FFFFFF; width: 64px; height: 64px; float: left; outline: 2px solid black; outline-offset: -2px; margin: 0px -1px 0px -1px" onclick="colorPicked('white')"></div>
+			<div id="picker" style="height: 64px; display: inline-block;">
+				<div class="color" id="black" style="background-color: #000000;" onclick="colorPicked('black')"></div>
+				<div class="color" id="red" style="background-color: #FF0000;" onclick="colorPicked('red')"></div>
+				<div class="color" id="yellow" style="background-color: #FFFF00;" onclick="colorPicked('yellow')"></div>
+				<div class="color" id="green" style="background-color: #00FF00;" onclick="colorPicked('green')"></div>
+				<div class="color" id="cyan" style="background-color: #00FFFF;" onclick="colorPicked('cyan')"></div>
+				<div class="color" id="blue" style="background-color: #0000FF;" onclick="colorPicked('blue')"></div>
+				<div class="color" id="purple" style="background-color: #FF00FF;" onclick="colorPicked('purple')"></div>
+				<div class="color" id="white" style="background-color: #FFFFFF;" onclick="colorPicked('white')"></div>
 			</div>
 		</div>
 	</body>
