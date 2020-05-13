@@ -1,0 +1,27 @@
+.color {
+	width: 64px;
+	height: 64px;
+	float: left;
+	outline: 2px solid black;
+	outline-offset: -2px;
+	margin: 0px -1px 0px -1px
+}
+
+.label {
+	width: 192px;
+	float: left;
+	text-align: right;
+	margin-right: 8px;
+	display: block;
+}
+
+.field {
+	width: 256px;
+	float: left;
+	margin-bottom: 8px;
+	display: block;
+}
+
+.combo {
+	display: inline-block;
+}
