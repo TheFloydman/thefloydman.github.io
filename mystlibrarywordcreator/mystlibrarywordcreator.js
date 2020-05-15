@@ -135,13 +135,17 @@ function save() {
             });
         }
     });
+    
+    var colorData = isArrayAllZeroes(colorArray) ? `` : `,
+        "colors": ${JSON.stringify(colorArray).replace(/,/g, ", ")}`;
+    
+    var textureData = document.getElementById("texture").value == "mystcraft:textures/symbolcomponents.png" ? `` : `,
+        "texture": "${document.getElementById("texture").value}"`;
 
     var jsonData = `[
     {
         "word": "${word}",
-        "arcs": ${JSON.stringify(idArray).replace(/,/g, ", ")},
-        "colors": ${JSON.stringify(colorArray).replace(/,/g, ", ")},
-        "texture": "${document.getElementById("texture").value}"
+        "arcs": ${JSON.stringify(idArray).replace(/,/g, ", ")}${colorData}${textureData}
     }
 ]`;
 
@@ -151,6 +155,15 @@ function save() {
     a.download = "word_" + word + ".json";
     a.click();
 
+}
+
+function isArrayAllZeroes(array) {
+    for (var i = 0; i < array.length; i++) {
+        if (array[i] != 0) {
+            return false;
+        }
+    }
+    return true;
 }
 
 function colorPicked(id) {
