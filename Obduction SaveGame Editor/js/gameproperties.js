@@ -40,6 +40,54 @@ var stringProperties = [
 		'id' : 'SwampArmoryLight',
 		'options' : ['0','1','2','3','4','5','6','7','8','9'],
 		'altOptions' : ['0','1','2','3','4','5','6','7','8','9']
+	},
+	{
+		'identifier' : 'Maray Bridge 1',
+		'id' : 'SwampExtrusionBridge1',
+		'options' : ['00000;00000','11111;11111','22222;22222','33333;33333'],
+		'altOptions' : ['Empty','Framed','Basic','Complete']
+	},
+	{
+		'identifier' : 'Maray Bridge 2',
+		'id' : 'SwampExtrusionBridge2',
+		'options' : ['00000;00000','11111;11111','22222;22222','33333;33333'],
+		'altOptions' : ['Empty','Framed','Basic','Complete']
+	},
+	{
+		'identifier' : 'Maray Bridge 3',
+		'id' : 'SwampExtrusionBridge3',
+		'options' : ['00000;00000','11111;11111','22222;22222','33333;33333'],
+		'altOptions' : ['Empty','Framed','Basic','Complete']
+	},
+	{
+		'identifier' : 'Maray Bridge 4',
+		'id' : 'SwampExtrusionBridge4',
+		'options' : ['00000;00000','11111;11111','22222;22222','33333;33333'],
+		'altOptions' : ['Empty','Framed','Basic','Complete']
+	},
+	{
+		'identifier' : 'Maray Bridge 5',
+		'id' : 'SwampExtrusionBridge5',
+		'options' : ['00000;00000','11111;11111','22222;22222','33333;33333'],
+		'altOptions' : ['Empty','Framed','Basic','Complete']
+	},
+	{
+		'identifier' : 'Maray Bridge 6',
+		'id' : 'SwampExtrusionBridge6',
+		'options' : ['00000;00000','11111;11111','22222;22222','33333;33333'],
+		'altOptions' : ['Empty','Framed','Basic','Complete']
+	},
+	{
+		'identifier' : 'Maray Bridge 7',
+		'id' : 'SwampExtrusionBridge7',
+		'options' : ['00000;00000','11111;11111','22222;22222','33333;33333'],
+		'altOptions' : ['Empty','Framed','Basic','Complete']
+	},
+	{
+		'identifier' : 'Maray Bridge 8',
+		'id' : 'SwampExtrusionBridge8',
+		'options' : ['00000;00000','11111;11111','22222;22222','33333;33333'],
+		'altOptions' : ['Empty','Framed','Basic','Complete']
 	}
 ];
 
@@ -213,6 +261,22 @@ var booleanProperties = [
 		'trueText' : 'Disabled'
 	},
 	{
+		'identifier' : 'Plane Cave Imager Rocks',
+		'name' : 'HunrathCrashSiteRocksDisabled',
+		'falseId' : 'hunrathCrashSiteRocksEnabled',
+		'trueId' : 'hunrathCrashSiteRocksDisabled',
+		'falseText' : 'Enabled',
+		'trueText' : 'Disabled'
+	},
+	{
+		'identifier' : 'Submarine Cave Imager Rocks',
+		'name' : 'HunrathSubmarineRocksDisabled',
+		'falseId' : 'hunrathSubmarineRocksEnabled',
+		'trueId' : 'hunrathSubmarineRocksDisabled',
+		'falseText' : 'Enabled',
+		'trueText' : 'Disabled'
+	},
+	{
 		'identifier' : 'Tower Bleeder-side Door',
 		'name' : 'HunrathLatchDoorUnlockedTowerA',
 		'falseId' : 'hunrathLatchDoorTowerALocked',
@@ -357,7 +421,7 @@ var booleanProperties = [
 		'trueText' : 'On'
 	},
 	{
-		'identifier' : 'Has Hunrath Tree Been Watered?',
+		'identifier' : 'Is Hunrath connected to the Heart?',
 		'name' : 'HunrathConnectedToHub',
 		'falseId' : 'hunrathDisonnectedToHub',
 		'trueId' : 'hunrathConnectedToHub',
@@ -365,7 +429,7 @@ var booleanProperties = [
 		'trueText' : 'Yes'
 	},
 	{
-		'identifier' : 'Has Kaptar Tree Been Watered?',
+		'identifier' : 'Is Kaptar connected to the Heart?',
 		'name' : 'ChainConnectedToHub',
 		'falseId' : 'chainDisconnectedToHub',
 		'trueId' : 'chainConnectedToHub',
@@ -373,7 +437,7 @@ var booleanProperties = [
 		'trueText' : 'Yes'
 	},
 	{
-		'identifier' : 'Has Maray Tree Been Watered?',
+		'identifier' : 'Is Maray connected to the Heart?',
 		'name' : 'SwampConnectedToHub',
 		'falseId' : 'swampDisconnectedToHub',
 		'trueId' : 'swampConnectedToHub',
@@ -381,9 +445,9 @@ var booleanProperties = [
 		'trueText' : 'Yes'
 	},
 	{
-		'identifier' : 'Has Soria Tree Been Watered?',
+		'identifier' : 'Is Soria connected to the Heart?',
 		'name' : 'SoariaConnectedToHub',
-		'falseId' : 'soariaConnectedToHub',
+		'falseId' : 'soariaDisconnectedToHub',
 		'trueId' : 'soariaConnectedToHub',
 		'falseText' : 'No',
 		'trueText' : 'Yes'

@@ -12,7 +12,7 @@
     <script src="js/main.js"></script>
 </head>
 <body>
-  <div id="introSection">Welcome to the <b><i>Obduction</i> SaveGame Editor</b>, a brower-based program that can edit savegame files (.sav) for the video game <i><a href="http://obduction.com/">Obduction</a></i>. I have created a few other <i>Obduction</i> resources that you can view <a href="https://thefloydman.github.io/">here</a>.<br><br>To begin, click the <i>Choose File</i> button, and locate the save file you would like to edit. Once you open that file, this page will automatically fill with variables to play with. Once you are finished, press <i>Save</i> at the bottom of the page, and a new <i>GameState.sav</i> will be saved to your default download folder.<br><br>As a fail-safe, this editor does not manipulate save files directly. Instead, when you click <i>Save</i>, a new <i>.sav</i> file is downloaded to your default download folder. You will need to copy the resulting <i>GameState.sav</i> into the appropriate save folder. I highly recommend you make a backup of any save file you plan to replace. (Keep in mind, though, that using this editor will never mess up your existing save file. That can only happen if you delete or overwrite your existing save file.)<br><br>If there is a variable you would like to edit that is not displayed here, please <a href="https://www.reddit.com/message/compose/?to=IAmTheFloydman">contact me on reddit</a>.</div>
+  <div id="introSection">Welcome to the <b><i>Obduction</i> SaveGame Editor</b>, a brower-based program that can edit savegame files (.sav) for the video game <i><a href="http://obduction.com/">Obduction</a></i>. I have created a few other <i>Obduction</i> resources that you can view <a href="https://thefloydman.github.io/">here</a>.<br><br>To begin, click the <i>Choose File</i> button, and locate the save file you would like to edit. Once you open that file, this page will automatically fill with variables to play with. Once you are finished, press <i>Save</i> at the bottom of the page, and a new <i>GameState.sav</i> will be saved to your default download folder.<br><br>This editor does not manipulate save files directly. Instead, when you click <i>Save</i>, a new <i>.sav</i> file is downloaded to your default download folder. You will need to copy the resulting <i>GameState.sav</i> into the appropriate save folder. I highly recommend you keep a backup of any save file you plan to replace, just in case.<br><br>If there is a variable you would like to edit that is not displayed here, please <a href="https://www.reddit.com/message/compose/?to=IAmTheFloydman">contact me on reddit</a>.</div>
 </div>
   <div id="frontSection">
     <input type="file" id="loadFile" accept=".sav" onchange="loadButtonPressed()" />
@@ -20,7 +20,7 @@
 	  <p id="gameversion"></p>
   </div>
   <div id="positionSection" class="varSection"></div>
-	<div id="stringSection" class="varSection"></div>
+  <div id="stringSection" class="varSection"></div>
   <div id="integerSection" class="varSection"></div>
   <div id="floatSection" class="varSection"></div>
   <div id="booleanSection" class="varSection"></div>
