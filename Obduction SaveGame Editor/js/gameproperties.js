@@ -80,7 +80,7 @@ var stringProperties = [
 	{
 		'identifier' : 'Maray Bridge 7',
 		'id' : 'SwampExtrusionBridge7',
-		'options' : ['00000;00000','11111;11111','22222;22222','33333;33333'],
+		'options' : ['00000','11111','22222','33333'],
 		'altOptions' : ['Empty','Framed','Basic','Complete']
 	},
 	{
@@ -461,7 +461,7 @@ var booleanProperties = [
 		'trueText' : 'Powered'
 	},
 	{
-		'identifier' : 'SwampWMDDisabled (EXPERIMENTAL)',
+		'identifier' : 'WMD in Maray',
 		'name' : 'SwampWMDDisabled',
 		'falseId' : 'swampWMDDEnabled',
 		'trueId' : 'swampWMDDisabled',
@@ -563,5 +563,35 @@ var floatProperties = [
 		'id' : 'HunrathSwingBridgePaddleRotation',
 		'options' : ['0000803f','bcc3043f','00000000'],
 		'altOptions' : ['Left Side Up','Level','Right Side Up']
+	},
+	{
+		'identifier' : 'Maze Straight Piece Rotation',
+		'id' : 'SphereRRotation',
+		'options' : ['00000000','0000B442','00003443','0000B4C2'],
+		'altOptions' : ['0°','+90°','180°','-90°']
+	},
+	{
+		'identifier' : 'Maze Corner Piece A Rotation',
+		'id' : 'SphereR1Rotation',
+		'options' : ['00000000','0000B442','00003443','0000B4C2'],
+		'altOptions' : ['0°','+90°','180°','-90°']
+	},
+	{
+		'identifier' : 'Maze Corner Piece B Rotation',
+		'id' : 'SphereR2Rotation',
+		'options' : ['00000000','0000B442','00003443','0000B4C2'],
+		'altOptions' : ['0°','+90°','180°','-90°']
+	},
+	{
+		'identifier' : 'Maze Bent Piece A Rotation',
+		'id' : 'SphereR3Rotation',
+		'options' : ['00000000','0000B442','00003443','0000B4C2'],
+		'altOptions' : ['0°','+90°','180°','-90°']
+	},
+	{
+		'identifier' : 'Maze Bent Piece B Rotation',
+		'id' : 'SphereR4Rotation',
+		'options' : ['00000000','0000B442','00003443','0000B4C2'],
+		'altOptions' : ['0°','+90°','180°','-90°']
 	}
 ];

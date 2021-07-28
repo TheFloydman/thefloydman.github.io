@@ -291,14 +291,32 @@ function loadButtonPressed() {
 			for (var k = 0; k < 4; k++) {
 				floatString += String(floatArray[k]);
 			}
+			var floatStringReverse = '';
+			for (var k = 3; k > -1; k--) {
+				floatStringReverse += String(floatArray[k]);
+			}
+			var actualValue = hex2Float('0x' + floatStringReverse);
 			for (var j = 0; j < floatProperties[i].options.length; j++) {
-				if (floatString == floatProperties[i].options[j]) {
+				let storedValue = hex2Float('0x' + floatProperties[i].options[j].substring(6) + floatProperties[i].options[j].substring(4, 6) + floatProperties[i].options[j].substring(2, 4) + floatProperties[i].options[j].substring(0, 2));
+				if (Math.abs(actualValue - storedValue) < 0.5) {
 					document.getElementById(floatProperties[i].id).value = floatProperties[i].options[j];
 					break;
 				}
 			}
 		}
 	};
+}
+
+function hex2Float(hex) {
+	let bin = (parseInt(hex, 16).toString(2)).padStart(32, '0');
+	let sign = bin.substring(0, 1) === '0' ? 1 : -1;
+	let exp = parseInt(bin.substring(1, 9), 2) - 127;
+	let arr = bin.substring(9).split('').reverse();
+	let mantissa = 1;
+	for (var i = 1; i < 24; i++) {
+		mantissa += arr[23-i] * (2 ** -i);
+	}
+	return sign * (2 ** exp) * mantissa;
 }
 
 function saveButtonPressed () {
