@@ -565,6 +565,12 @@ var floatProperties = [
 		'altOptions' : ['Left Side Up','Level','Right Side Up']
 	},
 	{
+		'identifier' : 'Puzzlisimo Rotation',
+		'id' : 'PuzzlisimoRotation',
+		'options' : ['00000000','0000B442','00003443','0000B4C2'],
+		'altOptions' : ['0°','+90°','180°','-90°']
+	},
+	{
 		'identifier' : 'Maze Straight Piece Rotation',
 		'id' : 'SphereRRotation',
 		'options' : ['00000000','0000B442','00003443','0000B4C2'],
@@ -591,6 +597,12 @@ var floatProperties = [
 	{
 		'identifier' : 'Maze Bent Piece B Rotation',
 		'id' : 'SphereR4Rotation',
+		'options' : ['00000000','0000B442','00003443','0000B4C2'],
+		'altOptions' : ['0°','+90°','180°','-90°']
+	},
+	{
+		'identifier' : 'Maze Insert Rotator (in Hunrath) Rotation',
+		'id' : 'SphereRBaseRotation',
 		'options' : ['00000000','0000B442','00003443','0000B4C2'],
 		'altOptions' : ['0°','+90°','180°','-90°']
 	}
