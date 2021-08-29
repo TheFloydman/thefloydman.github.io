@@ -7,7 +7,7 @@ var booleanProperties = [{
         'trueText': 'Raised'
     },
     {
-        'identifier': 'Red Page on Myst Island Taken',
+        'identifier': 'Red Page in Library Taken',
         'name': '9061C3CC40A2C1669F3B4B932AA70BAF',
         'falseId': 'mystRedPageNotTaken',
         'trueId': 'mystRedPageTaken',
@@ -55,7 +55,7 @@ var booleanProperties = [{
         'trueText': 'Taken'
     },
     {
-        'identifier': 'Blue Page on Myst Island Taken',
+        'identifier': 'Blue Page in Library Taken',
         'name': 'BC94889247AA708BE80ED08CE275AC11',
         'falseId': 'mystBluePageNotTaken',
         'trueId': 'mystBluePageTaken',
