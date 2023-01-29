@@ -1,0 +1,121 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+* {
+    font-family: 'Inter', sans-serif;
+    box-sizing: border-box;
+}
+
+div#save-button {
+    margin-top: 16px;
+    margin-bottom: 16px;
+}
+
+div#main {
+    max-width: 960px;
+    margin: 0 auto 0 auto;
+}
+
+div#intro {
+    border: 1px solid black;
+    border-radius: 8px;
+    padding: 16px;
+    margin-bottom: 16px;
+}
+
+a {
+    font-weight: 600;
+    text-decoration: none;
+}
+
+div.intro-sub {
+    margin-top: 16px;
+}
+
+div#ue4-version-wrapper {
+    margin-top: 8px;
+}
+
+div#save-type-wrapper {
+    margin-top: 8px;
+    padding-bottom: 8px;
+}
+
+span#ue4-version,
+span#save-type {
+    font-weight: 600;
+}
+
+div#arrow-explainer {
+    font-weight: 600;
+}
+
+ol {
+    margin: 0;
+    padding-left: 16px;
+}
+
+li {
+    margin-top: 16px;
+}
+
+div#instructions-wrapper {
+    background-color: #c2e3f2;
+    border-radius: 8px;
+    padding: 16px;
+    cursor: pointer;
+}
+
+div#instructions {
+    display: none;
+}
+
+div.property-header {
+    font-weight: 600;
+    margin-bottom: 8px;
+}
+
+div.property-description {
+    font-size: small;
+    margin-bottom: 16px;
+}
+
+div.property-wrapper {
+    padding-top: 16px;
+    padding-bottom: 16px;
+    border-top: 1px solid black;
+}
+
+div.sub {
+    border: 0;
+    margin: 0;
+    padding: 0;
+}
+
+div.game-wrapper {
+    display: none;
+}
+
+.caps {
+    text-transform: capitalize;
+}
+
+label {
+    margin-right: 8px;
+}
+
+input.checkbox {
+    margin-right: 8px;
+}
+
+div#disclaimer {
+    border-top: 1px solid black;
+    padding-top: 16px;
+    font-size: small;
+}
+
+label.right {
+    margin-left: 8px;
+}
+
+label.right[type=checkbox] {
+    margin-left: 4px;
+}
