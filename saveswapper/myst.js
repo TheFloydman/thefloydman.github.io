@@ -1,111 +1,109 @@
 const mystProperties = [{
     gvas: ['VectorGameStates', 'PlayerLocation', 'Value'],
-    html: 'myst-player-position',
+    html: 'player-position',
     title: 'Player position',
     description: 'Stay relatively close to where you saved. This variable does not control what terrain is loaded, so you\'ll fall through the ground if you move too far.'
 
 }, {
     gvas: ['RotatorGameStates', 'PlayerRotation', 'Value'],
-    html: 'myst-player-rotation',
+    html: 'player-rotation',
     title: 'Player rotation'
 
 }, {
-    html: 'myst-red-pages',
+    html: 'red-pages',
     title: 'Red pages',
-    type: 'container',
-    values: [{
+    children: [{
         gvas: ['IntGameStates', 'C5A89B014CE01E07936702840743BF20', 'Value'],
-        html: 'myst-red-pages-book',
+        html: 'red-pages-book',
         title: 'Pages in book',
         type: 'dropdown',
         values: [0, 1, 2, 3, 4, 5, 6]
     }, {
         gvas: 'RedPagesAccrued',
-        html: 'myst-red-pages-accrued',
+        html: 'red-pages-accrued',
         title: 'Pages accrued',
         type: 'dropdown',
         values: [0, 1, 2, 3, 4, 5, 6]
     }, {
         gvas: ['IntGameStates', '1FB5FBEC46F1CC9B173C4DB90C321669', 'Value'],
-        html: 'myst-red-pages-displayed',
+        html: 'red-pages-displayed',
         title: 'Pages displayed on shelf',
         type: 'dropdown',
         values: [0, 1, 2, 3, 4, 5, 6]
     }, {
         gvas: ['BoolGameStates', '9061C3CC40A2C1669F3B4B932AA70BAF', 'Value'],
-        html: 'myst-red-pages-shelf',
+        html: 'red-pages-shelf',
         label: 'Collected page from shelf'
     }, {
         gvas: ['BoolGameStates', '9B367BB645A9E2985A2B8894777B5C8D', 'Value'],
-        html: 'myst-red-pages-channelwood',
+        html: 'red-pages-channelwood',
         label: 'Collected page from Channelwood'
     }, {
         gvas: ['BoolGameStates', '2BF0440B4BD0EF1D28ED56ABEE4CA0CB', 'Value'],
-        html: 'myst-red-pages-stoneship',
+        html: 'red-pages-stoneship',
         label: 'Collected page from Stoneship'
     }, {
         gvas: ['BoolGameStates', '52EFAC6F402821D619A3169A1FC96DB8', 'Value'],
-        html: 'myst-red-pages-mechanical',
+        html: 'red-pages-mechanical',
         label: 'Collected page from Mechanical'
     }, {
         gvas: ['BoolGameStates', '8E2EB304405936BB4E8BCCBD02F07326', 'Value'],
-        html: 'myst-red-pages-selenitic',
+        html: 'red-pages-selenitic',
         label: 'Collected page from Selenitic'
     }, {
         gvas: ['BoolGameStates', '04E4EA0D47A8ADBD0A66BD8609442B12', 'Value'],
-        html: 'myst-red-pages-fireplace',
+        html: 'red-pages-fireplace',
         label: 'Collected page from fireplace'
     }]
 }, {
-    html: 'myst-blue-pages',
+    html: 'blue-pages',
     title: 'Blue pages',
-    type: 'container',
-    values: [{
+    children: [{
         gvas: ['IntGameStates', '26A56BA54230F778BAAAFBB3C2DD4E2F', 'Value'],
-        html: 'myst-blue-pages-book',
+        html: 'blue-pages-book',
         title: 'Pages in book',
         type: 'dropdown',
         values: [0, 1, 2, 3, 4, 5, 6]
     }, {
         gvas: 'BluePagesAccrued',
-        html: 'myst-blue-pages-accrued',
+        html: 'blue-pages-accrued',
         title: 'Pages accrued',
         type: 'dropdown',
         values: [0, 1, 2, 3, 4, 5, 6]
     }, {
         gvas: ['IntGameStates', 'D0C19FD7470F5D2F18DEE687FAF216D3', 'Value'],
-        html: 'myst-blue-pages-displayed',
+        html: 'blue-pages-displayed',
         title: 'Pages displayed on shelf',
         type: 'dropdown',
         values: [0, 1, 2, 3, 4, 5, 6]
     }, {
         gvas: ['BoolGameStates', 'BC94889247AA708BE80ED08CE275AC11', 'Value'],
-        html: 'myst-blue-pages-shelf',
+        html: 'blue-pages-shelf',
         label: 'Collected page from shelf'
     }, {
         gvas: ['BoolGameStates', 'F3449E084DE16263C45D26815428DE5C', 'Value'],
-        html: 'myst-blue-pages-channelwood',
+        html: 'blue-pages-channelwood',
         label: 'Collected page from Channelwood'
     }, {
         gvas: ['BoolGameStates', '89350DAF42B8245A4CC60FA78E75BC2B', 'Value'],
-        html: 'myst-blue-pages-stoneship',
+        html: 'blue-pages-stoneship',
         label: 'Collected page from Stoneship'
     }, {
         gvas: ['BoolGameStates', '89678E8046D61D06A1A73F846E435E6B', 'Value'],
-        html: 'myst-blue-pages-mechanical',
+        html: 'blue-pages-mechanical',
         label: 'Collected page from Mechanical'
     }, {
         gvas: ['BoolGameStates', '8D608861405BC31CC5FEA9AD0386E3CB', 'Value'],
-        html: 'myst-blue-pages-selenitic',
+        html: 'blue-pages-selenitic',
         label: 'Collected page from Selenitic'
     }, {
         gvas: ['BoolGameStates', '80A4AFD24407F25C0FE06195763C6943', 'Value'],
-        html: 'myst-blue-pages-fireplace',
+        html: 'blue-pages-fireplace',
         label: 'Collected page from fireplace'
     }]
 }, {
     gvas: ['IntGameStates', '308C65FD4C23714E48A66FB11C250B32', 'Value'],
-    html: 'myst-compass-solution-button',
+    html: 'compass-solution-button',
     title: 'Stoneship compass solution',
     type: 'dropdown',
     values: [

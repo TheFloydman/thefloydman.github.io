@@ -1,36 +1,35 @@
 const obductionProperties = [{
     gvas: 'PlayerPosition',
-    html: 'obduction-player-position',
+    html: 'player-position',
     title: 'Player position',
     description: 'Stay relatively close to where you saved. This variable does not control what terrain is loaded, so you\'ll fall through the ground if you move too far.'
 }, {
     gvas: 'PlayerRotation',
-    html: 'obduction-player-rotation',
+    html: 'player-rotation',
     title: 'Player rotation'
 }, {
-    html: 'obduction-domes-unlocked',
+    html: 'domes-unlocked',
     title: 'Cell membranes unlocked',
-    type: 'container',
-    values: [{
+    children: [{
         gvas: 'HunrathDomeEnabled',
-        html: 'obduction-domes-unlocked-hunrath',
+        html: 'domes-unlocked-hunrath',
         label: 'Hunrath (desert)'
     }, {
         gvas: 'ChainDomeEnabled',
-        html: 'obduction-domes-unlocked-kaptar',
+        html: 'domes-unlocked-kaptar',
         label: 'Kaptar (cliffs)'
     }, {
         gvas: 'SwampDomeEnabled',
-        html: 'obduction-domes-unlocked-maray',
+        html: 'domes-unlocked-maray',
         label: 'Maray (swamp)'
     }, {
         gvas: 'SoariaDomeEnabled',
-        html: 'obduction-domes-unlocked-soria',
+        html: 'domes-unlocked-soria',
         label: 'Soria (melted)'
     }]
 }, {
     gvas: 'LicensePlateSolution',
-    html: 'obduction-license-plate-solution',
+    html: 'license-plate-solution',
     title: 'License plate solution',
     type: 'select',
     values: [
@@ -52,7 +51,7 @@ const obductionProperties = [{
     ]
 }, {
     gvas: 'ActiveLicensePlates',
-    html: 'obduction-active-license-plates',
+    html: 'active-license-plates',
     title: 'Active license plates',
     type: 'selects-comma',
     quantity: 10,
@@ -86,17 +85,16 @@ const obductionProperties = [{
         { actual: '14', display: 'D.C. (1NH965)' }
     ]
 }, {
-    html: 'obduction-easter-egg-mode',
+    html: 'easter-egg-mode',
     title: 'Easter egg mode',
     description: 'When enabled, this mode allows you to view Easter egg images using the projector in Farley\'s Community Center.',
-    type: 'container',
-    values: [{
+    children: [{
         gvas: 'IsEasterEggModeEnabled',
-        html: 'obduction-easter-egg-mode-enabled',
+        html: 'easter-egg-mode-enabled',
         label: 'Mode enabled'
     }, {
         gvas: 'ChainEEMachineEasterEgg',
-        html: 'obduction-easter-egg-mode-image',
+        html: 'easter-egg-mode-image',
         label: 'Active image',
         type: 'select',
         values: [
@@ -163,6 +161,59 @@ const obductionProperties = [{
             { actual: '39166488711641851871', display: 'Image #60' },
             { actual: '98540222284362254836', display: 'Image #61' },
             { actual: '77189501249998307770', display: 'Image #62' }
+        ]
+    }]
+}, {
+    html: 'disabler-beam-colors',
+    title: 'Disabler beam colors',
+    description: 'The disabler beams are all one color in <i>Obduction</i>, and that color can\'t be changed in-game. However, altering your save will let you choose between several different colors for each beam.',
+    children: [{
+        gvas: 'CWMinecartBeamColor',
+        html: 'disabler-beam-colors-minecart',
+        label: 'Minecart',
+        type: 'select',
+        values: [
+            { actual: '0', display: 'Green' },
+            { actual: '1', display: 'Cyan' },
+            { actual: '2', display: 'Blue (default)' },
+            { actual: '3', display: 'Purple' },
+            { actual: '4', display: 'Black' }
+        ]
+    }, {
+        gvas: 'HunrathCWWorkshopBeamColor',
+        html: 'disabler-beam-colors-workshop',
+        label: 'C.W.\'s workshop mini',
+        type: 'select',
+        values: [
+            { actual: '0', display: 'Green' },
+            { actual: '1', display: 'Cyan' },
+            { actual: '2', display: 'Blue (default)' },
+            { actual: '3', display: 'Purple' },
+            { actual: '4', display: 'Black' }
+        ]
+    }, {
+        gvas: 'SwampBeamBuildingBeamColor',
+        html: 'disabler-beam-colors-maray-roof',
+        label: 'Roof-mounted in Maray',
+        type: 'select',
+        values: [
+            { actual: '0', display: 'Green' },
+            { actual: '1', display: 'Cyan' },
+            { actual: '2', display: 'Blue (default)' },
+            { actual: '3', display: 'Purple' },
+            { actual: '4', display: 'Black' }
+        ]
+    }, {
+        gvas: 'SwampWMDBeamColor',
+        html: 'disabler-beam-colors-maray-wmd',
+        label: 'Near WMD',
+        type: 'select',
+        values: [
+            { actual: '0', display: 'Green' },
+            { actual: '1', display: 'Cyan' },
+            { actual: '2', display: 'Blue (default)' },
+            { actual: '3', display: 'Purple' },
+            { actual: '4', display: 'Black' }
         ]
     }]
 }]

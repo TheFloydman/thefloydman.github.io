@@ -42,11 +42,11 @@ function fileChosen() {
         if (saveFile.saveType == '/Script/Obduction.ObductionSaveGame' || saveFile.saveType == 'ObductionSaveGame') {
             let obductionDiv = document.getElementById('obduction');
             obductionDiv.style.display = 'block';
-            toElement(obductionProperties, saveFile.properties, obductionDiv, true);
+            toElement(obductionProperties, saveFile.properties, obductionDiv, 'obduction', true);
         } else if (saveFile.saveType == '/Script/CyanGameplayContent.CyanSaveGame') {
             let mystDiv = document.getElementById('myst');
             mystDiv.style.display = 'block';
-            toElement(mystProperties, saveFile.properties, mystDiv, true);
+            toElement(mystProperties, saveFile.properties, mystDiv, 'myst', true);
         } else {
             console.error(`Unrecognized save file type: ${saveFile.saveType}`);
         }
@@ -63,14 +63,14 @@ function savePressed() {
     saveAs(file);
 }
 
-function toElement(json, gvasPool, parentElement, isMain = true) {
+function toElement(json, gvasPool, parentElement, prefix, isMain = true) {
     if (!Array.isArray(json)) {
         json = [json];
     }
     for (const propertyInfo of json) {
 
         let propertyWrapper = document.createElement('DIV');
-        propertyWrapper.id = propertyInfo.html;
+        propertyWrapper.id = `${prefix}-${propertyInfo.html}`;
         propertyWrapper.className = 'property-wrapper';
         if (!isMain) {
             propertyWrapper.classList.add('sub');
@@ -90,7 +90,7 @@ function toElement(json, gvasPool, parentElement, isMain = true) {
         let propertyDesc = document.createElement('DIV');
         if (isMain) {
             propertyDesc.className = 'property-description';
-            propertyDesc.innerText = propertyInfo.description ? propertyInfo.description : '';
+            propertyDesc.innerHTML = propertyInfo.description ? propertyInfo.description : '';
             if (propertyDesc.innerText) {
                 propertyDesc.style.display = 'block';
             } else {
@@ -101,13 +101,11 @@ function toElement(json, gvasPool, parentElement, isMain = true) {
         let propertyBody = document.createElement('DIV');
         propertyBody.className = 'property-body';
 
-        if (propertyInfo.type) {
-            if (propertyInfo.type == 'container') {
-                propertyWrapper.prepend(propertyHeader, propertyDesc);
-                toElement(propertyInfo.values, gvasPool, propertyWrapper, false);
-                parentElement.append(propertyWrapper);
-                continue;
-            }
+        if (propertyInfo.children) {
+            propertyWrapper.prepend(propertyHeader, propertyDesc);
+            toElement(propertyInfo.children, gvasPool, propertyWrapper, prefix, false);
+            parentElement.append(propertyWrapper);
+            continue;
         }
 
         let gvas = Array.isArray(propertyInfo.gvas) ? propertyInfo.gvas[0] : propertyInfo.gvas;
@@ -116,7 +114,7 @@ function toElement(json, gvasPool, parentElement, isMain = true) {
             let property2 = fetchPropertyFromMap(propertyInfo.gvas[1], property.value.entries);
             let newJson = structuredClone(propertyInfo);
             newJson.gvas = propertyInfo.gvas[2];
-            toElement(newJson, property2, parentElement, isMain);
+            toElement(newJson, property2, parentElement, prefix, isMain);
             continue;
         } else if (property instanceof GvasStruct) {
             if (property.value.length == 1) {
