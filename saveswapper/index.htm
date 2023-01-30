@@ -16,14 +16,14 @@
     <script src="myst.js"></script>
 </head>
 
-<body onload="onLoad()">
+<body>
     <div id="main">
         <div id="intro">
             <div>Welcome, explorer, to Floydman's <b>Save Swapper</b>! You can use this tool to edit save files from Unreal Engine 4 games developed by Cyan: <i><a href="https://cyan.com/games/obduction/" target="_blank">Obduction</a></i> (2016) and <i><a href="https://cyan.com/games/myst/" target="_blank">Myst</a></i>                (2020). Support is planned for <i><a href="https://fulfillment.fangamer.com/kindling/firmament" target="_blank">Firmament</a></i> (2023) but is currently untested and unsupported.</div>
             <div class="intro-sub">This app was built using only HTML, JavaScript, and CSS and operates completely client-side within your browser, so your files are never sent anywhere, nor are they handled by anyone other than you. This means the editor is also portable,
                 so you can download it and use it anywhere you have access to a modern browser whether or not you have access to the Internet.</div>
             <div class="intro-sub">
-                <div id="instructions-wrapper">
+                <div id="instructions-wrapper" onclick="toggleInstructions()">
                     <div id="arrow-explainer">Here's how it works: <span id="instruction-arrow">⏵</span> <i>(Click to <span id="show">show</span>.)</i></div>
                     <div id="instructions">
                         <ol>
@@ -61,49 +61,8 @@
         <div id="save-type-wrapper">
             Save type: <span id="save-type">Unknown</span>
         </div>
-        <div id="obduction" class="game-wrapper">
-            <div id="obduction-player-position"></div>
-            <div id="obduction-player-rotation"></div>
-            <div id="obduction-domes-unlocked">
-                <div id="obduction-domes-unlocked-hunrath"></div>
-                <div id="obduction-domes-unlocked-kaptar"></div>
-                <div id="obduction-domes-unlocked-maray"></div>
-                <div id="obduction-domes-unlocked-soria"></div>
-            </div>
-            <div id="obduction-license-plate-solution"></div>
-            <div id="obduction-active-license-plates"></div>
-            <div id="obduction-easter-egg-mode">
-                <div id="obduction-easter-egg-mode-enabled"></div>
-                <div id="obduction-easter-egg-mode-image"></div>
-            </div>
-        </div>
-        <div id="myst" class="game-wrapper">
-            <div id="myst-player-position"></div>
-            <div id="myst-player-rotation"></div>
-            <div id="myst-red-pages">
-                <div id="myst-red-pages-accrued"></div>
-                <div id="myst-red-pages-book"></div>
-                <div id="myst-red-pages-displayed"></div>
-                <div id="myst-red-pages-shelf"></div>
-                <div id="myst-red-pages-channelwood"></div>
-                <div id="myst-red-pages-stoneship"></div>
-                <div id="myst-red-pages-mechanical"></div>
-                <div id="myst-red-pages-selenitic"></div>
-                <div id="myst-red-pages-fireplace"></div>
-            </div>
-            <div id="myst-blue-pages">
-                <div id="myst-blue-pages-accrued"></div>
-                <div id="myst-blue-pages-book"></div>
-                <div id="myst-blue-pages-displayed"></div>
-                <div id="myst-blue-pages-shelf"></div>
-                <div id="myst-blue-pages-channelwood"></div>
-                <div id="myst-blue-pages-stoneship"></div>
-                <div id="myst-blue-pages-mechanical"></div>
-                <div id="myst-blue-pages-selenitic"></div>
-                <div id="myst-blue-pages-fireplace"></div>
-            </div>
-            <div id="myst-compass-solution-button"></div>
-        </div>
+        <div id="obduction" class="game-wrapper"></div>
+        <div id="myst" class="game-wrapper"></div>
     </div>
 </body>
 

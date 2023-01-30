@@ -893,7 +893,7 @@ function fromGvas(buffer) {
     const isGvas = buffer.byteLength >= 4 && new TextDecoder().decode(buffer.slice(0, 4)) == 'GVAS';
     if (!isGvas) {
         logErrors('File not correctly formatted as GVAS.');
-        clear();
+        refresh();
         return;
     }
 

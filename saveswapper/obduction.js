@@ -1,4 +1,4 @@
-var obductionProperties = [{
+const obductionProperties = [{
     gvas: 'PlayerPosition',
     html: 'obduction-player-position',
     title: 'Player position',
@@ -7,6 +7,27 @@ var obductionProperties = [{
     gvas: 'PlayerRotation',
     html: 'obduction-player-rotation',
     title: 'Player rotation'
+}, {
+    html: 'obduction-domes-unlocked',
+    title: 'Cell membranes unlocked',
+    type: 'container',
+    values: [{
+        gvas: 'HunrathDomeEnabled',
+        html: 'obduction-domes-unlocked-hunrath',
+        label: 'Hunrath (desert)'
+    }, {
+        gvas: 'ChainDomeEnabled',
+        html: 'obduction-domes-unlocked-kaptar',
+        label: 'Kaptar (cliffs)'
+    }, {
+        gvas: 'SwampDomeEnabled',
+        html: 'obduction-domes-unlocked-maray',
+        label: 'Maray (swamp)'
+    }, {
+        gvas: 'SoariaDomeEnabled',
+        html: 'obduction-domes-unlocked-soria',
+        label: 'Soria (melted)'
+    }]
 }, {
     gvas: 'LicensePlateSolution',
     html: 'obduction-license-plate-solution',
@@ -64,27 +85,6 @@ var obductionProperties = [{
         { actual: '13', display: 'Colorado (BG4153)' },
         { actual: '14', display: 'D.C. (1NH965)' }
     ]
-}, {
-    html: 'obduction-domes-unlocked',
-    title: 'Cell membranes unlocked',
-    type: 'container',
-    values: [{
-        gvas: 'HunrathDomeEnabled',
-        html: 'obduction-domes-unlocked-hunrath',
-        label: 'Hunrath (desert)'
-    }, {
-        gvas: 'ChainDomeEnabled',
-        html: 'obduction-domes-unlocked-kaptar',
-        label: 'Kaptar (cliffs)'
-    }, {
-        gvas: 'SwampDomeEnabled',
-        html: 'obduction-domes-unlocked-maray',
-        label: 'Maray (swamp)'
-    }, {
-        gvas: 'SoariaDomeEnabled',
-        html: 'obduction-domes-unlocked-soria',
-        label: 'Soria (melted)'
-    }]
 }, {
     html: 'obduction-easter-egg-mode',
     title: 'Easter egg mode',

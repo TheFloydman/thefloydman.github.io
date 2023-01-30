@@ -1,4 +1,4 @@
-var mystProperties = [{
+const mystProperties = [{
     gvas: ['VectorGameStates', 'PlayerLocation', 'Value'],
     html: 'myst-player-position',
     title: 'Player position',
@@ -9,45 +9,6 @@ var mystProperties = [{
     html: 'myst-player-rotation',
     title: 'Player rotation'
 
-}, {
-    gvas: ['IntGameStates', '308C65FD4C23714E48A66FB11C250B32', 'Value'],
-    html: 'myst-compass-solution-button',
-    title: 'Stoneship compass solution',
-    type: 'dropdown',
-    values: [
-        { actual: 0, display: 'Button #1' },
-        { actual: 1, display: 'Button #2' },
-        { actual: 2, display: 'Button #3' },
-        { actual: 3, display: 'Button #4' },
-        { actual: 4, display: 'Button #5' },
-        { actual: 5, display: 'Button #6' },
-        { actual: 6, display: 'Button #7' },
-        { actual: 7, display: 'Button #8' },
-        { actual: 8, display: 'Button #9' },
-        { actual: 9, display: 'Button #10' },
-        { actual: 10, display: 'Button #11' },
-        { actual: 11, display: 'Button #12' },
-        { actual: 12, display: 'Button #13' },
-        { actual: 13, display: 'Button #14' },
-        { actual: 14, display: 'Button #15' },
-        { actual: 15, display: 'Button #16' },
-        { actual: 16, display: 'Button #17' },
-        { actual: 17, display: 'Button #18' },
-        { actual: 18, display: 'Button #19' },
-        { actual: 19, display: 'Button #20' },
-        { actual: 20, display: 'Button #21' },
-        { actual: 21, display: 'Button #22' },
-        { actual: 22, display: 'Button #23' },
-        { actual: 23, display: 'Button #24' },
-        { actual: 24, display: 'Button #25' },
-        { actual: 25, display: 'Button #26' },
-        { actual: 26, display: 'Button #27' },
-        { actual: 27, display: 'Button #28' },
-        { actual: 28, display: 'Button #29' },
-        { actual: 29, display: 'Button #30' },
-        { actual: 30, display: 'Button #31' },
-        { actual: 31, display: 'Button #32' }
-    ]
 }, {
     html: 'myst-red-pages',
     title: 'Red pages',
@@ -142,4 +103,43 @@ var mystProperties = [{
         html: 'myst-blue-pages-fireplace',
         label: 'Collected page from fireplace'
     }]
+}, {
+    gvas: ['IntGameStates', '308C65FD4C23714E48A66FB11C250B32', 'Value'],
+    html: 'myst-compass-solution-button',
+    title: 'Stoneship compass solution',
+    type: 'dropdown',
+    values: [
+        { actual: 0, display: 'Button #1' },
+        { actual: 1, display: 'Button #2' },
+        { actual: 2, display: 'Button #3' },
+        { actual: 3, display: 'Button #4' },
+        { actual: 4, display: 'Button #5' },
+        { actual: 5, display: 'Button #6' },
+        { actual: 6, display: 'Button #7' },
+        { actual: 7, display: 'Button #8' },
+        { actual: 8, display: 'Button #9' },
+        { actual: 9, display: 'Button #10' },
+        { actual: 10, display: 'Button #11' },
+        { actual: 11, display: 'Button #12' },
+        { actual: 12, display: 'Button #13' },
+        { actual: 13, display: 'Button #14' },
+        { actual: 14, display: 'Button #15' },
+        { actual: 15, display: 'Button #16' },
+        { actual: 16, display: 'Button #17' },
+        { actual: 17, display: 'Button #18' },
+        { actual: 18, display: 'Button #19' },
+        { actual: 19, display: 'Button #20' },
+        { actual: 20, display: 'Button #21' },
+        { actual: 21, display: 'Button #22' },
+        { actual: 22, display: 'Button #23' },
+        { actual: 23, display: 'Button #24' },
+        { actual: 24, display: 'Button #25' },
+        { actual: 25, display: 'Button #26' },
+        { actual: 26, display: 'Button #27' },
+        { actual: 27, display: 'Button #28' },
+        { actual: 28, display: 'Button #29' },
+        { actual: 29, display: 'Button #30' },
+        { actual: 30, display: 'Button #31' },
+        { actual: 31, display: 'Button #32' }
+    ]
 }]

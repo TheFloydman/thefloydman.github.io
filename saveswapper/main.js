@@ -1,9 +1,5 @@
 var saveFile;
 
-function onLoad() {
-    document.getElementById('instructions-wrapper').addEventListener('click', toggleInstructions);
-}
-
 function toggleInstructions() {
     let instructions = document.getElementById('instructions');
     let arrow = document.getElementById('instruction-arrow');
@@ -19,20 +15,20 @@ function toggleInstructions() {
     }
 }
 
-function clear() {
-    saveFile = undefined;
+function refresh() {
     let saveButton = document.getElementById('button-save');
     saveButton.disabled = true;
     document.getElementById('ue4-version').innerText = 'Unknown';
     document.getElementById('save-type').innerText = 'Unknown';
-    for (const wrapper of document.getElementsByClassName('property-wrapper')) {
-        wrapper.innerHTML = '';
+    for (const wrapper of document.getElementsByClassName('game-wrapper')) {
+        wrapper.style.display = 'none';
+        wrapper.replaceChildren();
     }
     console.clear();
 }
 
 function fileChosen() {
-    clear();
+    refresh();
     let uploadButton = document.getElementById('button-open');
     let file = uploadButton.files[0];
     if (!file)
@@ -43,15 +39,14 @@ function fileChosen() {
         document.getElementById('ue4-version').innerText = saveFile.ue4Version;
         document.getElementById('save-type').innerText = saveFile.saveType;
         console.log(saveFile);
-        for (const wrapper of document.getElementsByClassName('game-wrapper')) {
-            wrapper.style.display = 'none';
-        }
         if (saveFile.saveType == '/Script/Obduction.ObductionSaveGame' || saveFile.saveType == 'ObductionSaveGame') {
-            document.getElementById('obduction').style.display = 'block';
-            foo(obductionProperties, saveFile.properties);
+            let obductionDiv = document.getElementById('obduction');
+            obductionDiv.style.display = 'block';
+            toElement(obductionProperties, saveFile.properties, obductionDiv, true);
         } else if (saveFile.saveType == '/Script/CyanGameplayContent.CyanSaveGame') {
-            document.getElementById('myst').style.display = 'block';
-            foo(mystProperties, saveFile.properties);
+            let mystDiv = document.getElementById('myst');
+            mystDiv.style.display = 'block';
+            toElement(mystProperties, saveFile.properties, mystDiv, true);
         } else {
             console.error(`Unrecognized save file type: ${saveFile.saveType}`);
         }
@@ -68,19 +63,21 @@ function savePressed() {
     saveAs(file);
 }
 
-function foo(relevantProperties, pool, main = true) {
-    if (!Array.isArray(relevantProperties)) {
-        relevantProperties = [relevantProperties];
+function toElement(json, gvasPool, parentElement, isMain = true) {
+    if (!Array.isArray(json)) {
+        json = [json];
     }
-    for (const propertyInfo of relevantProperties) {
-        let propertyWrapper = document.getElementById(propertyInfo.html);
+    for (const propertyInfo of json) {
+
+        let propertyWrapper = document.createElement('DIV');
+        propertyWrapper.id = propertyInfo.html;
         propertyWrapper.className = 'property-wrapper';
-        if (!main) {
+        if (!isMain) {
             propertyWrapper.classList.add('sub');
         }
 
         let propertyHeader = document.createElement('DIV');
-        if (main) {
+        if (isMain) {
             propertyHeader.className = 'property-header';
             propertyHeader.innerText = propertyInfo.title ? propertyInfo.title : '';
             if (propertyHeader.innerText) {
@@ -91,7 +88,7 @@ function foo(relevantProperties, pool, main = true) {
         }
 
         let propertyDesc = document.createElement('DIV');
-        if (main) {
+        if (isMain) {
             propertyDesc.className = 'property-description';
             propertyDesc.innerText = propertyInfo.description ? propertyInfo.description : '';
             if (propertyDesc.innerText) {
@@ -107,18 +104,19 @@ function foo(relevantProperties, pool, main = true) {
         if (propertyInfo.type) {
             if (propertyInfo.type == 'container') {
                 propertyWrapper.prepend(propertyHeader, propertyDesc);
-                foo(propertyInfo.values, pool, false);
+                toElement(propertyInfo.values, gvasPool, propertyWrapper, false);
+                parentElement.append(propertyWrapper);
                 continue;
             }
         }
 
         let gvas = Array.isArray(propertyInfo.gvas) ? propertyInfo.gvas[0] : propertyInfo.gvas;
-        let property = fetchPropertyFromArray(gvas, pool);
+        let property = fetchPropertyFromArray(gvas, gvasPool);
         if (property instanceof GvasMap) {
             let property2 = fetchPropertyFromMap(propertyInfo.gvas[1], property.value.entries);
-            let newJson = propertyInfo;
+            let newJson = structuredClone(propertyInfo);
             newJson.gvas = propertyInfo.gvas[2];
-            foo(newJson, property2, main);
+            toElement(newJson, property2, parentElement, isMain);
             continue;
         } else if (property instanceof GvasStruct) {
             if (property.value.length == 1) {
@@ -178,7 +176,7 @@ function foo(relevantProperties, pool, main = true) {
                         label.setAttribute('for', `${propertyInfo.html}-${i}`);
                         label.innerText = `${propertyInfo.labels[i]}:`;
                         let select = document.createElement('SELECT');
-                        select.className = 'active-license-plate';
+                        select.className = `${propertyInfo.html}-select`;
                         select.setAttribute('index', i);
                         select.setAttribute('name', `${propertyInfo.html}-${i}`);
                         for (const optionInfo of propertyInfo.values) {
@@ -202,7 +200,7 @@ function foo(relevantProperties, pool, main = true) {
                             property.value = value.join(',') + ',';
                             let chosenValues = [];
                             let chosenSources = [];
-                            const allSelects = document.getElementsByClassName('active-license-plate');
+                            const allSelects = document.getElementsByClassName(`${propertyInfo.html}-select`);
                             for (const select of allSelects) {
                                 chosenValues.push(select.value);
                                 chosenSources.push(select);
@@ -254,7 +252,7 @@ function foo(relevantProperties, pool, main = true) {
                     property.value = this.value;
                 })
                 propertyBody.append(select);
-                if (!main) {
+                if (!isMain) {
                     let label = document.createElement('LABEL');
                     label.className = 'right';
                     label.setAttribute('for', `${propertyInfo.html}-select`);
@@ -262,29 +260,9 @@ function foo(relevantProperties, pool, main = true) {
                     propertyBody.append(label);
                 }
             }
-        } else if (property instanceof GvasUnknown) {
-            if (propertyInfo.type == 'boolean-group') {
-                for (const boolInfo of propertyInfo.values) {
-                    let bool = fetchPropertyFromArray(boolInfo.gvas, pool);
-                    let div = document.createElement('DIV');
-                    div.className = 'property-value-wrapper';
-                    let label = document.createElement('LABEL');
-                    label.setAttribute('for', `${boolInfo.html}-input`);
-                    label.innerText = boolInfo.label;
-                    let value = bool.value;
-                    let checkbox = document.createElement('INPUT');
-                    checkbox.className = 'checkbox';
-                    checkbox.setAttribute('type', 'checkbox');
-                    checkbox.checked = value;
-                    checkbox.addEventListener('input', function() {
-                        bool.value = this.checked;
-                    })
-                    div.append(checkbox, label);
-                    propertyBody.append(div);
-                }
-            }
         }
 
         propertyWrapper.append(propertyHeader, propertyDesc, propertyBody);
+        parentElement.append(propertyWrapper);
     }
 }
