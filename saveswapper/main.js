@@ -258,6 +258,61 @@ function toElement(json, gvasPool, parentElement, prefix, isMain = true) {
                     propertyBody.append(label);
                 }
             }
+        } else if (property instanceof GvasFloat) {
+            if (propertyInfo.type) {
+                if (propertyInfo.type == 'dropdown') {
+                    let value = parseFloat(property.value.float);
+                    let select = document.createElement('SELECT');
+                    select.name = `${propertyInfo.html}-select`;
+                    for (const validFloat of propertyInfo.values) {
+                        let option = document.createElement('OPTION');
+                        if (validFloat.actual != undefined && validFloat.display != undefined) {
+                            option.value = parseFloat(validFloat.actual);
+                            option.innerText = validFloat.display;
+                        } else {
+                            option.value = parseFloat(validFloat);
+                            option.innerText = parseFloat(validFloat);
+                        }
+                        select.append(option);
+                    }
+                    select.value = value;
+                    select.addEventListener('change', function() {
+                        property.value.float = this.value;
+                    })
+                    propertyBody.append(select);
+                    if (!isMain) {
+                        let label = document.createElement('LABEL');
+                        label.className = 'right';
+                        label.setAttribute('for', `${propertyInfo.html}-select`);
+                        label.innerText = propertyInfo.title;
+                        propertyBody.append(label);
+                    }
+                }
+            } else {
+                let value = parseFloat(property.value.float);
+                let input = document.createElement('INPUT');
+                input.name = `${propertyInfo.html}-input`;
+                input.setAttribute('type', 'number');
+                input.setAttribute('min', propertyInfo.min)
+                input.setAttribute('max', propertyInfo.max)
+                input.value = value;
+                input.addEventListener('input', function() {
+                    if (this.value > propertyInfo.max) {
+                        this.value = propertyInfo.max;
+                    } else if (this.value < propertyInfo.min) {
+                        this.value = propertyInfo.min;
+                    }
+                    property.value.float = this.value;
+                })
+                propertyBody.append(input);
+                if (!isMain) {
+                    let label = document.createElement('LABEL');
+                    label.className = 'right';
+                    label.setAttribute('for', `${propertyInfo.html}-select`);
+                    label.innerText = propertyInfo.title;
+                    propertyBody.append(label);
+                }
+            }
         }
 
         propertyWrapper.append(propertyHeader, propertyDesc, propertyBody);

@@ -234,4 +234,11 @@ const obductionProperties = [{
         { actual: 9, display: '90%' },
         { actual: 10, display: '100%' }
     ]
+}, {
+    gvas: 'HunrathSwingBridgeYaw',
+    html: 'hunrath-swing-bridge-position',
+    title: 'Position of Hunrath swing bridge',
+    description: 'The game normally settles on one of three values: 0 (town-side), 0.5 (across river), and 1 (mine-side).',
+    min: 0,
+    max: 1
 }]
