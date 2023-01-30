@@ -247,7 +247,7 @@ function toElement(json, gvasPool, parentElement, prefix, isMain = true) {
                 }
                 select.value = value;
                 select.addEventListener('change', function() {
-                    property.value = this.value;
+                    property.value.int = this.value;
                 })
                 propertyBody.append(select);
                 if (!isMain) {

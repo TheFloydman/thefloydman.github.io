@@ -216,4 +216,22 @@ const obductionProperties = [{
             { actual: '4', display: 'Black' }
         ]
     }]
+}, {
+    gvas: 'HunrathTreeDeviceProgress',
+    html: 'tree-swapper-progress',
+    title: 'C.W.\'s giant swapper progress',
+    type: 'dropdown',
+    values: [
+        { actual: 0, display: '0%' },
+        { actual: 1, display: '10%' },
+        { actual: 2, display: '20%' },
+        { actual: 3, display: '30%' },
+        { actual: 4, display: '40%' },
+        { actual: 5, display: '50%' },
+        { actual: 6, display: '60%' },
+        { actual: 7, display: '70%' },
+        { actual: 8, display: '80%' },
+        { actual: 9, display: '90%' },
+        { actual: 10, display: '100%' }
+    ]
 }]
