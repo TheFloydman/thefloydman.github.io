@@ -1,3 +1,7 @@
+/**
+ * GVAS Parser written by Floydman. Use at your own risk.
+ */
+
 class Property {
 
     value;

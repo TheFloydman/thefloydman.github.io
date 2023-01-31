@@ -28,6 +28,26 @@ const obductionProperties = [{
         label: 'Soria (melted)'
     }]
 }, {
+    html: 'connected-to-hub',
+    title: 'Worlds connected to the Heart (underground hub)',
+    children: [{
+        gvas: 'HunrathConnectedToHub',
+        html: 'connected-to-hub-hunrath',
+        label: 'Hunrath (desert)'
+    }, {
+        gvas: 'ChainConnectedToHub',
+        html: 'connected-to-hub-kaptar',
+        label: 'Kaptar (cliffs)'
+    }, {
+        gvas: 'SwampConnectedToHub',
+        html: 'connected-to-hub-swamp',
+        label: 'Maray (swamp)'
+    }, {
+        gvas: 'SoariaConnectedToHub',
+        html: 'connected-to-hub-soria',
+        label: 'Soria (melted)'
+    }]
+}, {
     gvas: 'LicensePlateSolution',
     html: 'license-plate-solution',
     title: 'License plate solution',
@@ -217,6 +237,87 @@ const obductionProperties = [{
         ]
     }]
 }, {
+    html: 'doors-and-bridges-maray',
+    title: 'Maray doors and bridges',
+    children: [{
+        gvas: 'SwampExtrusionBridge1',
+        html: 'bridges-maray-1',
+        label: 'Bridge between WMD and Tree',
+        type: 'select',
+        values: [
+            { actual: '00000;00000', display: 'Empty' },
+            { actual: '11111;11111', display: 'Framed' },
+            { actual: '22222;22222', display: 'Basic' },
+            { actual: '33333;33333', display: 'Complete' }
+        ]
+    }, {
+        gvas: 'SwampExtrusionBridge3',
+        html: 'bridges-maray-3',
+        label: 'Bridge between Armory and disabler beam building',
+        type: 'select',
+        values: [
+            { actual: '00000;00000', display: 'Empty' },
+            { actual: '11111;11111', display: 'Framed' },
+            { actual: '22222;22222', display: 'Basic' },
+            { actual: '33333;33333', display: 'Complete' }
+        ]
+    }, {
+        gvas: 'SwampExtrusionBridge4',
+        html: 'bridges-maray-4',
+        label: 'Bridge between Armory and junkyard swapping area',
+        type: 'select',
+        values: [
+            { actual: '00000;00000', display: 'Empty' },
+            { actual: '11111;11111', display: 'Framed' },
+            { actual: '22222;22222', display: 'Basic' },
+            { actual: '33333;33333', display: 'Complete' }
+        ]
+    }, {
+        gvas: 'SwampExtrusionBridge7',
+        html: 'bridges-maray-7',
+        label: 'Bridge between Maray entry and WMD area',
+        type: 'select',
+        values: [
+            { actual: '00000;00000', display: 'Empty' },
+            { actual: '11111;11111', display: 'Framed' },
+            { actual: '22222;22222', display: 'Basic' },
+            { actual: '33333;33333', display: 'Complete' }
+        ]
+    }, {
+        gvas: 'SwampArmoryDoorState',
+        html: 'doors-maray-entry',
+        label: 'Entry door',
+        type: 'select',
+        values: [
+            { actual: '0', display: 'Empty' },
+            { actual: '1', display: 'Framed' },
+            { actual: '2', display: 'Basic' },
+            { actual: '3', display: 'Complete' }
+        ]
+    }, {
+        gvas: 'SwampCryoToEntryDoor',
+        html: 'doors-maray-cryo-to-entry',
+        label: 'Door between cryo-chamber and entry',
+        type: 'select',
+        values: [
+            { actual: '0', display: 'Empty' },
+            { actual: '1', display: 'Framed' },
+            { actual: '2', display: 'Basic' },
+            { actual: '3', display: 'Complete' }
+        ]
+    }, {
+        gvas: 'SwampCryoWMDToEntryDoor',
+        html: 'doors-maray-wmd-to-entry',
+        label: 'Door between entry and WMD area',
+        type: 'select',
+        values: [
+            { actual: '0', display: 'Empty' },
+            { actual: '1', display: 'Framed' },
+            { actual: '2', display: 'Basic' },
+            { actual: '3', display: 'Complete' }
+        ]
+    }]
+}, {
     gvas: 'HunrathTreeDeviceProgress',
     html: 'tree-swapper-progress',
     title: 'C.W.\'s giant swapper progress',
@@ -241,4 +342,9 @@ const obductionProperties = [{
     description: 'The game normally settles on one of three values: 0 (town-side), 0.5 (across river), and 1 (mine-side).',
     min: 0,
     max: 1
+}, {
+    gvas: 'SwampWMDDisabled',
+    html: 'wmd-disabled',
+    title: 'Mofang WMD',
+    label: 'Disabled'
 }]
