@@ -149,6 +149,8 @@ function toElement(json, gvasPool, parentElement, prefix, isMain = true) {
             if (propertyInfo.values) {
                 if (propertyInfo.type == 'select') {
                     let value = property.value;
+                    let div = document.createElement('DIV');
+                    div.className = 'property-value-wrapper';
                     let select = document.createElement('SELECT');
                     for (const optionInfo of propertyInfo.values) {
                         let option = document.createElement('OPTION');
@@ -161,13 +163,15 @@ function toElement(json, gvasPool, parentElement, prefix, isMain = true) {
                     select.addEventListener('change', function() {
                         property.value = this.value;
                     })
+                    div.append(select);
                     if (propertyInfo.label) {
                         let label = document.createElement('LABEL');
+                        label.className = 'right';
                         label.setAttribute('for', propertyInfo.html);
                         label.innerText = `${propertyInfo.label}:`;
-                        propertyBody.append(label);
+                        div.append(label);
                     }
-                    propertyBody.append(select);
+                    propertyBody.append(div);
                 } else if (propertyInfo.type == 'selects-comma') {
                     let value = property.value.split(',');
                     value = value.slice(0, value.length - 1);
@@ -175,8 +179,9 @@ function toElement(json, gvasPool, parentElement, prefix, isMain = true) {
                         let div = document.createElement('DIV');
                         div.className = 'property-value-wrapper';
                         let label = document.createElement('LABEL');
+                        label.className = 'right';
                         label.setAttribute('for', `${propertyInfo.html}-${i}`);
-                        label.innerText = `${propertyInfo.labels[i]}:`;
+                        label.innerText = propertyInfo.labels[i];
                         let select = document.createElement('SELECT');
                         select.className = `${propertyInfo.html}-select`;
                         select.setAttribute('index', i);
@@ -185,41 +190,24 @@ function toElement(json, gvasPool, parentElement, prefix, isMain = true) {
                             let option = document.createElement('OPTION');
                             option.value = optionInfo.actual;
                             option.innerText = optionInfo.display;
-                            option.disabled = value.includes(option.value);
                             select.append(option);
                         }
                         select.value = value[i];
-                        for (const child of select.children) {
-                            if (child.value == select.value) {
-                                child.disabled = false;
-                                break;
-                            }
-                        }
                         select.addEventListener('change', function() {
                             let value = property.value.split(',');
                             value = value.slice(0, value.length - 1);
                             value[parseInt(this.getAttribute('index'))] = this.value;
                             property.value = value.join(',') + ',';
-                            let chosenValues = [];
-                            let chosenSources = [];
-                            const allSelects = document.getElementsByClassName(`${propertyInfo.html}-select`);
-                            for (const select of allSelects) {
-                                chosenValues.push(select.value);
-                                chosenSources.push(select);
-                            }
-                            for (const select of allSelects) {
-                                for (const child of select.children) {
-                                    child.disabled = chosenValues.includes(child.value) && select.value != child.value;
-                                }
-                            }
                         })
-                        div.append(label, select);
+                        div.append(select, label);
                         propertyBody.append(div);
                     }
                 }
             }
         } else if (property instanceof GvasBoolean) {
             let value = property.value;
+            let div = document.createElement('DIV');
+            div.className = 'property-value-wrapper';
             let label = document.createElement('LABEL');
             label.className = 'right';
             label.setAttribute('type', 'checkbox');
@@ -232,11 +220,14 @@ function toElement(json, gvasPool, parentElement, prefix, isMain = true) {
             input.addEventListener('input', function() {
                 property.value = this.checked;
             });
-            propertyBody.append(input, label);
+            div.append(input, label);
+            propertyBody.append(div);
         } else if (property instanceof GvasInteger) {
             if (propertyInfo.type) {
                 if (propertyInfo.type == 'dropdown') {
                     let value = parseInt(property.value.int);
+                    let div = document.createElement('DIV');
+                    div.className = 'property-value-wrapper';
                     let select = document.createElement('SELECT');
                     select.name = `${propertyInfo.html}-select`;
                     for (const validInt of propertyInfo.values) {
@@ -251,46 +242,47 @@ function toElement(json, gvasPool, parentElement, prefix, isMain = true) {
                         select.append(option);
                     }
                     select.addEventListener('change', function() {
-                        property.value.int = this.value;
+                        property.value.int = parseInt(this.value);
                     })
                     select.value = value;
-                    propertyBody.append(select);
+
+                    div.append(select);
                     if (!isMain) {
                         let label = document.createElement('LABEL');
                         label.className = 'right';
                         label.setAttribute('for', `${propertyInfo.html}-select`);
                         label.innerText = propertyInfo.title;
-                        propertyBody.append(label);
+                        div.append(label);
                     }
+                    propertyBody.append(div);
                 }
             } else {
                 let value = parseInt(property.value.int);
+                let div = document.createElement('DIV');
+                div.className = 'property-value-wrapper';
                 let input = document.createElement('INPUT');
                 input.name = `${propertyInfo.html}-input`;
                 input.setAttribute('type', 'number');
                 input.value = value;
                 input.addEventListener('input', function() {
-                    this.value = parseInt(this.value);
-                    if (propertyInfo.max != undefined && parseInt(propertyInfo.max) != NaN && parseInt(this.value) > parseInt(propertyInfo.max)) {
-                        this.value = parseInt(propertyInfo.max);
-                    } else if (propertyInfo.min != undefined && parseInt(propertyInfo.min) != NaN && parseInt(this.value) < parseInt(propertyInfo.min)) {
-                        this.value = parseInt(propertyInfo.min);
-                    }
                     property.value.int = parseInt(this.value);
                 })
-                propertyBody.append(input);
+                div.append(input);
                 if (!isMain) {
                     let label = document.createElement('LABEL');
                     label.className = 'right';
                     label.setAttribute('for', `${propertyInfo.html}-select`);
                     label.innerText = propertyInfo.title;
-                    propertyBody.append(label);
+                    div.append(label);
                 }
+                propertyBody.append(div);
             }
         } else if (property instanceof GvasFloat) {
             if (propertyInfo.type) {
                 if (propertyInfo.type == 'dropdown') {
                     let value = parseFloat(property.value.float);
+                    let div = document.createElement('DIV');
+                    div.className = 'property-value-wrapper';
                     let select = document.createElement('SELECT');
                     select.name = `${propertyInfo.html}-select`;
                     for (const validFloat of propertyInfo.values) {
@@ -306,40 +298,38 @@ function toElement(json, gvasPool, parentElement, prefix, isMain = true) {
                     }
                     select.value = value;
                     select.addEventListener('change', function() {
-                        property.value.float = this.value;
+                        property.value.float = parseFloat(this.value);
                     })
-                    propertyBody.append(select);
+                    div.append(select);
                     if (!isMain) {
                         let label = document.createElement('LABEL');
                         label.className = 'right';
                         label.setAttribute('for', `${propertyInfo.html}-select`);
                         label.innerText = propertyInfo.title;
-                        propertyBody.append(label);
+                        div.append(label);
                     }
+                    propertyBody.append(div);
                 }
             } else {
                 let value = parseFloat(property.value.float);
+                let div = document.createElement('DIV');
+                div.className = 'property-value-wrapper';
                 let input = document.createElement('INPUT');
                 input.name = `${propertyInfo.html}-input`;
                 input.setAttribute('type', 'number');
                 input.value = value;
                 input.addEventListener('input', function() {
-                    if (propertyInfo.max != undefined && parseFloat(propertyInfo.max) != NaN && parseFloat(this.value) > parseFloat(propertyInfo.max)) {
-                        this.value = parseFloat(propertyInfo.max);
-                    } else if (propertyInfo.min != undefined && parseFloat(propertyInfo.min) != NaN && parseFloat(this.value) < parseFloat(propertyInfo.min)) {
-                        this.value = parseFloat(propertyInfo.min);
-                        console.log(parseFloat(propertyInfo.min));
-                    }
                     property.value.float = parseFloat(this.value);
                 })
-                propertyBody.append(input);
+                div.append(input);
                 if (!isMain) {
                     let label = document.createElement('LABEL');
                     label.className = 'right';
                     label.setAttribute('for', `${propertyInfo.html}-select`);
                     label.innerText = propertyInfo.title;
-                    propertyBody.append(label);
+                    div.append(label);
                 }
+                propertyBody.append(div);
             }
         }
 

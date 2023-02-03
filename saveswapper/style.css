@@ -80,8 +80,12 @@ div.property-description {
 
 div.property-wrapper {
     padding-top: 16px;
-    padding-bottom: 16px;
+    padding-bottom: 8px;
     border-top: 1px solid black;
+}
+
+div.property-value-wrapper {
+    margin-bottom: 8px;
 }
 
 div.sub {

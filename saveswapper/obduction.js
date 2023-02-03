@@ -73,6 +73,7 @@ const obductionProperties = [{
     gvas: 'ActiveLicensePlates',
     html: 'active-license-plates',
     title: 'Active license plates',
+    description: 'Duplicated plates will be displayed as Minnesota.',
     type: 'selects-comma',
     quantity: 10,
     labels: [
