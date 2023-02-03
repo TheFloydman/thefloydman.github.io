@@ -237,53 +237,9 @@ const obductionProperties = [{
         ]
     }]
 }, {
-    html: 'doors-and-bridges-maray',
-    title: 'Maray doors and bridges',
+    html: 'doors-maray',
+    title: 'Maray doors',
     children: [{
-        gvas: 'SwampExtrusionBridge1',
-        html: 'bridges-maray-1',
-        label: 'Bridge between WMD and Tree',
-        type: 'select',
-        values: [
-            { actual: '00000;00000', display: 'Empty' },
-            { actual: '11111;11111', display: 'Framed' },
-            { actual: '22222;22222', display: 'Basic' },
-            { actual: '33333;33333', display: 'Complete' }
-        ]
-    }, {
-        gvas: 'SwampExtrusionBridge3',
-        html: 'bridges-maray-3',
-        label: 'Bridge between Armory and disabler beam building',
-        type: 'select',
-        values: [
-            { actual: '00000;00000', display: 'Empty' },
-            { actual: '11111;11111', display: 'Framed' },
-            { actual: '22222;22222', display: 'Basic' },
-            { actual: '33333;33333', display: 'Complete' }
-        ]
-    }, {
-        gvas: 'SwampExtrusionBridge4',
-        html: 'bridges-maray-4',
-        label: 'Bridge between Armory and junkyard swapping area',
-        type: 'select',
-        values: [
-            { actual: '00000;00000', display: 'Empty' },
-            { actual: '11111;11111', display: 'Framed' },
-            { actual: '22222;22222', display: 'Basic' },
-            { actual: '33333;33333', display: 'Complete' }
-        ]
-    }, {
-        gvas: 'SwampExtrusionBridge7',
-        html: 'bridges-maray-7',
-        label: 'Bridge between Maray entry and WMD area',
-        type: 'select',
-        values: [
-            { actual: '00000;00000', display: 'Empty' },
-            { actual: '11111;11111', display: 'Framed' },
-            { actual: '22222;22222', display: 'Basic' },
-            { actual: '33333;33333', display: 'Complete' }
-        ]
-    }, {
         gvas: 'SwampArmoryDoorState',
         html: 'doors-maray-entry',
         label: 'Entry door',
@@ -316,25 +272,134 @@ const obductionProperties = [{
             { actual: '2', display: 'Basic' },
             { actual: '3', display: 'Complete' }
         ]
+    }, {
+        gvas: 'TramGate_1_Material',
+        html: 'doors-maray-tram-1',
+        label: 'First tram door',
+        type: 'select',
+        values: [
+            { actual: '0', display: 'Empty' },
+            { actual: '1', display: 'Framed' },
+            { actual: '2', display: 'Basic' },
+            { actual: '3', display: 'Complete' }
+        ]
+    }, {
+        gvas: 'TramGate_2_Material',
+        html: 'doors-maray-tram-2',
+        label: 'Second tram door',
+        type: 'select',
+        values: [
+            { actual: '0', display: 'Empty' },
+            { actual: '1', display: 'Framed' },
+            { actual: '2', display: 'Basic' },
+            { actual: '3', display: 'Complete' }
+        ]
+    }, {
+        gvas: 'TramGate_3_Material',
+        html: 'doors-maray-tram-3',
+        label: 'Third tram door',
+        type: 'select',
+        values: [
+            { actual: '0', display: 'Empty' },
+            { actual: '1', display: 'Framed' },
+            { actual: '2', display: 'Basic' },
+            { actual: '3', display: 'Complete' }
+        ]
+    }]
+}, {
+    html: 'bridges-maray',
+    title: 'Maray bridges',
+    children: [{
+        gvas: 'SwampExtrusionBridge1',
+        html: 'bridges-maray-1',
+        label: 'Bridge between WMD and Tree',
+        type: 'select',
+        values: [
+            { actual: '00000;00000', display: 'Not yet used' },
+            { actual: '00000', display: 'Empty' },
+            { actual: '11111', display: 'Framed' },
+            { actual: '22222', display: 'Basic' },
+            { actual: '33333', display: 'Complete' }
+        ]
+    }, {
+        gvas: 'SwampExtrusionBridge2',
+        html: 'bridges-maray-2',
+        label: 'Bridge between mine rotation and pod dispenser',
+        type: 'select',
+        values: [
+            { actual: '00000;00000', display: 'Not yet used' },
+            { actual: '00000', display: 'Empty' },
+            { actual: '11111', display: 'Framed' },
+            { actual: '22222', display: 'Basic' },
+            { actual: '33333', display: 'Complete' }
+        ]
+    }, {
+        gvas: 'SwampExtrusionBridge3',
+        html: 'bridges-maray-3',
+        label: 'Bridge between Armory and disabler beam building',
+        type: 'select',
+        values: [
+            { actual: '00000;00000', display: 'Not yet used' },
+            { actual: '00000', display: 'Empty' },
+            { actual: '11111', display: 'Framed' },
+            { actual: '22222', display: 'Basic' },
+            { actual: '33333', display: 'Complete' }
+        ]
+    }, {
+        gvas: 'SwampExtrusionBridge4',
+        html: 'bridges-maray-4',
+        label: 'Bridge between Armory and junkyard swapping area',
+        type: 'select',
+        values: [
+            { actual: '00000;00000', display: 'Not yet used' },
+            { actual: '00000', display: 'Empty' },
+            { actual: '11111', display: 'Framed' },
+            { actual: '22222', display: 'Basic' },
+            { actual: '33333', display: 'Complete' }
+        ]
+    }, {
+        gvas: 'SwampExtrusionBridge7',
+        html: 'bridges-maray-7',
+        label: 'Bridge between Maray entry and WMD area',
+        type: 'select',
+        values: [
+            { actual: '00000;00000', display: 'Not yet used' },
+            { actual: '00000', display: 'Empty' },
+            { actual: '11111', display: 'Framed' },
+            { actual: '22222', display: 'Basic' },
+            { actual: '33333', display: 'Complete' }
+        ]
+    }, {
+        gvas: 'ExtrusionBridgeVilleinA',
+        html: 'bridges-maray-a',
+        label: 'Bridge between mine rotation and maze',
+        type: 'select',
+        values: [
+            { actual: '00000;00000', display: 'Not yet used' },
+            { actual: '00000', display: 'Empty' },
+            { actual: '11111', display: 'Framed' },
+            { actual: '22222', display: 'Basic' },
+            { actual: '33333', display: 'Complete' }
+        ]
+    }, {
+        gvas: 'ExtrusionBridgeVilleinB',
+        html: 'bridges-maray-b',
+        label: 'Bridge between mine rotation and locking beam',
+        type: 'select',
+        values: [
+            { actual: '00000;00000', display: 'Not yet used' },
+            { actual: '00000', display: 'Empty' },
+            { actual: '11111', display: 'Framed' },
+            { actual: '22222', display: 'Basic' },
+            { actual: '33333', display: 'Complete' }
+        ]
     }]
 }, {
     gvas: 'HunrathTreeDeviceProgress',
     html: 'tree-swapper-progress',
     title: 'C.W.\'s giant swapper progress',
-    type: 'dropdown',
-    values: [
-        { actual: 0, display: '0%' },
-        { actual: 1, display: '10%' },
-        { actual: 2, display: '20%' },
-        { actual: 3, display: '30%' },
-        { actual: 4, display: '40%' },
-        { actual: 5, display: '50%' },
-        { actual: 6, display: '60%' },
-        { actual: 7, display: '70%' },
-        { actual: 8, display: '80%' },
-        { actual: 9, display: '90%' },
-        { actual: 10, display: '100%' }
-    ]
+    description: '0 is 0% and 10 is 100%. Value will go over 10 if you increase it outside the game and then do something in-game to increment it.',
+    min: 0
 }, {
     gvas: 'HunrathSwingBridgeYaw',
     html: 'hunrath-swing-bridge-position',
@@ -346,5 +411,6 @@ const obductionProperties = [{
     gvas: 'SwampWMDDisabled',
     html: 'wmd-disabled',
     title: 'Mofang WMD',
+    description: 'Disabling the WMD will close certain end area doors in Maray.',
     label: 'Disabled'
 }]
