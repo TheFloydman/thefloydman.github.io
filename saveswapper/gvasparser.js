@@ -1014,7 +1014,7 @@ function serializeProperty(property) {
     return combined;
 }
 
-function fetchPropertyFromArray(name, array) {
+function fetchNamedPropertyFromArray(name, array) {
     for (const property of array) {
         if (property.name == name) {
             return property;
@@ -1023,11 +1023,12 @@ function fetchPropertyFromArray(name, array) {
     return new GvasUnknown();
 }
 
-function fetchPropertyFromMap(name, map) {
-    for (const [key, value] of map) {
-        if (key.value == name) {
-            return value.value;
-        }
+function fetchPropertyFromMap(key, map) {
+    for (const [entryKey, entryValue] of map) {
+        if (JSON.stringify(entryKey) != JSON.stringify(key)) {
+            continue;
+        };
+        return entryValue.value;
     }
     return new GvasUnknown();
 }

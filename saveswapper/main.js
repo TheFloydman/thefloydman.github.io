@@ -109,13 +109,17 @@ function toElement(json, gvasPool, parentElement, prefix, isMain = true) {
         }
 
         let gvas = Array.isArray(propertyInfo.gvas) ? propertyInfo.gvas[0] : propertyInfo.gvas;
-        let property = fetchPropertyFromArray(gvas, gvasPool);
+        let property = fetchNamedPropertyFromArray(gvas, gvasPool);
         if (property instanceof GvasMap) {
-            let property2 = fetchPropertyFromMap(propertyInfo.gvas[1], property.value.entries);
-            let newJson = structuredClone(propertyInfo);
-            newJson.gvas = propertyInfo.gvas[2];
-            toElement(newJson, property2, parentElement, prefix, isMain);
-            continue;
+            if (prefix == 'myst') {
+                let key = new GvasString();
+                key.value = propertyInfo.gvas[1];
+                let property2 = fetchPropertyFromMap(key, property.value.entries);
+                let newJson = structuredClone(propertyInfo);
+                newJson.gvas = propertyInfo.gvas[2];
+                toElement(newJson, property2, parentElement, prefix, isMain);
+                continue;
+            }
         } else if (property instanceof GvasStruct) {
             if (property.value.length == 1) {
                 let subProperty = property.value[0];
@@ -230,26 +234,51 @@ function toElement(json, gvasPool, parentElement, prefix, isMain = true) {
             });
             propertyBody.append(input, label);
         } else if (property instanceof GvasInteger) {
-            if (propertyInfo.type == 'dropdown') {
-                let value = parseInt(property.value.int);
-                let select = document.createElement('SELECT');
-                select.name = `${propertyInfo.html}-select`;
-                for (const validInt of propertyInfo.values) {
-                    let option = document.createElement('OPTION');
-                    if (validInt.actual != undefined && validInt.display != undefined) {
-                        option.value = parseInt(validInt.actual);
-                        option.innerText = validInt.display;
-                    } else {
-                        option.value = parseInt(validInt);
-                        option.innerText = parseInt(validInt);
+            if (propertyInfo.type) {
+                if (propertyInfo.type == 'dropdown') {
+                    let value = parseInt(property.value.int);
+                    let select = document.createElement('SELECT');
+                    select.name = `${propertyInfo.html}-select`;
+                    for (const validInt of propertyInfo.values) {
+                        let option = document.createElement('OPTION');
+                        if (validInt.actual != undefined && validInt.display != undefined) {
+                            option.value = parseInt(validInt.actual);
+                            option.innerText = validInt.display;
+                        } else {
+                            option.value = parseInt(validInt);
+                            option.innerText = parseInt(validInt);
+                        }
+                        select.append(option);
                     }
-                    select.append(option);
+                    select.addEventListener('change', function() {
+                        property.value.int = this.value;
+                    })
+                    select.value = value;
+                    propertyBody.append(select);
+                    if (!isMain) {
+                        let label = document.createElement('LABEL');
+                        label.className = 'right';
+                        label.setAttribute('for', `${propertyInfo.html}-select`);
+                        label.innerText = propertyInfo.title;
+                        propertyBody.append(label);
+                    }
                 }
-                select.value = value;
-                select.addEventListener('change', function() {
-                    property.value.int = this.value;
+            } else {
+                let value = parseInt(property.value.int);
+                let input = document.createElement('INPUT');
+                input.name = `${propertyInfo.html}-input`;
+                input.setAttribute('type', 'number');
+                input.value = value;
+                input.addEventListener('input', function() {
+                    this.value = parseInt(this.value);
+                    if (propertyInfo.max != undefined && parseInt(propertyInfo.max) != NaN && parseInt(this.value) > parseInt(propertyInfo.max)) {
+                        this.value = parseInt(propertyInfo.max);
+                    } else if (propertyInfo.min != undefined && parseInt(propertyInfo.min) != NaN && parseInt(this.value) < parseInt(propertyInfo.min)) {
+                        this.value = parseInt(propertyInfo.min);
+                    }
+                    property.value.int = parseInt(this.value);
                 })
-                propertyBody.append(select);
+                propertyBody.append(input);
                 if (!isMain) {
                     let label = document.createElement('LABEL');
                     label.className = 'right';
@@ -293,16 +322,15 @@ function toElement(json, gvasPool, parentElement, prefix, isMain = true) {
                 let input = document.createElement('INPUT');
                 input.name = `${propertyInfo.html}-input`;
                 input.setAttribute('type', 'number');
-                input.setAttribute('min', propertyInfo.min)
-                input.setAttribute('max', propertyInfo.max)
                 input.value = value;
                 input.addEventListener('input', function() {
-                    if (this.value > propertyInfo.max) {
-                        this.value = propertyInfo.max;
-                    } else if (this.value < propertyInfo.min) {
-                        this.value = propertyInfo.min;
+                    if (propertyInfo.max != undefined && parseFloat(propertyInfo.max) != NaN && parseFloat(this.value) > parseFloat(propertyInfo.max)) {
+                        this.value = parseFloat(propertyInfo.max);
+                    } else if (propertyInfo.min != undefined && parseFloat(propertyInfo.min) != NaN && parseFloat(this.value) < parseFloat(propertyInfo.min)) {
+                        this.value = parseFloat(propertyInfo.min);
+                        console.log(parseFloat(propertyInfo.min));
                     }
-                    property.value.float = this.value;
+                    property.value.float = parseFloat(this.value);
                 })
                 propertyBody.append(input);
                 if (!isMain) {
