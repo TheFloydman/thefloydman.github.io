@@ -923,9 +923,6 @@ function fromGvas(buffer) {
         i++;
     }
 
-    let saveButton = document.getElementById('button-save');
-    saveButton.disabled = false;
-
     return saveObject;
 }
 

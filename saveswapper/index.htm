@@ -51,6 +51,9 @@
             <div id="open-button">
                 <input type="file" accept=".sav" id="button-open" oninput="fileChosen()">
             </div>
+            <div id="raw-button">
+                <button type="button" id="button-raw" onclick="toggleRaw()" disabled>Switch to raw editor</button> (may freeze your browser while loading)
+            </div>
             <div id="save-button">
                 <button type="button" id="button-save" onclick="savePressed()" disabled>Save</button>
             </div>
@@ -61,6 +64,7 @@
         <div id="save-type-wrapper">
             Save type: <span id="save-type">Unknown</span>
         </div>
+        <div id="raw" class="game-wrapper"></div>
         <div id="obduction" class="game-wrapper"></div>
         <div id="myst" class="game-wrapper"></div>
     </div>

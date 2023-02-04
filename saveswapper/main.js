@@ -18,6 +18,9 @@ function toggleInstructions() {
 function refresh() {
     let saveButton = document.getElementById('button-save');
     saveButton.disabled = true;
+    let rawButton = document.getElementById('button-raw');
+    rawButton.disabled = true;
+    document.getElementById('button-raw').innerText = 'Switch to raw editor';
     document.getElementById('ue4-version').innerText = 'Unknown';
     document.getElementById('save-type').innerText = 'Unknown';
     for (const wrapper of document.getElementsByClassName('game-wrapper')) {
@@ -28,28 +31,38 @@ function refresh() {
 }
 
 function fileChosen() {
-    refresh();
     let uploadButton = document.getElementById('button-open');
     let file = uploadButton.files[0];
-    if (!file)
+    if (!file) {
         return;
+    }
+    refresh();
     let reader = new FileReader();
     reader.addEventListener('load', () => {
         saveFile = fromGvas(reader.result);
         document.getElementById('ue4-version').innerText = saveFile.ue4Version;
         document.getElementById('save-type').innerText = saveFile.saveType;
         console.log(saveFile);
+        let saveButton = document.getElementById('button-save');
+        let rawButton = document.getElementById('button-raw');
+        saveButton.disabled = true;
+        rawButton.disabled = true;
         if (saveFile.saveType == '/Script/Obduction.ObductionSaveGame' || saveFile.saveType == 'ObductionSaveGame') {
             let obductionDiv = document.getElementById('obduction');
             obductionDiv.style.display = 'block';
             toElement(obductionProperties, saveFile.properties, obductionDiv, 'obduction', true);
+            saveButton.disabled = false;
+            rawButton.disabled = false;
         } else if (saveFile.saveType == '/Script/CyanGameplayContent.CyanSaveGame') {
             let mystDiv = document.getElementById('myst');
             mystDiv.style.display = 'block';
             toElement(mystProperties, saveFile.properties, mystDiv, 'myst', true);
+            saveButton.disabled = false;
+            rawButton.disabled = false;
         } else {
             console.error(`Unrecognized save file type: ${saveFile.saveType}`);
         }
+        toRaw(saveFile.properties, document.getElementById('raw'));
     });
     reader.addEventListener('error', () => {
         logErrors(`Error occured reading file: ${file.name}`);
@@ -63,7 +76,7 @@ function savePressed() {
     saveAs(file);
 }
 
-function toElement(json, gvasPool, parentElement, prefix, isMain = true) {
+function toElement(json, gvasArray, parentElement, prefix, isMain = true) {
     if (!Array.isArray(json)) {
         json = [json];
     }
@@ -103,13 +116,13 @@ function toElement(json, gvasPool, parentElement, prefix, isMain = true) {
 
         if (propertyInfo.children) {
             propertyWrapper.prepend(propertyHeader, propertyDesc);
-            toElement(propertyInfo.children, gvasPool, propertyWrapper, prefix, false);
+            toElement(propertyInfo.children, gvasArray, propertyWrapper, prefix, false);
             parentElement.append(propertyWrapper);
             continue;
         }
 
         let gvas = Array.isArray(propertyInfo.gvas) ? propertyInfo.gvas[0] : propertyInfo.gvas;
-        let property = fetchNamedPropertyFromArray(gvas, gvasPool);
+        let property = fetchNamedPropertyFromArray(gvas, gvasArray);
         if (property instanceof GvasMap) {
             if (prefix == 'myst') {
                 let key = new GvasString();
@@ -168,7 +181,7 @@ function toElement(json, gvasPool, parentElement, prefix, isMain = true) {
                         let label = document.createElement('LABEL');
                         label.className = 'right';
                         label.setAttribute('for', propertyInfo.html);
-                        label.innerText = `${propertyInfo.label}:`;
+                        label.innerText = propertyInfo.label;
                         div.append(label);
                     }
                     propertyBody.append(div);
@@ -265,6 +278,10 @@ function toElement(json, gvasPool, parentElement, prefix, isMain = true) {
                 input.setAttribute('type', 'number');
                 input.value = value;
                 input.addEventListener('input', function() {
+                    this.value = parseInt(this.value);
+                    if (this.value == NaN || this.value == null || this.value == undefined) {
+                        this.value = 0;
+                    }
                     property.value.int = parseInt(this.value);
                 })
                 div.append(input);
@@ -317,8 +334,13 @@ function toElement(json, gvasPool, parentElement, prefix, isMain = true) {
                 let input = document.createElement('INPUT');
                 input.name = `${propertyInfo.html}-input`;
                 input.setAttribute('type', 'number');
+                input.setAttribute('step', '0.01');
                 input.value = value;
                 input.addEventListener('input', function() {
+                    this.value = parseFloat(this.value);
+                    if (this.value == NaN || this.value == null || this.value == undefined) {
+                        this.value = 0.0;
+                    }
                     property.value.float = parseFloat(this.value);
                 })
                 div.append(input);
@@ -335,5 +357,413 @@ function toElement(json, gvasPool, parentElement, prefix, isMain = true) {
 
         propertyWrapper.append(propertyHeader, propertyDesc, propertyBody);
         parentElement.append(propertyWrapper);
+    }
+}
+
+function toggleRaw() {
+    let div = document.getElementById('raw');
+    let button = document.getElementById('button-raw');
+    if (div.style.display == 'none') {
+        div.style.display = 'block';
+        button.innerText = 'Switch to curated editor';
+        for (const wrapper of document.getElementsByClassName('game-wrapper')) {
+            if (wrapper.id != 'raw') {
+                wrapper.style.display = 'none';
+            }
+        }
+    } else {
+        div.style.display = 'none';
+        button.innerText = 'Switch to raw editor';
+        for (const wrapper of document.getElementsByClassName('game-wrapper')) {
+            if (wrapper.id != 'raw') {
+                wrapper.style.display = 'block';
+            }
+        }
+    }
+}
+
+function toRaw(gvasArray, parentElement, level = 0) {
+    if (!Array.isArray(gvasArray)) {
+        gvasArray = [gvasArray];
+    }
+    for (const property of gvasArray) {
+        let wrapperDiv = document.createElement('DIV');
+        wrapperDiv.classList.add('raw-property-wrapper', `level-${level}`);
+        if (property instanceof LongNone ||
+            property instanceof ShortNone ||
+            property instanceof GvasByte ||
+            property instanceof GvasUnknown) {
+            continue;
+        } else if (property instanceof GvasString) {
+            let headerDiv = document.createElement('DIV');
+            headerDiv.className = 'raw-property-header';
+            if (property.name) {
+                let nameSPan = document.createElement('SPAN');
+                nameSPan.className = 'raw-property-name';
+                nameSPan.innerText = property.name;
+                headerDiv.append(nameSPan);
+            }
+            if (property.type) {
+                let typeSpan = document.createElement('SPAN');
+                typeSpan.className = 'raw-property-type';
+                typeSpan.innerText = `(${property.type})`;
+                headerDiv.append(typeSpan);
+            }
+            let bodyDiv = document.createElement('DIV');
+            bodyDiv.className = 'raw-property-body';
+            let input = document.createElement('INPUT');
+            input.setAttribute('type', 'text');
+            input.value = property.value.toString();
+            input.addEventListener('input', function(event) {
+                property.value = this.value.toString();
+            })
+            bodyDiv.append(input);
+            wrapperDiv.append(headerDiv, bodyDiv);
+        } else if (property instanceof GvasInteger) {
+            let headerDiv = document.createElement('DIV');
+            headerDiv.className = 'raw-property-header';
+            if (property.name) {
+                let nameSpan = document.createElement('SPAN');
+                nameSpan.className = 'raw-property-name';
+                nameSpan.innerText = property.name;
+                headerDiv.append(nameSpan);
+            }
+            if (property.type) {
+                let typeSpan = document.createElement('SPAN');
+                typeSpan.className = 'raw-property-type';
+                typeSpan.innerText = `(${property.type})`;
+                headerDiv.append(typeSpan);
+            }
+            let bodyDiv = document.createElement('DIV');
+            bodyDiv.className = 'raw-property-body';
+            let input = document.createElement('INPUT');
+            input.setAttribute('type', 'number');
+            input.value = parseInt(property.value.int);
+            input.addEventListener('input', function(event) {
+                this.value = parseInt(this.value);
+                if (this.value == NaN || this.value == null || this.value == undefined) {
+                    this.value = 0;
+                }
+                property.value.int = this.value;
+            })
+            bodyDiv.append(input);
+            wrapperDiv.append(headerDiv, bodyDiv);
+        } else if (property instanceof GvasFloat) {
+            let headerDiv = document.createElement('DIV');
+            headerDiv.className = 'raw-property-header';
+            if (property.name) {
+                let nameSpan = document.createElement('SPAN');
+                nameSpan.className = 'raw-property-name';
+                nameSpan.innerText = property.name;
+                headerDiv.append(nameSpan);
+            }
+            if (property.type) {
+                let typeSpan = document.createElement('SPAN');
+                typeSpan.className = 'raw-property-type';
+                typeSpan.innerText = `(${property.type})`;
+                headerDiv.append(typeSpan);
+            }
+            let bodyDiv = document.createElement('DIV');
+            bodyDiv.className = 'raw-property-body';
+            let input = document.createElement('INPUT');
+            input.setAttribute('type', 'number');
+            input.value = parseFloat(property.value.float);
+            input.addEventListener('input', function(event) {
+                this.value = parseFloat(this.value);
+                if (this.value == NaN || this.value == null || this.value == undefined) {
+                    this.value = 0.0;
+                }
+                property.value.float = this.value;
+            })
+            bodyDiv.append(input);
+            wrapperDiv.append(headerDiv, bodyDiv);
+        } else if (property instanceof GvasBoolean) {
+            let headerDiv = document.createElement('DIV');
+            headerDiv.className = 'raw-property-header';
+            if (property.name) {
+                let nameSpan = document.createElement('SPAN');
+                nameSpan.className = 'raw-property-name';
+                nameSpan.innerText = property.name;
+                headerDiv.append(nameSpan);
+            }
+            if (property.type) {
+                let typeSpan = document.createElement('SPAN');
+                typeSpan.className = 'raw-property-type';
+                typeSpan.innerText = `(${property.type})`;
+                headerDiv.append(typeSpan);
+            }
+            let bodyDiv = document.createElement('DIV');
+            bodyDiv.className = 'raw-property-body';
+            let input = document.createElement('INPUT');
+            input.setAttribute('type', 'checkbox');
+            input.checked = property.value;
+            input.addEventListener('change', function(event) {
+                property.value = this.checked;
+            })
+            bodyDiv.append(input);
+            wrapperDiv.append(headerDiv, bodyDiv);
+        } else if (property instanceof GvasStruct) {
+            if (property.value.length == 1) {
+                let subProperty = property.value[0];
+                if (subProperty instanceof Vector || subProperty instanceof Rotator) {
+                    let headerDiv = document.createElement('DIV');
+                    headerDiv.className = 'raw-property-header';
+                    if (property.name) {
+                        let nameSpan = document.createElement('SPAN');
+                        nameSpan.className = 'raw-property-name';
+                        nameSpan.innerText = property.name;
+                        headerDiv.append(nameSpan);
+                    }
+                    if (property.type) {
+                        let typeSpan = document.createElement('SPAN');
+                        typeSpan.className = 'raw-property-type';
+                        typeSpan.innerText = `(${subProperty.type})`;
+                        headerDiv.append(typeSpan);
+                    }
+                    let bodyDiv = document.createElement('DIV');
+                    bodyDiv.className = 'raw-property-body';
+                    let vector = subProperty.value;
+                    let letters = ['x', 'y', 'z'];
+                    for (const letter of letters) {
+                        let div = document.createElement('DIV');
+                        div.className = 'raw-property-value-wrapper';
+                        let label = document.createElement('LABEL');
+                        label.className = 'caps';
+                        let random = Math.random();
+                        label.setAttribute('for', `${random}-${letter}`);
+                        label.innerText = `${letter}:`;
+                        let input = document.createElement('INPUT');
+                        input.setAttribute('type', 'number');
+                        input.setAttribute('name', `${random}-${letter}`);
+                        input.value = vector[letter];
+                        input.addEventListener('input', function() {
+                            this.value = parseFloat(this.value);
+                            if (this.value == NaN || this.value == null || this.value == undefined) {
+                                this.value = 0.0;
+                            }
+                            vector[letter] = this.value;
+                        })
+                        div.append(label, input);
+                        bodyDiv.append(div);
+                    }
+                    wrapperDiv.append(headerDiv, bodyDiv);
+                } else if (subProperty instanceof Vector2D) {
+                    let headerDiv = document.createElement('DIV');
+                    headerDiv.className = 'raw-property-header';
+                    if (property.name) {
+                        let nameSpan = document.createElement('SPAN');
+                        nameSpan.className = 'raw-property-name';
+                        nameSpan.innerText = property.name;
+                        headerDiv.append(nameSpan);
+                    }
+                    if (property.type) {
+                        let typeSpan = document.createElement('SPAN');
+                        typeSpan.className = 'raw-property-type';
+                        typeSpan.innerText = `(${subProperty.type})`;
+                        headerDiv.append(typeSpan);
+                    }
+                    let bodyDiv = document.createElement('DIV');
+                    bodyDiv.className = 'raw-property-body';
+                    let vector = subProperty.value;
+                    let letters = ['x', 'y'];
+                    for (const letter of letters) {
+                        let div = document.createElement('DIV');
+                        div.className = 'raw-property-value-wrapper';
+                        let label = document.createElement('LABEL');
+                        label.className = 'caps';
+                        let random = Math.random();
+                        label.setAttribute('for', `${random}-${letter}`);
+                        label.innerText = `${letter}:`;
+                        let input = document.createElement('INPUT');
+                        input.setAttribute('type', 'number');
+                        input.setAttribute('name', `${random}-${letter}`);
+                        input.value = vector[letter];
+                        input.addEventListener('input', function() {
+                            this.value = parseFloat(this.value);
+                            if (this.value == NaN || this.value == null || this.value == undefined) {
+                                this.value = 0.0;
+                            }
+                            vector[letter] = this.value;
+                        })
+                        div.append(label, input);
+                        bodyDiv.append(div);
+                    }
+                    wrapperDiv.append(headerDiv, bodyDiv);
+                } else if (subProperty instanceof Quat) {
+                    let headerDiv = document.createElement('DIV');
+                    headerDiv.className = 'raw-property-header';
+                    if (property.name) {
+                        let nameSpan = document.createElement('SPAN');
+                        nameSpan.className = 'raw-property-name';
+                        nameSpan.innerText = property.name;
+                        headerDiv.append(nameSpan);
+                    }
+                    if (property.type) {
+                        let typeSpan = document.createElement('SPAN');
+                        typeSpan.className = 'raw-property-type';
+                        typeSpan.innerText = `(${subProperty.type})`;
+                        headerDiv.append(typeSpan);
+                    }
+                    let bodyDiv = document.createElement('DIV');
+                    bodyDiv.className = 'raw-property-body';
+                    let vector = subProperty.value;
+                    let letters = ['a', 'b', 'c', 'd'];
+                    for (const letter of letters) {
+                        let div = document.createElement('DIV');
+                        div.className = 'raw-property-value-wrapper';
+                        let label = document.createElement('LABEL');
+                        label.className = 'caps';
+                        let random = Math.random();
+                        label.setAttribute('for', `${random}-${letter}`);
+                        label.innerText = `${letter}:`;
+                        let input = document.createElement('INPUT');
+                        input.setAttribute('type', 'number');
+                        input.setAttribute('name', `${random}-${letter}`);
+                        input.value = vector[letter];
+                        input.addEventListener('input', function() {
+                            this.value = parseFloat(this.value);
+                            if (this.value == NaN || this.value == null || this.value == undefined) {
+                                this.value = 0.0;
+                            }
+                            vector[letter] = this.value;
+                        })
+                        div.append(label, input);
+                        bodyDiv.append(div);
+                    }
+                    wrapperDiv.append(headerDiv, bodyDiv);
+                } else if (subProperty instanceof Transform) {
+                    let headerDiv = document.createElement('DIV');
+                    headerDiv.className = 'raw-property-header';
+                    if (property.name) {
+                        let nameSpan = document.createElement('SPAN');
+                        nameSpan.className = 'raw-property-name';
+                        nameSpan.innerText = property.name;
+                        headerDiv.append(nameSpan);
+                    }
+                    if (property.type) {
+                        let typeSpan = document.createElement('SPAN');
+                        typeSpan.className = 'raw-property-type';
+                        typeSpan.innerText = `(${subProperty.type})`;
+                        headerDiv.append(typeSpan);
+                    }
+                    let bodyDiv = document.createElement('DIV');
+                    bodyDiv.className = 'raw-property-body';
+                    let rotationDiv = document.createElement('DIV');
+                    toRaw(subProperty.value.rotation, rotationDiv, level + 1);
+                    let translationDiv = document.createElement('DIV');
+                    toRaw(subProperty.value.translation, translationDiv, level + 1);
+                    let scaleDiv = document.createElement('DIV');
+                    toRaw(subProperty.value.scale, scaleDiv, level + 1);
+                    bodyDiv.append(rotationDiv, translationDiv, scaleDiv);
+                    wrapperDiv.append(headerDiv, bodyDiv);
+                } else if (subProperty instanceof Guid || subProperty instanceof DateTime) {
+                    continue;
+                }
+            } else if (property.value.length > 1) {
+                let headerDiv = document.createElement('DIV');
+                headerDiv.className = 'raw-property-header';
+                if (property.name) {
+                    let nameSpan = document.createElement('SPAN');
+                    nameSpan.className = 'raw-property-name';
+                    nameSpan.innerText = property.name;
+                    headerDiv.append(nameSpan);
+                }
+                if (property.type) {
+                    let typeSpan = document.createElement('SPAN');
+                    typeSpan.className = 'raw-property-type';
+                    typeSpan.innerText = `(${subProperty.type})`;
+                    headerDiv.append(typeSpan);
+                }
+                let bodyDiv = document.createElement('DIV');
+                bodyDiv.className = 'raw-property-body';
+                toRaw(property.value, bodyDiv, level + 1);
+                wrapperDiv.append(headerDiv, bodyDiv);
+            }
+        } else if (property instanceof GvasArray) {
+            let headerDiv = document.createElement('DIV');
+            headerDiv.className = 'raw-property-header';
+            if (property.name) {
+                let nameSpan = document.createElement('SPAN');
+                nameSpan.className = 'raw-property-name';
+                nameSpan.innerText = property.name;
+                headerDiv.append(nameSpan);
+            }
+            if (property.type) {
+                let typeSpan = document.createElement('SPAN');
+                typeSpan.className = 'raw-property-type';
+                typeSpan.innerText = `(${property.type})`;
+                headerDiv.append(typeSpan);
+            }
+            if (property.name || property.type) {
+                let arrowSpan = document.createElement('SPAN');
+                arrowSpan.className = 'raw-property-arrow';
+                arrowSpan.innerText = '⏵';
+                headerDiv.prepend(arrowSpan);
+                headerDiv.style.cursor = 'pointer';
+                headerDiv.addEventListener('click', function(event) {
+                    if (bodyDiv.style.display == 'none') {
+                        bodyDiv.style.display = 'block';
+                        arrowSpan.innerText = '⏷';
+                    } else {
+                        bodyDiv.style.display = 'none';
+                        arrowSpan.innerText = '⏵';
+                    }
+                });
+            }
+            let bodyDiv = document.createElement('DIV');
+            bodyDiv.className = 'raw-property-body';
+            bodyDiv.style.display = 'none';
+            toRaw(property.value.properties, bodyDiv, level + 1);
+            wrapperDiv.append(headerDiv, bodyDiv);
+        } else if (property instanceof GvasMap) {
+            let headerDiv = document.createElement('DIV');
+            headerDiv.className = 'raw-property-header';
+            if (property.name) {
+                let nameSpan = document.createElement('SPAN');
+                nameSpan.className = 'raw-property-name';
+                nameSpan.innerText = property.name;
+                headerDiv.append(nameSpan);
+            }
+            if (property.type) {
+                let typeSpan = document.createElement('SPAN');
+                typeSpan.className = 'raw-property-type';
+                typeSpan.innerText = `(${property.type})`;
+                headerDiv.append(typeSpan);
+            }
+            if (property.name || property.type) {
+                let arrowSpan = document.createElement('SPAN');
+                arrowSpan.className = 'raw-property-arrow';
+                arrowSpan.innerText = '⏵';
+                headerDiv.prepend(arrowSpan);
+                headerDiv.style.cursor = 'pointer';
+                headerDiv.addEventListener('click', function(event) {
+                    if (bodyDiv.style.display == 'none') {
+                        bodyDiv.style.display = 'block';
+                        arrowSpan.innerText = '⏷';
+                    } else {
+                        bodyDiv.style.display = 'none';
+                        arrowSpan.innerText = '⏵';
+                    }
+                });
+            }
+            let bodyDiv = document.createElement('DIV');
+            bodyDiv.className = 'raw-property-body';
+            bodyDiv.style.display = 'none';
+            for (const [entryKey, entryValue] of property.value.entries) {
+                let subWrapper = document.createElement('div');
+                subWrapper.classList.add('raw-property-wrapper', `level-${level+1}`);
+                let keyDiv = document.createElement('DIV');
+                toRaw(entryKey, keyDiv, level + 2);
+                let entryDiv = document.createElement('DIV');
+                toRaw(entryValue, entryDiv, level + 2);
+                subWrapper.append(keyDiv, entryDiv);
+                bodyDiv.append(subWrapper);
+            }
+            wrapperDiv.append(headerDiv, bodyDiv);
+        } else {
+            console.log(property);
+            continue;
+        }
+        parentElement.append(wrapperDiv);
     }
 }
