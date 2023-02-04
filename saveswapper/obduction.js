@@ -414,4 +414,12 @@ const obductionProperties = [{
     title: 'Mofang WMD',
     description: 'Disabling the WMD will close certain end area doors in Maray.',
     label: 'Disabled'
+}, {
+    html: 'hunrath-doors',
+    title: 'Hunrath doors',
+    children: [{
+        gvas: 'HunrathTreeGateOpen',
+        html: 'hunrath-doors-tree-gate',
+        label: 'Tree gate open'
+    }]
 }]
