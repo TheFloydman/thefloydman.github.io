@@ -50,13 +50,13 @@ function fileChosen() {
         if (saveFile.saveType == '/Script/Obduction.ObductionSaveGame' || saveFile.saveType == 'ObductionSaveGame') {
             let obductionDiv = document.getElementById('obduction');
             obductionDiv.style.display = 'block';
-            toElement(obductionProperties, saveFile.properties, obductionDiv, 'obduction', true);
+            toCurated(obductionProperties, saveFile.properties, obductionDiv, 'obduction', true);
             saveButton.disabled = false;
             rawButton.disabled = false;
         } else if (saveFile.saveType == '/Script/CyanGameplayContent.CyanSaveGame') {
             let mystDiv = document.getElementById('myst');
             mystDiv.style.display = 'block';
-            toElement(mystProperties, saveFile.properties, mystDiv, 'myst', true);
+            toCurated(mystProperties, saveFile.properties, mystDiv, 'myst', true);
             saveButton.disabled = false;
             rawButton.disabled = false;
         } else {
@@ -76,7 +76,7 @@ function savePressed() {
     saveAs(file);
 }
 
-function toElement(json, gvasArray, parentElement, prefix, isMain = true) {
+function toCurated(json, gvasArray, parentElement, prefix, isMain = true) {
     if (!Array.isArray(json)) {
         json = [json];
     }
@@ -116,7 +116,7 @@ function toElement(json, gvasArray, parentElement, prefix, isMain = true) {
 
         if (propertyInfo.children) {
             propertyWrapper.prepend(propertyHeader, propertyDesc);
-            toElement(propertyInfo.children, gvasArray, propertyWrapper, prefix, false);
+            toCurated(propertyInfo.children, gvasArray, propertyWrapper, prefix, false);
             parentElement.append(propertyWrapper);
             continue;
         }
@@ -130,7 +130,7 @@ function toElement(json, gvasArray, parentElement, prefix, isMain = true) {
                 let property2 = fetchPropertyFromMap(key, property.value.entries);
                 let newJson = structuredClone(propertyInfo);
                 newJson.gvas = propertyInfo.gvas[2];
-                toElement(newJson, property2, parentElement, prefix, isMain);
+                toCurated(newJson, property2, parentElement, prefix, isMain);
                 continue;
             }
         } else if (property instanceof GvasStruct) {
@@ -221,17 +221,20 @@ function toElement(json, gvasArray, parentElement, prefix, isMain = true) {
             let value = property.value;
             let div = document.createElement('DIV');
             div.className = 'property-value-wrapper';
-            let label = document.createElement('LABEL');
-            label.className = 'right';
-            label.setAttribute('type', 'checkbox');
-            label.setAttribute('for', propertyInfo.html);
-            label.innerText = propertyInfo.label;
             let input = document.createElement('INPUT');
             input.id = `checkbox-${propertyInfo.html}`;
             input.setAttribute('type', 'checkbox');
             input.checked = value;
             input.addEventListener('input', function() {
                 property.value = this.checked;
+            });
+            let label = document.createElement('LABEL');
+            label.className = 'right';
+            label.setAttribute('type', 'checkbox');
+            label.setAttribute('for', propertyInfo.html);
+            label.innerText = propertyInfo.label;
+            label.addEventListener('click', function() {
+                input.dispatchEvent(new MouseEvent('click'));
             });
             div.append(input, label);
             propertyBody.append(div);
@@ -268,6 +271,28 @@ function toElement(json, gvasArray, parentElement, prefix, isMain = true) {
                         div.append(label);
                     }
                     propertyBody.append(div);
+                } else if (propertyInfo.type == 'checkbox') {
+                    let value = property.value.int;
+                    let div = document.createElement('DIV');
+                    div.className = 'property-value-wrapper';
+                    let input = document.createElement('INPUT');
+                    input.id = `checkbox-${propertyInfo.html}`;
+                    input.setAttribute('type', 'checkbox');
+                    input.checked = parseInt(propertyInfo.value.checked) == value;
+                    input.addEventListener('input', function() {
+                        property.value.int = this.checked ? parseInt(propertyInfo.value.checked) : parseInt(propertyInfo.value.unchecked);
+                    });
+                    let label = document.createElement('LABEL');
+                    label.className = 'right';
+                    label.setAttribute('type', 'checkbox');
+                    label.setAttribute('for', propertyInfo.html);
+                    label.innerText = propertyInfo.label;
+                    label.addEventListener('click', function() {
+                        input.dispatchEvent(new MouseEvent('click'));
+                    });
+                    div.append(input, label);
+                    propertyBody.append(div);
+
                 }
             } else {
                 let value = parseInt(property.value.int);

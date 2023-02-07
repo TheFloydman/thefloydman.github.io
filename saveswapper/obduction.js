@@ -415,11 +415,168 @@ const obductionProperties = [{
     description: 'Disabling the WMD will close certain end area doors in Maray.',
     label: 'Disabled'
 }, {
+    gvas: 'HunrathTowerElevatorEnabled',
+    html: 'hunrath-elevator-enabled',
+    title: 'Tower elevator in Hunrath',
+    label: 'Enabled'
+}, {
+    html: 'hunrath-rocks-disabled',
+    title: 'Hunrath rock projectors disabled',
+    description: 'Checked imagers have been broken with a disabler beam.',
+    children: [{
+        gvas: 'HunrathPrairieRocksDisabled',
+        html: 'hunrath-rocks-disabled-prairie',
+        label: 'Prairie (covering tracks)'
+    }, {
+        gvas: 'HunrathQuarryRocksDisabled',
+        html: 'hunrath-rocks-disabled-quarry',
+        label: 'Quarry (beetle nesting grounds)'
+    }, {
+        gvas: 'HunrathSoariaTunnelRocksDisabled',
+        html: 'hunrath-rocks-disabled-soria',
+        label: 'Soria tunnel'
+    }, {
+        gvas: 'HunrathCrashSiteRocksDisabled',
+        html: 'hunrath-rocks-disabled-crash-site',
+        label: 'Tiki bar'
+    }, {
+        gvas: 'HunrathSubmarineRocksDisabled',
+        html: 'hunrath-rocks-disabled-submarine',
+        label: 'Submarine'
+    }, {
+        gvas: 'HunrathCWWorkshopRockOneDisabled',
+        html: 'hunrath-rocks-disabled-workshop-1',
+        label: 'C.W.\'s workshop #1'
+    }, {
+        gvas: 'HunrathCWWorkshopockTwoDisabled',
+        html: 'hunrath-rocks-disabled-workshop-2',
+        label: 'C.W.\'s workshop #2'
+    }]
+}, {
+    html: 'hunrath-imagers-broken',
+    title: 'Hunrath tour projectors disabled',
+    description: 'Checked imagers have been broken with a disabler beam.',
+    children: [{
+        gvas: 'HunrathEntryCanyonImagerBroken',
+        html: 'hunrath-imagers-broken-entry',
+        label: 'Entry canyon'
+    }, {
+        gvas: 'HunrathFarleyImagerBroken',
+        html: 'hunrath-imagers-broken-farley',
+        label: 'Community center (Farley\'s house)'
+    }, {
+        gvas: 'HunrathTreeImagerBroken',
+        html: 'hunrath-imagers-broken-tree',
+        label: 'Tree'
+    }, {
+        gvas: 'HunrathDowntownImagerBroken',
+        html: 'hunrath-imagers-broken-downtown',
+        label: 'Downtown'
+    }, {
+        gvas: 'HunrathWaterfallImagerBroken',
+        html: 'hunrath-imagers-broken-waterfall',
+        label: 'Waterfall'
+    }, {
+        gvas: 'HunrathCWWorkshopImagerBroken',
+        html: 'hunrath-imagers-broken-workshop',
+        label: 'C.W.\'s workshop'
+    }]
+}, {
     html: 'hunrath-doors',
     title: 'Hunrath doors',
     children: [{
         gvas: 'HunrathTreeGateOpen',
         html: 'hunrath-doors-tree-gate',
         label: 'Tree gate open'
+    }, {
+        gvas: 'HunrathGarageOpen',
+        html: 'hunrath-doors-garage',
+        label: 'Garage open'
+    }, {
+        gvas: 'HunrathDoorCWWorkshop1Open',
+        html: 'doors-hunrath-workshop-front',
+        label: 'Front door of C.W.\s workshop open',
+        type: 'checkbox',
+        value: { checked: 1, unchecked: 0 }
+    }, {
+        gvas: 'HunrathLatchDoorUnlockedWorkshop',
+        html: 'hunrath-doors-workshop',
+        label: 'Upper door of C.W.\s workshop unlocked'
+    }, {
+        gvas: 'MineDoorALocked',
+        html: 'hunrath-doors-mine-a',
+        label: 'Mine interior door unlocked'
+    }, {
+        gvas: 'MineDoorBLocked',
+        html: 'hunrath-doors-mine-b',
+        label: 'Mine exterior door unlocked'
+    }, {
+        gvas: 'SubmarineAreaDoorUnlocked',
+        html: 'hunrath-doors-submarine',
+        label: 'Door near submarine unlocked'
+    }, {
+        gvas: 'HunrathFarleyFrontGateOpen',
+        html: 'doors-hunrath-farley-front-gate',
+        label: 'Community center front gate open',
+        type: 'checkbox',
+        value: { checked: 1, unchecked: 0 }
+    }, {
+        gvas: 'HunrathFarleyDoorEnabled',
+        html: 'doors-hunrath-farley-front-door-enabled',
+        label: 'Can interact with community center front door'
+    }, {
+        gvas: 'HunrathFarleyFrontDoorOpen',
+        html: 'doors-hunrath-farley-front-door',
+        label: 'Community center front door open',
+        type: 'checkbox',
+        value: { checked: 1, unchecked: 0 }
+    }, {
+        gvas: 'HunrathFarleyBackDoorEnabled',
+        html: 'doors-hunrath-farley-back-door-enabled',
+        label: 'Can interact with community center back door'
+    }, {
+        gvas: 'HunrathFarleyBackDoorOpen',
+        html: 'doors-hunrath-farley-back-door',
+        label: 'Community center back door open',
+        type: 'checkbox',
+        value: { checked: 1, unchecked: 0 }
+    }, {
+        gvas: 'HunrathLatchDoorUnlockedTowerA',
+        html: 'hunrath-doors-tower-a',
+        label: 'Tower sphere-side door unlocked'
+    }, {
+        gvas: 'HunrathLatchDoorUnlockedTowerB',
+        html: 'hunrath-doors-tower-b',
+        label: 'Tower tree-side door unlocked'
+    }, {
+        gvas: 'KeypadDoorPosition',
+        html: 'doors-hunrath-tower-sliding',
+        label: 'Tower sliding door open',
+        type: 'checkbox',
+        value: { checked: 1, unchecked: 0 }
+    }]
+}, {
+    html: 'hunrath-power',
+    title: 'Hunrath power enabled',
+    children: [{
+        gvas: 'PowerToFarleysHouseEnabled',
+        html: 'hunrath-power-farley',
+        label: 'Community center (Farley\'s house)'
+    }, {
+        gvas: 'PowerToDowntownEnabled',
+        html: 'hunrath-power-downtown',
+        label: 'Downtown'
+    }, {
+        gvas: 'PowerToGarageEnabled',
+        html: 'hunrath-power-garage',
+        label: 'Garage'
+    }, {
+        gvas: 'PowerToSphereEnabled',
+        html: 'hunrath-power-sphere',
+        label: 'Rotating sphere'
+    }, {
+        gvas: 'PowerToTowerEnabled',
+        html: 'hunrath-power-tower',
+        label: 'Tower'
     }]
 }]
