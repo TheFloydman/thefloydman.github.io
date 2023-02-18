@@ -86,6 +86,8 @@ button:hover {
         width: 33.333333%;
     }
     button {
+        padding-left: unset;
+        padding-right: unset;
         width: 33.333333%;
     }
 }
