@@ -9,9 +9,9 @@ body {
 }
 
 #svg-maray-wrapper {
-    margin: 0 auto 0 auto;
+    margin: 0 auto 32px auto;
+    width: 100%;
     max-width: 480px;
-    margin-bottom: 32px;
 }
 
 #svg-maray-parent {
@@ -20,6 +20,7 @@ body {
 
 #svg-hunrath-wrapper {
     margin: 0 auto 32px auto;
+    width: 100%;
     max-width: 160px;
 }
 
@@ -85,13 +86,13 @@ button:hover {
 @media (pointer:none),
 (pointer:coarse) {
     #page-wrapper {
-        width: 100%;
+        max-width: 100%;
     }
     #svg-maray-wrapper {
-        width: 100%;
+        max-width: 100%;
     }
     #svg-hunrath-wrapper {
-        width: 33.33333%;
+        max-width: 33.33333%;
     }
     #swap-button-div {
         width: 33.33333%;
