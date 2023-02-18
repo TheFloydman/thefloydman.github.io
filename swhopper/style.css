@@ -95,12 +95,9 @@ button:hover {
         max-width: 33.33333%;
     }
     #swap-button-div {
-        width: 100%;
+        width: 33.33333%%;
     }
     button {
-        padding-left: unset;
-        padding-right: unset;
-        font-size: larger;
-        width: 100%%;
+        font-size: xx-large;
     }
 }
