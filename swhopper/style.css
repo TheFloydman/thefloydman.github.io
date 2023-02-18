@@ -1,0 +1,76 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+body {
+    font-family: 'Inter', sans - serif;
+}
+
+#page-wrapper {
+    margin: 0 auto 0 auto;
+    max-width: 960px;
+}
+
+#svg-maray-wrapper {
+    margin: 0 auto 0 auto;
+    max-width: 480px;
+    margin-bottom: 16px;
+}
+
+#svg-hunrath-wrapper {
+    margin: 0 auto 0 auto;
+    max-width: 160px;
+}
+
+.st0 {
+    fill: #507bb3;
+    stroke: #000000;
+    stroke-width: 2;
+    stroke-miterlimit: 10;
+}
+
+.st0:hover {
+    fill: #719ad1;
+    cursor: pointer;
+}
+
+.st1 {
+    fill: #d18b36;
+    stroke: #000000;
+    stroke-width: 2;
+    stroke-miterlimit: 10;
+}
+
+.st1:hover {
+    fill: #eda853;
+    cursor: pointer;
+}
+
+.st2 {
+    opacity: 0;
+    fill: #EF4352;
+    stroke: #EF4352;
+    stroke-width: 2;
+    stroke-miterlimit: 10;
+}
+
+#swap-button-div {
+    margin: auto;
+    width: min-content;
+    margin-bottom: 16px;
+}
+
+button {
+    user-select: none;
+    font-size: large;
+    font-weight: bold;
+    border-radius: 32px;
+    border-style: none;
+    color: white;
+    padding-left: 32px;
+    padding-right: 32px;
+    padding-top: 8px;
+    padding-bottom: 8px;
+    background-color: #9a5bb5;
+}
+
+button:hover {
+    background-color: #7e4a94;
+}

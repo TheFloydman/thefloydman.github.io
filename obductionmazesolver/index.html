@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+    <title>Maze Solver | Obduction</title>
+    <link rel="stylesheet" href="./style.css">
+    <script src="./script.js"></script>
+</head>
+
+<body onload="onLoad()">
+    <div id="page-wrapper">
+        <div id="svg-maray-wrapper">
+            <svg id="svg-maray-parent" viewBox="0 0 600 600" xmlns="http://www.w3.org/2000/svg">
+                <g id="svg-maray-circles">
+                <g id="svg-circle-main" class="st0">
+                    <path d="M64.6,234.4c-7.9-7.9-12.3-18.5-12.3-29.7s4.4-21.8,12.3-29.7l26.7-26.7c7.9-7.9,18.5-12.3,29.7-12.3h81
+                        c6.2-43.5,40.5-77.9,84-84V30V1.3C132,8.4,8.4,132,1.3,286H30h22c2.4-16.9,9-32.4,18.8-45.4L64.6,234.4z"/>
+                    <path d="M515.6,385.4l-6.2-6.2C492.9,391.6,472.3,399,450,399c-54.7,0-99-44.3-99-99c0-49.9,37-91.2,85-98v-24
+                        c0-7.7-6.3-14-14-14h-24c-6.8,48-48.1,85-98,85s-91.2-37-98-85h-81c-3.7,0-7.3,1.5-9.9,4.1l-26.7,26.7c-2.6,2.6-4.1,6.2-4.1,9.9
+                        s1.5,7.3,4.1,9.9l6.2,6.2c16.5-12.4,37.1-19.8,59.4-19.8c49.9,0,91.2,37,98,85h24c23.2,0,42,18.8,42,42v24
+                        c43.5,6.2,77.9,40.5,84,84h81c3.7,0,7.3-1.5,9.9-4.1l26.7-26.7c2.6-2.6,4.1-6.2,4.1-9.9S518.2,388,515.6,385.4z"/>
+                    <path d="M314,1.3V30v22c43.5,6.2,77.9,40.5,84,84h24c23.2,0,42,18.8,42,42v24c48,6.8,85,48.1,85,98
+                        c0,22.3-7.4,42.9-19.8,59.4l6.2,6.2c7.9,7.9,12.3,18.5,12.3,29.7s-4.4,21.8-12.3,29.7l-26.7,26.7c-7.9,7.9-18.5,12.3-29.7,12.3h-81
+                        c-6.2,43.5-40.5,77.9-84,84v22v28.7c158.6-7.3,285-138.2,285-298.7S472.6,8.6,314,1.3z"/>
+                    <path d="M201,450c0-49.9,37-91.2,85-98v-24c0-7.7-6.3-14-14-14h-24c-6.8,48-48.1,85-98,85s-91.2-37-98-85H30H1.3
+                        C8.4,468,132,591.6,286,598.7V570v-22C238,541.2,201,499.9,201,450z"/>
+                    <circle class="st2" cx="300" cy="300" r="299"/>
+                    <animateTransform id="svg-circle-main-animation-rotate" attributeName="transform" type="rotate" dur="0.1s"/>
+                    <animateTransform id="svg-circle-main-animation-translate" attributeName="transform" type="translate" dur="0.1s" additive="sum"/>
+                </g>
+            <g id="svg-circle-90-a" class="st1">
+                <path d="M86,142c0-15.4-12.6-28-28-28H2c6.2,43.5,40.5,77.9,84,84V142z" />
+                <path d="M100,1C50.1,1,8.8,38,2,86h56c30.9,0,56,25.1,56,56v56c48-6.8,85-48.1,85-98C199,45.3,154.7,1,100,1z" />
+                <circle class="st2" cx="100" cy="100" r="99"/>
+                <animateTransform id="svg-circle-90-a-animation-rotate" attributeName="transform" type="rotate" dur="0.1s" />
+                <animateTransform id="svg-circle-90-a-animation-translate" attributeName="transform" type="translate" dur="0.1s" additive="sum"/>
+            </g>
+            <g id="svg-circle-90-b" class="st1">
+                <path d="M86,142c0-15.4-12.6-28-28-28H2c6.2,43.5,40.5,77.9,84,84V142z" />
+                <path d="M100,1C50.1,1,8.8,38,2,86h56c30.9,0,56,25.1,56,56v56c48-6.8,85-48.1,85-98C199,45.3,154.7,1,100,1z" />
+                <circle class="st2" cx="100" cy="100" r="99"/>
+                <animateTransform id="svg-circle-90-b-animation-rotate" attributeName="transform" type="rotate" dur="0.1s" />
+                <animateTransform id="svg-circle-90-b-animation-translate" attributeName="transform" type="translate" dur="0.1s" additive="sum"/>
+            </g>
+            <g id="svg-circle-bent-a" class="st1">
+                <path d="M86,129c0-15-5.8-29-16.4-39.6L20.8,40.6C8.4,57.1,1,77.7,1,100c0,49.9,37,91.2,85,98V129z" />
+                <path d="M100,1C77.7,1,57.1,8.4,40.6,20.8l48.8,48.8c15.9,15.9,24.6,37,24.6,59.4v69c48-6.8,85-48.1,85-98
+                        C199,45.3,154.7,1,100,1z" />
+                <circle class="st2" cx="100" cy="100" r="99"/>
+                <animateTransform id="svg-circle-bent-a-animation-rotate" attributeName="transform" type="rotate" dur="0.1s" />
+                <animateTransform id="svg-circle-bent-a-animation-translate" attributeName="transform" type="translate" dur="0.1s" additive="sum"/>
+            </g>
+            <g id="svg-circle-bent-b" class="st1">
+                <path d="M71,86c22.4,0,43.5,8.7,59.4,24.6l48.8,48.8c12.4-16.5,19.8-37.1,19.8-59.4c0-54.7-44.3-99-99-99
+                    C50.1,1,8.8,38,2,86H71z" />
+                <path d="M110.6,130.4C100,119.8,86,114,71,114H2c6.8,48,48.1,85,98,85c22.3,0,42.9-7.4,59.4-19.8L110.6,130.4z" />
+                <circle class="st2" cx="100" cy="100" r="99"/>
+                <animateTransform id="svg-circle-bent-b-animation-rotate" attributeName="transform" type="rotate" dur="0.1s" />
+                <animateTransform id="svg-circle-bent-b-animation-translate" attributeName="transform" type="translate" dur="0.1s" additive="sum"/>
+            </g>
+            <animateTransform id="svg-maray-circles-animation-rotate" attributeName="transform" type="rotate" dur="0.1s" by="90 300 300" begin="" accumulate="sum"/>
+        </g>
+            </svg>
+        </div>
+        <div id="swap-button-div">
+            <button onclick="swap()">Swap</button>
+        </div>
+        <div id="svg-hunrath-wrapper">
+            <svg id="svg-hunrath-parent" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
+                    <g id="svg-circle-straight" class="st1">
+                        <path d="M2,114c6.8,48,48.1,85,98,85s91.2-37,98-85H2z"/>
+                        <path d="M198,86c-6.8-48-48.1-85-98-85S8.8,38,2,86H198z"/>
+                        <circle class="st2" cx="100" cy="100" r="99"/>
+                        <animateTransform id="svg-circle-straight-animation-rotate" attributeName="transform" type="rotate" dur="0.1s"/>
+                        <animateTransform id="svg-circle-straight-animation-translate" attributeName="transform" type="translate" dur="0.1s" additive="sum"/>
+                    </g>
+            </svg>
+        </div>
+    </div>
+</body>
+
+</html>
