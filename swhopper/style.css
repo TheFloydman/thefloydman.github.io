@@ -11,11 +11,11 @@ body {
 #svg-maray-wrapper {
     margin: 0 auto 0 auto;
     max-width: 480px;
-    margin-bottom: 16px;
+    margin-bottom: 32px;
 }
 
 #svg-hunrath-wrapper {
-    margin: 0 auto 0 auto;
+    margin: 0 auto 32px auto;
     max-width: 160px;
 }
 
@@ -54,7 +54,6 @@ body {
 #swap-button-div {
     margin: auto;
     width: min-content;
-    margin-bottom: 16px;
 }
 
 button {
@@ -64,13 +63,29 @@ button {
     border-radius: 32px;
     border-style: none;
     color: white;
-    padding-left: 32px;
-    padding-right: 32px;
-    padding-top: 8px;
-    padding-bottom: 8px;
+    padding-left: 64px;
+    padding-right: 64px;
+    padding-top: 16px;
+    padding-bottom: 16px;
     background-color: #9a5bb5;
 }
 
 button:hover {
     background-color: #7e4a94;
+}
+
+@media (pointer:none),
+(pointer:coarse) {
+    #page-wrapper {
+        width: 100%;
+    }
+    #svg-maray-wrapper {
+        width: 100%;
+    }
+    #svg-hunrath-wrapper {
+        width: 33.333333%;
+    }
+    button {
+        width: 33.333333%;
+    }
 }

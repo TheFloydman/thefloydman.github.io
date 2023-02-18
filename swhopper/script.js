@@ -1,5 +1,6 @@
 class SwapCircle {
     id;
+    size;
     position;
     rotation;
     isAnimating = false;
@@ -9,6 +10,11 @@ class SwapCircle {
         this.position = pos;
         this.rotation = rot;
     }
+}
+
+class Board {
+    size = 300;
+    rotation = 0;
 }
 
 var validPositions = [{ x: 200, y: 50 }, { x: 200, y: 350 }, { x: 50, y: 200 }, { x: 350, y: 200 }, { x: 0, y: 0 }];
