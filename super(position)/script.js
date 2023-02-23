@@ -1,13 +1,11 @@
 const imageBoard = new Image();
 const imageLargeCircle = new Image();
 const imageSmallCircle = new Image();
-const imageTriangle = new Image();
 
 var imagesLoaded = new Map([
     [imageBoard, false],
     [imageLargeCircle, false],
-    [imageSmallCircle, false],
-    [imageTriangle, false],
+    [imageSmallCircle, false]
 ]);
 
 const circlePositions = [
@@ -25,42 +23,99 @@ const trianglePositions = [
     { x: 73 / 180, y: 1 / 2 },
 ];
 
+let mouseX = 0;
+let mouseY = 0;
+
 class Triangle {
     canvas;
     position;
     rotation;
+    dimensions;
+    path = new Path2D();
 
     constructor(position) {
         this.position = position;
-        this.canvas = new OffscreenCanvas(40, 40);
+        this.rotation = position;
+        if (this.position % 2 == 0) {
+            this.dimensions = { x: 80, y: 40 };
+        } else {
+            this.dimensions = { x: 40, y: 80 };
+        }
+        this.canvas = new OffscreenCanvas(this.dimensions.x, this.dimensions.y);
+
+        const pos = this.getAbsolutePosition();
+        const variations = [[[-40, -20], [0, 20], [40, -20]], [[20, -40], [-20, 0], [20, 40]], [[-40, 20], [0, -20], [40, 20]], [[-20, -40], [20, 0], [-20, 40]]];
+        let points = variations[this.rotation];
+        for (const foo of points) {
+            foo[0] += pos.x + this.dimensions.x / 2;
+            foo[1] += pos.y + this.dimensions.y / 2;
+        }
+
+        this.path.moveTo(points[0][0], points[0][1]);
+        this.path.lineTo(points[1][0], points[1][1]);
+        this.path.lineTo(points[2][0], points[2][1]);
+        this.path.lineTo(points[0][0], points[0][1]);
     }
 
     draw(ctx) {
         let localContext = this.canvas.getContext("2d");
         localContext.clearRect(0, 0, this.canvas.width, this.canvas.height);
         localContext.save();
-        localContext.translate(20, 20);
+        localContext.translate(this.dimensions.x / 2, this.dimensions.y / 2);
         localContext.rotate(((this.rotation + 2) * Math.PI) / 2);
-        localContext.translate(-20, -20);
-        localContext.drawImage(imageTriangle, 0, 0);
-        let pos = this.getRelativePosition();
+        localContext.translate(-this.dimensions.x / 2, -this.dimensions.y / 2);
+        //localContext.drawImage(imageTriangle, 0, 0);
+        if (!this.isWithin(Math.floor(mouseX), Math.floor(mouseY))) {
+            localContext.globalAlpha = 0.75;
+        }
+        localContext.fillStyle = '#db4242';
+        localContext.strokeStyle = '#542828';
+        localContext.lineWidth = 2;
+        localContext.beginPath();
+        localContext.moveTo(this.dimensions.x / 2 - 39, this.dimensions.y / 2 + 19);
+        localContext.lineTo(this.dimensions.x / 2, this.dimensions.y / 2 - 20);
+        localContext.lineTo(this.dimensions.x / 2 + 39, this.dimensions.y / 2 + 19);
+        localContext.lineTo(this.dimensions.x / 2 - 39, this.dimensions.y / 2 + 19);
+        localContext.fill();
+        localContext.stroke();
         localContext.restore();
+        let pos = this.getAbsolutePosition();
         ctx.drawImage(this.canvas, Math.floor(pos.x), Math.floor(pos.y));
     }
 
-    getRelativePosition() {
+    getAbsolutePosition() {
         let x =
-            trianglePositions[this.position].x * this.parentObject.radius * 2 - 20;
+            trianglePositions[this.position].x * 900 - (this.dimensions.x / 2);
         let y =
-            trianglePositions[this.position].y * this.parentObject.radius * 2 - 20;
+            trianglePositions[this.position].y * 900 - (this.dimensions.y / 2);
         return { x: x, y: y };
     }
 
-    isWithin(x, y) { }
+    isWithin(x, y) {
+        return document.getElementById('main-canvas').getContext('2d').isPointInPath(this.path, x, y);
+    }
 
-    mouseClicked(x, y) { }
+    mouseClicked(x, y) {
+        if (this.isWithin(x, y)) {
+            const centerCircle = outerCircle.children[4];
+            const swapPos = (this.position + 2) % 4;
+            const childCircle = largeCircles[this.position].children[(swapPos - largeCircles[this.position].rotation) % 4];
+            largeCircles[this.position].children[(swapPos - largeCircles[this.position].rotation) % 4] = centerCircle;
+            centerCircle.position = childCircle.position;
+            centerCircle.rotation = (centerCircle.rotation - largeCircles[this.position].rotation) % 4;
+            centerCircle.parentObject = largeCircles[this.position];
+            childCircle.position = 4;
+            childCircle.rotation = (childCircle.rotation + largeCircles[this.position].rotation) % 4;
+            outerCircle.setChild(4, childCircle);
+        }
+    }
 
-    mouseMoved(x, y) { }
+    mouseMoved(x, y) {
+        let canvas = document.getElementById('main-canvas');
+        if (canvas.style.cursor != 'pointer' && this.isWithin(x, y)) {
+            canvas.style.cursor = 'pointer';
+        }
+    }
 }
 
 class Circle {
@@ -81,6 +136,11 @@ class Circle {
 
     addChild(child) {
         this.children.push(child);
+        child.parentObject = this;
+    }
+
+    setChild(index, child) {
+        this.children[index] = child;
         child.parentObject = this;
     }
 
@@ -124,6 +184,9 @@ class Circle {
         localContext.clearRect(0, 0, this.canvas.width, this.canvas.height);
         localContext.save();
         localContext.translate(this.radius, this.radius);
+        if (this.parentObject instanceof Board && !this.isWithin(Math.floor(mouseX), Math.floor(mouseY))) {
+            localContext.globalAlpha = 0.75;
+        }
         localContext.rotate(((this.rotation + partial) * Math.PI) / 2);
         localContext.translate(-this.radius, -this.radius);
         localContext.drawImage(this.image, 0, 0);
@@ -280,8 +343,6 @@ const triangles = [
     new Triangle(3),
 ];
 
-const swapCircle = new SmallCircle(-1);
-
 function onLoad() {
     for (let i = 0; i < 4; i++) {
         outerCircle.addChild(largeCircles[i]);
@@ -294,7 +355,6 @@ function onLoad() {
 
     for (let i = 0; i < 4; i++) {
         outerCircle.addChild(triangles[i]);
-        triangles[i].rotation = i;
     }
 
     document
@@ -307,7 +367,6 @@ function onLoad() {
     loadImage(imageBoard, "./assets/outer-circle.png");
     loadImage(imageLargeCircle, "./assets/large-circle.png");
     loadImage(imageSmallCircle, "./assets/small-circle.png");
-    loadImage(imageTriangle, "./assets/triangle.png");
 }
 
 function loadImage(image, source) {
@@ -349,5 +408,7 @@ function onMouseMoveCanvas(moveEvent) {
     moveEvent.stopPropagation();
     let canvasRect = this.getBoundingClientRect();
     let scale = this.width / canvasRect.width;
+    mouseX = moveEvent.offsetX * scale;
+    mouseY = moveEvent.offsetY * scale;
     outerCircle.mouseMoved(moveEvent.offsetX * scale, moveEvent.offsetY * scale);
 }
