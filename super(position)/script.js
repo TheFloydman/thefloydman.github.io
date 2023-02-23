@@ -99,10 +99,10 @@ class Triangle {
         if (this.isWithin(x, y)) {
             const centerCircle = outerCircle.children[4];
             const swapPos = (this.position + 2) % 4;
-            const childCircle = largeCircles[this.position].children[(swapPos - largeCircles[this.position].rotation) % 4];
-            largeCircles[this.position].children[(swapPos - largeCircles[this.position].rotation) % 4] = centerCircle;
+            const childCircle = largeCircles[this.position].children[(swapPos - largeCircles[this.position].rotation + 4) % 4];
+            largeCircles[this.position].children[(swapPos - largeCircles[this.position].rotation + 4) % 4] = centerCircle;
             centerCircle.position = childCircle.position;
-            centerCircle.rotation = (centerCircle.rotation - largeCircles[this.position].rotation) % 4;
+            centerCircle.rotation = (centerCircle.rotation - largeCircles[this.position].rotation + 4) % 4;
             centerCircle.parentObject = largeCircles[this.position];
             childCircle.position = 4;
             childCircle.rotation = (childCircle.rotation + largeCircles[this.position].rotation) % 4;
