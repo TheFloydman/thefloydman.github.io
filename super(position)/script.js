@@ -1,19 +1,26 @@
-const imageBoard = new Image();
 const imageLargeCircle = new Image();
 const imageSmallCircle = new Image();
+const imageSmallCircles = new Image();
 
 var imagesLoaded = new Map([
-    [imageBoard, false],
     [imageLargeCircle, false],
     [imageSmallCircle, false]
 ]);
 
-const circlePositions = [
+const largeCirclePositions = [
     { x: 1 / 2, y: 1 / 5 },
     { x: 4 / 5, y: 1 / 2 },
     { x: 1 / 2, y: 4 / 5 },
     { x: 1 / 5, y: 1 / 2 },
-    { x: 1 / 2, y: 1 / 2 },
+    { x: 1 / 2, y: 1 / 2 }
+];
+
+const smallCirclePositions = [
+    { x: 1 / 2, y: 7 / 30 },
+    { x: 23 / 30, y: 1 / 2 },
+    { x: 1 / 2, y: 23 / 30 },
+    { x: 7 / 30, y: 1 / 2 },
+    { x: 1 / 2, y: 1 / 2 }
 ];
 
 const trianglePositions = [
@@ -23,8 +30,10 @@ const trianglePositions = [
     { x: 73 / 180, y: 1 / 2 },
 ];
 
-let mouseX = 0;
-let mouseY = 0;
+var mouseX = 0;
+var mouseY = 0;
+var mouseMoved = false;
+var mouseMoveTimeout = mouseTimeout();
 
 class Triangle {
     canvas;
@@ -64,12 +73,11 @@ class Triangle {
         localContext.translate(this.dimensions.x / 2, this.dimensions.y / 2);
         localContext.rotate(((this.rotation + 2) * Math.PI) / 2);
         localContext.translate(-this.dimensions.x / 2, -this.dimensions.y / 2);
-        //localContext.drawImage(imageTriangle, 0, 0);
-        if (!this.isWithin(Math.floor(mouseX), Math.floor(mouseY))) {
+        if (!this.isWithin(Math.floor(mouseX), Math.floor(mouseY)) || !mouseMoved) {
             localContext.globalAlpha = 0.75;
         }
         localContext.fillStyle = '#db4242';
-        localContext.strokeStyle = '#542828';
+        //localContext.strokeStyle = '#542828';
         localContext.lineWidth = 2;
         localContext.beginPath();
         localContext.moveTo(this.dimensions.x / 2 - 39, this.dimensions.y / 2 + 19);
@@ -107,6 +115,9 @@ class Triangle {
             childCircle.position = 4;
             childCircle.rotation = (childCircle.rotation + largeCircles[this.position].rotation) % 4;
             outerCircle.setChild(4, childCircle);
+            clearTimeout(mouseMoveTimeout);
+            mouseMoved = true;
+            mouseMoveTimeout = mouseTimeout();
         }
     }
 
@@ -145,13 +156,7 @@ class Circle {
     }
 
     getRelativePosition() {
-        let x =
-            circlePositions[this.position].x * this.parentObject.radius * 2 -
-            this.radius;
-        let y =
-            circlePositions[this.position].y * this.parentObject.radius * 2 -
-            this.radius;
-        return { x: x, y: y };
+        return { x: 0, y: 0 };
     }
 
     getAbsolutePosition() {
@@ -173,26 +178,34 @@ class Circle {
     draw(ctx) {
         let partial = 0;
         if (this.animation.rotating == true) {
-            partial = (Date.now() - this.animation.startTime) / 100;
+            partial = (performance.now() - this.animation.startTime) / 100;
             if (partial >= 1) {
                 partial = 0;
                 this.animation.rotating = false;
                 this.rotation = (this.rotation + 1) % 4;
+                clearTimeout(mouseMoveTimeout);
+                mouseMoved = true;
+                mouseMoveTimeout = mouseTimeout();
             }
         }
         let localContext = this.canvas.getContext("2d");
         localContext.clearRect(0, 0, this.canvas.width, this.canvas.height);
         localContext.save();
         localContext.translate(this.radius, this.radius);
-        if (this.parentObject instanceof Board && !this.isWithin(Math.floor(mouseX), Math.floor(mouseY))) {
-            localContext.globalAlpha = 0.75;
-        }
         localContext.rotate(((this.rotation + partial) * Math.PI) / 2);
         localContext.translate(-this.radius, -this.radius);
-        localContext.drawImage(this.image, 0, 0);
+        localContext.drawImage(this.image.src, 0, 0, this.radius * 2, this.radius * 2, 0, 0, this.radius * 2, this.radius * 2);
+        localContext.drawImage(this.image.src, this.image.x, this.image.y, this.radius * 2, this.radius * 2, 0, 0, this.radius * 2, this.radius * 2);
         let pos = this.getRelativePosition();
         for (const child of this.children) {
             child.draw(localContext);
+        }
+        if (this.parentObject instanceof Board && (!this.isWithin(Math.floor(mouseX), Math.floor(mouseY)) || !mouseMoved) && this.animation.rotating == false) {
+            localContext.save();
+            localContext.fillStyle = '#FFFFFF';
+            localContext.globalAlpha = 0.25;
+            localContext.fillRect(0, 0, this.radius * 2, this.radius * 2);
+            localContext.restore();
         }
         localContext.restore();
         ctx.drawImage(this.canvas, Math.floor(pos.x), Math.floor(pos.y));
@@ -212,14 +225,12 @@ class Circle {
 
     rotate() {
         this.animation.rotating = true;
-        this.animation.startTime = Date.now();
+        this.animation.startTime = performance.now();
     }
 
 }
 
 class Board extends Circle {
-    image = imageBoard;
-
     constructor(position) {
         super(position, 450);
     }
@@ -236,7 +247,10 @@ class Board extends Circle {
 
     /* Override */
     draw(ctx) {
-        ctx.drawImage(this.image, 0, 0);
+        ctx.save();
+        ctx.fillStyle = '#FFFFFF';
+        ctx.fillRect(0, 0, this.radius * 2, this.radius * 2);
+        ctx.restore();
         for (const child of this.children) {
             child.draw(ctx);
         }
@@ -253,10 +267,23 @@ class Board extends Circle {
 }
 
 class LargeCircle extends Circle {
-    image = imageLargeCircle;
+    image = { src: imageLargeCircle, x: 0, y: 0 };
 
-    constructor(position) {
+    constructor(position, imageX, imageY) {
         super(position, 150);
+        this.image.x = imageX;
+        this.image.y = imageY;
+    }
+
+    /* Override */
+    getRelativePosition() {
+        let x =
+            largeCirclePositions[this.position].x * this.parentObject.radius * 2 -
+            this.radius;
+        let y =
+            largeCirclePositions[this.position].y * this.parentObject.radius * 2 -
+            this.radius;
+        return { x: x, y: y };
     }
 
     /* Override */
@@ -275,11 +302,26 @@ class LargeCircle extends Circle {
     }
 }
 
-class SmallCircle extends Circle {
-    image = imageSmallCircle;
+const smallCircleSubImages = [[100, 0], [200, 0], [300, 0], [0, 100], [100, 100], [200, 100], [300, 100], [0, 200], [100, 200], [200, 200], [300, 200]];
 
-    constructor(position) {
+class SmallCircle extends Circle {
+    image = { src: imageSmallCircles, x: 0, y: 0 };
+
+    constructor(position, imageCoords) {
         super(position, 50);
+        this.image.x = smallCircleSubImages[imageCoords][0];
+        this.image.y = smallCircleSubImages[imageCoords][1];
+    }
+
+    /* Override */
+    getRelativePosition() {
+        let x =
+            smallCirclePositions[this.position].x * this.parentObject.radius * 2 -
+            this.radius;
+        let y =
+            smallCirclePositions[this.position].y * this.parentObject.radius * 2 -
+            this.radius;
+        return { x: x, y: y };
     }
 
     /* Override */
@@ -310,31 +352,13 @@ class SmallCircle extends Circle {
 const outerCircle = new Board();
 
 const largeCircles = [
-    new LargeCircle(0),
-    new LargeCircle(1),
-    new LargeCircle(2),
-    new LargeCircle(3),
+    new LargeCircle(0, 0, 0),
+    new LargeCircle(1, 0, 0),
+    new LargeCircle(2, 0, 0),
+    new LargeCircle(3, 0, 0),
 ];
 
-const smallCircles = [
-    new SmallCircle(0),
-    new SmallCircle(1),
-    new SmallCircle(2),
-    new SmallCircle(3),
-    new SmallCircle(0),
-    new SmallCircle(1),
-    new SmallCircle(2),
-    new SmallCircle(3),
-    new SmallCircle(0),
-    new SmallCircle(1),
-    new SmallCircle(2),
-    new SmallCircle(3),
-    new SmallCircle(0),
-    new SmallCircle(1),
-    new SmallCircle(2),
-    new SmallCircle(3),
-    new SmallCircle(4),
-];
+var smallCircles = [];
 
 const triangles = [
     new Triangle(0),
@@ -343,7 +367,24 @@ const triangles = [
     new Triangle(3),
 ];
 
-function onLoad() {
+function onLoadFirst() {
+    const params = new URL(location.href).searchParams;
+    const puzzle = params.get('puzzle');
+    fetch(`./puzzles/${parseInt(puzzle)}.json`)
+        .then(response => response.json())
+        .then(json => {
+            console.log(json);
+            onLoad(json);
+        });
+}
+
+function onLoad(json) {
+
+    for (let i = 0; i < json.start.small_circles.length - 1; i++) {
+        smallCircles.push(new SmallCircle(i % 4, parseInt(json.start.small_circles[i])));
+    }
+    smallCircles.push(new SmallCircle(4, parseInt(json.start.small_circles[json.start.small_circles.length - 1])));
+
     for (let i = 0; i < 4; i++) {
         outerCircle.addChild(largeCircles[i]);
         for (let j = 0; j < 4; j++) {
@@ -364,9 +405,9 @@ function onLoad() {
         .getElementById("main-canvas")
         .addEventListener("mousemove", onMouseMoveCanvas);
 
-    loadImage(imageBoard, "./assets/outer-circle.png");
     loadImage(imageLargeCircle, "./assets/large-circle.png");
     loadImage(imageSmallCircle, "./assets/small-circle.png");
+    loadImage(imageSmallCircles, "./assets/small-circles.png");
 }
 
 function loadImage(image, source) {
@@ -406,9 +447,16 @@ function onClickCanvas(clickEvent) {
 function onMouseMoveCanvas(moveEvent) {
     moveEvent.preventDefault();
     moveEvent.stopPropagation();
+    mouseMoved = true;
+    clearTimeout(mouseMoveTimeout);
+    mouseMoveTimeout = mouseTimeout();
     let canvasRect = this.getBoundingClientRect();
     let scale = this.width / canvasRect.width;
     mouseX = moveEvent.offsetX * scale;
     mouseY = moveEvent.offsetY * scale;
     outerCircle.mouseMoved(moveEvent.offsetX * scale, moveEvent.offsetY * scale);
+}
+
+function mouseTimeout() {
+    return setTimeout(() => { mouseMoved = false; }, 1000);
 }
