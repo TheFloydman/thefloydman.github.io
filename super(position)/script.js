@@ -1,8 +1,8 @@
-const imageLargeCircle = new Image();
+const imageLargeCircles = new Image();
 const imageSmallCircles = new Image();
 
 var imagesLoaded = new Map([
-    [imageLargeCircle, false],
+    [imageLargeCircles, false],
     [imageSmallCircles, false]
 ]);
 
@@ -35,6 +35,7 @@ var mouseX = 0;
 var mouseY = 0;
 var mouseMoved = false;
 var mouseMoveTimeout = mouseTimeout();
+var numberOfPlatforms = 0;
 
 class SwapButton {
     canvas;
@@ -269,7 +270,7 @@ class Board extends Circle {
 }
 
 class Platform extends Circle {
-    image = { src: imageLargeCircle, x: 0, y: 0 };
+    image = { src: undefined, x: 0, y: 0 };
     swapButton;
 
     constructor(position, imageX, imageY) {
@@ -357,13 +358,6 @@ class Sphere extends Circle {
 
 const board = new Board();
 
-const platforms = [
-    new Platform(0, 0, 0),
-    new Platform(1, 0, 0),
-    new Platform(2, 0, 0),
-    new Platform(3, 0, 0),
-];
-
 var spheres = [];
 
 const triangles = [
@@ -373,6 +367,8 @@ const triangles = [
     new SwapButton(3),
 ];
 
+var solution;
+
 function onLoad() {
     const params = new URL(window.location.href).searchParams;
     const puzzle = params.get('puzzle');
@@ -380,7 +376,7 @@ function onLoad() {
         fetch(`./puzzles/${puzzle}.json`)
             .then(response => response.json())
             .then(json => {
-                loadPuzzleFromJson(json);
+                loadPuzzleFromJson(puzzle, json);
             })
             .catch(error => {
                 window.location.href = './';
@@ -394,7 +390,10 @@ function loadFrontPage() {
 
 }
 
-function loadPuzzleFromJson(json) {
+function loadPuzzleFromJson(puzzle, json) {
+
+    solution = json.solution;
+    console.log(solution);
 
     /* Stops mouse clicks on canvas from selecting text on page. */
     document
@@ -410,10 +409,10 @@ function loadPuzzleFromJson(json) {
         .getElementById('main-canvas')
         .addEventListener('mousemove', onMouseMoveCanvas);
 
-    loadImage(imageLargeCircle, './assets/large-circle.png');
+    loadImage(imageLargeCircles, `./assets/large-circles-${puzzle}.png`);
     loadImage(imageSmallCircles, './assets/small-circles.png');
 
-    let numberOfPlatforms = parseInt(json.platforms);
+    numberOfPlatforms = parseInt(json.platforms);
 
     if (numberOfPlatforms == 2) {
         largeCirclePositions[1] = largeCirclePositions[2];
@@ -430,11 +429,13 @@ function loadPuzzleFromJson(json) {
     spheres.push(new Sphere(4, parseInt(circle.style), parseInt(circle.rotation)));
 
     for (let i = 0; i < numberOfPlatforms; i++) {
-        board.addChild(platforms[i]);
+        let newPlatform = new Platform(i, i * 300, 0);
+        board.addChild(newPlatform);
         for (let j = 0; j < 4; j++) {
-            platforms[i].addChild(spheres[i * 4 + j]);
-            platforms[i].swapButton = triangles[i];
-            triangles[i].platform = platforms[i];
+            newPlatform.image.src = imageLargeCircles;
+            newPlatform.addChild(spheres[i * 4 + j]);
+            newPlatform.swapButton = triangles[i];
+            triangles[i].platform = newPlatform;
         }
     }
 
@@ -495,4 +496,28 @@ function onMouseMoveCanvas(moveEvent) {
 
 function mouseTimeout() {
     return setTimeout(() => { mouseMoved = false; }, 1000);
+}
+
+function isSolved() {
+
+}
+
+function exportPuzzle() {
+    let exportPlatforms = board.children.slice(0, numberOfPlatforms + 1);
+    let exportSpheres = [];
+    for (const singlePlatform of exportPlatforms) {
+        for (const childSphere of singlePlatform.children) {
+            exportSpheres.push({ style: childSphere.style, rotation: childSphere.rotation });
+        }
+    }
+    let centerSphere = board.children[numberOfPlatforms];
+    exportSpheres.push({ style: centerSphere.style, rotation: centerSphere.rotation });
+    let json = {
+        platforms: numberOfPlatforms,
+        start: {
+            spheres: exportSpheres,
+            platforms: exportPlatforms.slice(0, numberOfPlatforms).map(singlePlatform => { return { rotation: singlePlatform.rotation }; })
+        }
+    };
+    console.log(JSON.stringify(json));
 }

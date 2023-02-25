@@ -3,23 +3,52 @@
     "start": {
         "spheres": [
             {
-                "style": 3,
+                "style": 9,
                 "rotation": 0
             },
             {
-                "style": 3,
+                "style": 9,
+                "rotation": 0
+            },
+            {
+                "style": 9,
                 "rotation": 1
             },
             {
-                "style": 3,
-                "rotation": 2
+                "style": 9,
+                "rotation": 0
             },
             {
-                "style": 3,
-                "rotation": 3
+                "style": 0,
+                "rotation": 0
+            }
+        ],
+        "platforms": [
+            {
+                "rotation": 0
+            }
+        ]
+    },
+    "solution": {
+        "spheres": [
+            {
+                "style": 9,
+                "rotation": 1
             },
             {
-                "style": 5,
+                "style": 9,
+                "rotation": 0
+            },
+            {
+                "style": 9,
+                "rotation": 1
+            },
+            {
+                "style": 9,
+                "rotation": 0
+            },
+            {
+                "style": 0,
                 "rotation": 0
             }
         ]

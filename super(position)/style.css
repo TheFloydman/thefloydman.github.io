@@ -20,6 +20,10 @@ body {
     -webkit-tap-highlight-color: transparent;
 }
 
+#main-menu-container {
+    width: 100%;
+}
+
 #intro {
     margin-top: 16px;
     padding: 16px;
@@ -31,9 +35,6 @@ body {
 button {
     font-family: 'Poppins', sans-serif;
     user-select: none;
-    width: 128px;
-    height: 32px;
-    font-size: 16px;
 }
 
 #button-container {
