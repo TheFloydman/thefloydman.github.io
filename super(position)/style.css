@@ -44,6 +44,30 @@ button {
     padding-bottom: 16px;
 }
 
+#title {
+    display: none;
+    margin-top: 16px;
+    text-align: center;
+    font-weight: bold
+}
+
+#prompt {
+    display: none;
+    text-align: center;
+    font-style: italic;
+    max-width: 600px;
+    margin: 0 auto 0 auto;
+}
+
+#solved {
+    display: none;
+    margin-top: 16px;
+    text-align: center;
+    font-weight: bold;
+    font-size: x-large;
+    color: green;
+}
+
 @media (pointer:none),
 (pointer:coarse) {
     #page-wrapper {

@@ -121,6 +121,7 @@ class SwapButton {
             clearTimeout(mouseMoveTimeout);
             mouseMoved = true;
             mouseMoveTimeout = mouseTimeout();
+            isSolved();
         }
     }
 
@@ -189,6 +190,7 @@ class Circle {
                 clearTimeout(mouseMoveTimeout);
                 mouseMoved = true;
                 mouseMoveTimeout = mouseTimeout();
+                isSolved();
             }
         }
         let localContext = this.canvas.getContext("2d");
@@ -392,8 +394,17 @@ function loadFrontPage() {
 
 function loadPuzzleFromJson(puzzle, json) {
 
+    let title = document.getElementById('title');
+    title.innerHTML = `Puzzle #${parseInt(puzzle) + 1}`;
+    title.style.display = 'block';
+
+    if (json.prompt) {
+        let prompt = document.getElementById('prompt');
+        prompt.innerHTML = json.prompt;
+        prompt.style.display = 'block';
+    }
+
     solution = json.solution;
-    console.log(solution);
 
     /* Stops mouse clicks on canvas from selecting text on page. */
     document
@@ -499,7 +510,38 @@ function mouseTimeout() {
 }
 
 function isSolved() {
+    let allPlatforms = board.children.slice(0, numberOfPlatforms);
+    let allSpheres = [];
+    for (const singlePlatform of allPlatforms) {
+        for (const platformChild of singlePlatform.children) {
+            allSpheres.push(platformChild);
+        }
+    }
+    allSpheres.push(board.children[numberOfPlatforms]);
+    for (let i = 0; i < solution.spheres.length; i++) {
+        const sphereSolution = solution.spheres[i];
+        const actualSphere = allSpheres[i];
+        if (!sphereSolution.ignore && (sphereSolution.style != actualSphere.style || !isRotatedCorrectly(actualSphere.style, actualSphere.rotation, sphereSolution.rotation))) {
+            return false;
+        }
+    }
+    solved();
+    return true;
+}
 
+function isRotatedCorrectly(style, actualRotation, expectedrotation) {
+    if (style == 0) {
+        return true;
+    } else if (style == 9 || style == 10) {
+        return (actualRotation == expectedrotation) || (actualRotation == (expectedrotation + 6) % 4);
+    }
+    return actualRotation == expectedrotation;
+}
+
+function solved() {
+    setTimeout(() => {
+        document.getElementById('solved').style.display = 'block';
+    }, 250);
 }
 
 function exportPuzzle() {
