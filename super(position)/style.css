@@ -1,7 +1,7 @@
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
 
 body {
-    font-family: 'Inter', sans - serif;
+    font-family: 'Poppins', sans-serif;
 }
 
 #page-wrapper {
@@ -18,6 +18,29 @@ body {
     width: 100%;
     height: 100%;
     -webkit-tap-highlight-color: transparent;
+}
+
+#intro {
+    margin-top: 16px;
+    padding: 16px;
+    background-color: #d4eaff;
+    border-radius: 16px;
+    display: none;
+}
+
+button {
+    font-family: 'Poppins', sans-serif;
+    user-select: none;
+    width: 128px;
+    height: 32px;
+    font-size: 16px;
+}
+
+#button-container {
+    display: flex;
+    gap: 16px;
+    border-bottom: 2px solid #9c9c9c;
+    padding-bottom: 16px;
 }
 
 @media (pointer:none),

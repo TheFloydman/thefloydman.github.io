@@ -1,5 +1,5 @@
 {
-    "platforms": 1,
+    "platforms": 2,
     "start": {
         "spheres": [
             {
@@ -13,6 +13,22 @@
             {
                 "style": 3,
                 "rotation": 2
+            },
+            {
+                "style": 3,
+                "rotation": 3
+            },
+            {
+                "style": 3,
+                "rotation": 3
+            },
+            {
+                "style": 3,
+                "rotation": 3
+            },
+            {
+                "style": 3,
+                "rotation": 3
             },
             {
                 "style": 3,
