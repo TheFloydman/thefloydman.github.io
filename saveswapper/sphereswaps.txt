@@ -1,0 +1,29 @@
+A	H	entry canyon UNUSED
+B	HK
+C	HM	UNUSED
+D	HM	UNUSED
+E	HK
+F	HK	giant
+G	HM	maray entry
+H	HM	maray arch
+I	HM
+J	HK
+K	HK
+L	HK
+M	HM	small bridge rotator - panel on maray only (00-hunrath-beam-side 01-hunrath-maze-side 02-maray-beam-side 03-maray-maze-side)
+N	HM	large bridge rotator (00H 01M)
+O	HM	small bridge rotator - no panel (00-hunrath-beam-side 01-hunrath-maze-side 02-maray-beam-side 03-maray-maze-side)
+P	HM	small before-maze (00H 01M)
+Q	HM	large before-maze (00H 01M)
+R	HM	maze
+R1	HM	maze
+R2	HM	maze
+R3	HM	maze
+R4	HM	maze
+S	KM	maray entry door (00K 01M)
+T	HM	small junkyard (00H 01M)
+U	HM	large junkard (00H 01M)
+V	HS
+W	KS	wmd
+X	MS	wmd UNUSED
+Y	HK
