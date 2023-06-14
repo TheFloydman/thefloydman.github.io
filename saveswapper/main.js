@@ -117,11 +117,22 @@ function toCurated(json, gvasArray, parentElement, prefix, isMain = true) {
             }
         }
 
+        let propertyImage = document.createElement('DIV');
+        if (isMain) {
+            propertyImage.className = 'property-image';
+            propertyImage.innerHTML = propertyInfo.image && propertyInfo.alt ? `<img src="./images/${propertyInfo.image}" alt="${propertyInfo.alt}" style="max-width: 100%;">` : '';
+            if (propertyImage.innerHTML != '') {
+                propertyImage.style.display = 'block';
+            } else {
+                propertyImage.style.display = 'none';
+            }
+        }
+
         let propertyBody = document.createElement('DIV');
         propertyBody.className = 'property-body';
 
         if (propertyInfo.children) {
-            propertyWrapper.prepend(propertyHeader, propertyDesc);
+            propertyWrapper.prepend(propertyHeader, propertyDesc, propertyImage);
             toCurated(propertyInfo.children, gvasArray, propertyWrapper, prefix, false);
             parentElement.append(propertyWrapper);
             continue;
@@ -386,7 +397,7 @@ function toCurated(json, gvasArray, parentElement, prefix, isMain = true) {
             }
         }
 
-        propertyWrapper.append(propertyHeader, propertyDesc, propertyBody);
+        propertyWrapper.append(propertyHeader, propertyDesc, propertyImage, propertyBody);
         parentElement.append(propertyWrapper);
     }
 }
