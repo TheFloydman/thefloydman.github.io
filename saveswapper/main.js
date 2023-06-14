@@ -54,9 +54,15 @@ function fileChosen() {
             saveButton.disabled = false;
             rawButton.disabled = false;
         } else if (saveFile.saveType == '/Script/CyanGameplayContent.CyanSaveGame') {
-            let mystDiv = document.getElementById('myst');
-            mystDiv.style.display = 'block';
-            toCurated(mystProperties, saveFile.properties, mystDiv, 'myst', true);
+            if (saveFile.properties[1].name == 'AdjunctUpgradeFlags') {
+                let firmamentDiv = document.getElementById('firmament');
+                firmamentDiv.style.display = 'block';
+                toCurated(firmamentProperties, saveFile.properties, firmamentDiv, 'firmament', true);
+            } else {
+                let mystDiv = document.getElementById('myst');
+                mystDiv.style.display = 'block';
+                toCurated(mystProperties, saveFile.properties, mystDiv, 'myst', true);
+            }
             saveButton.disabled = false;
             rawButton.disabled = false;
         } else {
@@ -124,7 +130,7 @@ function toCurated(json, gvasArray, parentElement, prefix, isMain = true) {
         let gvas = Array.isArray(propertyInfo.gvas) ? propertyInfo.gvas[0] : propertyInfo.gvas;
         let property = fetchNamedPropertyFromArray(gvas, gvasArray);
         if (property instanceof GvasMap) {
-            if (prefix == 'myst') {
+            if (prefix == 'myst' || prefix == 'firmament') {
                 let key = new GvasString();
                 key.value = propertyInfo.gvas[1];
                 let property2 = fetchPropertyFromMap(key, property.value.entries);
@@ -150,7 +156,7 @@ function toCurated(json, gvasArray, parentElement, prefix, isMain = true) {
                         input.setAttribute('type', 'number');
                         input.setAttribute('name', `${propertyInfo.html}-${letter}`);
                         input.value = vector[letter];
-                        input.addEventListener('input', function() {
+                        input.addEventListener('input', function () {
                             vector[letter] = this.value;
                         })
                         div.append(label, input);
@@ -173,7 +179,7 @@ function toCurated(json, gvasArray, parentElement, prefix, isMain = true) {
                     }
                     select.name = propertyInfo.id;
                     select.value = value;
-                    select.addEventListener('change', function() {
+                    select.addEventListener('change', function () {
                         property.value = this.value;
                     })
                     div.append(select);
@@ -206,7 +212,7 @@ function toCurated(json, gvasArray, parentElement, prefix, isMain = true) {
                             select.append(option);
                         }
                         select.value = value[i];
-                        select.addEventListener('change', function() {
+                        select.addEventListener('change', function () {
                             let value = property.value.split(',');
                             value = value.slice(0, value.length - 1);
                             value[parseInt(this.getAttribute('index'))] = this.value;
@@ -225,7 +231,7 @@ function toCurated(json, gvasArray, parentElement, prefix, isMain = true) {
             input.id = `checkbox-${propertyInfo.html}`;
             input.setAttribute('type', 'checkbox');
             input.checked = value;
-            input.addEventListener('input', function() {
+            input.addEventListener('input', function () {
                 property.value = this.checked;
             });
             let label = document.createElement('LABEL');
@@ -233,7 +239,7 @@ function toCurated(json, gvasArray, parentElement, prefix, isMain = true) {
             label.setAttribute('type', 'checkbox');
             label.setAttribute('for', propertyInfo.html);
             label.innerText = propertyInfo.label;
-            label.addEventListener('click', function() {
+            label.addEventListener('click', function () {
                 input.dispatchEvent(new MouseEvent('click'));
             });
             div.append(input, label);
@@ -257,7 +263,7 @@ function toCurated(json, gvasArray, parentElement, prefix, isMain = true) {
                         }
                         select.append(option);
                     }
-                    select.addEventListener('change', function() {
+                    select.addEventListener('change', function () {
                         property.value.int = parseInt(this.value);
                     })
                     select.value = value;
@@ -279,7 +285,7 @@ function toCurated(json, gvasArray, parentElement, prefix, isMain = true) {
                     input.id = `checkbox-${propertyInfo.html}`;
                     input.setAttribute('type', 'checkbox');
                     input.checked = parseInt(propertyInfo.value.checked) == value;
-                    input.addEventListener('input', function() {
+                    input.addEventListener('input', function () {
                         property.value.int = this.checked ? parseInt(propertyInfo.value.checked) : parseInt(propertyInfo.value.unchecked);
                     });
                     let label = document.createElement('LABEL');
@@ -287,7 +293,7 @@ function toCurated(json, gvasArray, parentElement, prefix, isMain = true) {
                     label.setAttribute('type', 'checkbox');
                     label.setAttribute('for', propertyInfo.html);
                     label.innerText = propertyInfo.label;
-                    label.addEventListener('click', function() {
+                    label.addEventListener('click', function () {
                         input.dispatchEvent(new MouseEvent('click'));
                     });
                     div.append(input, label);
@@ -302,7 +308,7 @@ function toCurated(json, gvasArray, parentElement, prefix, isMain = true) {
                 input.name = `${propertyInfo.html}-input`;
                 input.setAttribute('type', 'number');
                 input.value = value;
-                input.addEventListener('input', function() {
+                input.addEventListener('input', function () {
                     this.value = parseInt(this.value);
                     if (this.value == NaN || this.value == null || this.value == undefined) {
                         this.value = 0;
@@ -339,7 +345,7 @@ function toCurated(json, gvasArray, parentElement, prefix, isMain = true) {
                         select.append(option);
                     }
                     select.value = value;
-                    select.addEventListener('change', function() {
+                    select.addEventListener('change', function () {
                         property.value.float = parseFloat(this.value);
                     })
                     div.append(select);
@@ -361,7 +367,7 @@ function toCurated(json, gvasArray, parentElement, prefix, isMain = true) {
                 input.setAttribute('type', 'number');
                 input.setAttribute('step', '0.01');
                 input.value = value;
-                input.addEventListener('input', function() {
+                input.addEventListener('input', function () {
                     this.value = parseFloat(this.value);
                     if (this.value == NaN || this.value == null || this.value == undefined) {
                         this.value = 0.0;
@@ -439,7 +445,7 @@ function toRaw(gvasArray, parentElement, level = 0) {
             let input = document.createElement('INPUT');
             input.setAttribute('type', 'text');
             input.value = property.value.toString();
-            input.addEventListener('input', function(event) {
+            input.addEventListener('input', function (event) {
                 property.value = this.value.toString();
             })
             bodyDiv.append(input);
@@ -464,7 +470,7 @@ function toRaw(gvasArray, parentElement, level = 0) {
             let input = document.createElement('INPUT');
             input.setAttribute('type', 'number');
             input.value = parseInt(property.value.int);
-            input.addEventListener('input', function(event) {
+            input.addEventListener('input', function (event) {
                 this.value = parseInt(this.value);
                 if (this.value == NaN || this.value == null || this.value == undefined) {
                     this.value = 0;
@@ -493,7 +499,7 @@ function toRaw(gvasArray, parentElement, level = 0) {
             let input = document.createElement('INPUT');
             input.setAttribute('type', 'number');
             input.value = parseFloat(property.value.float);
-            input.addEventListener('input', function(event) {
+            input.addEventListener('input', function (event) {
                 this.value = parseFloat(this.value);
                 if (this.value == NaN || this.value == null || this.value == undefined) {
                     this.value = 0.0;
@@ -522,7 +528,7 @@ function toRaw(gvasArray, parentElement, level = 0) {
             let input = document.createElement('INPUT');
             input.setAttribute('type', 'checkbox');
             input.checked = property.value;
-            input.addEventListener('change', function(event) {
+            input.addEventListener('change', function (event) {
                 property.value = this.checked;
             })
             bodyDiv.append(input);
@@ -561,7 +567,7 @@ function toRaw(gvasArray, parentElement, level = 0) {
                         input.setAttribute('type', 'number');
                         input.setAttribute('name', `${random}-${letter}`);
                         input.value = vector[letter];
-                        input.addEventListener('input', function() {
+                        input.addEventListener('input', function () {
                             this.value = parseFloat(this.value);
                             if (this.value == NaN || this.value == null || this.value == undefined) {
                                 this.value = 0.0;
@@ -603,7 +609,7 @@ function toRaw(gvasArray, parentElement, level = 0) {
                         input.setAttribute('type', 'number');
                         input.setAttribute('name', `${random}-${letter}`);
                         input.value = vector[letter];
-                        input.addEventListener('input', function() {
+                        input.addEventListener('input', function () {
                             this.value = parseFloat(this.value);
                             if (this.value == NaN || this.value == null || this.value == undefined) {
                                 this.value = 0.0;
@@ -645,7 +651,7 @@ function toRaw(gvasArray, parentElement, level = 0) {
                         input.setAttribute('type', 'number');
                         input.setAttribute('name', `${random}-${letter}`);
                         input.value = vector[letter];
-                        input.addEventListener('input', function() {
+                        input.addEventListener('input', function () {
                             this.value = parseFloat(this.value);
                             if (this.value == NaN || this.value == null || this.value == undefined) {
                                 this.value = 0.0;
@@ -725,7 +731,7 @@ function toRaw(gvasArray, parentElement, level = 0) {
                 arrowSpan.innerText = '⏵';
                 headerDiv.prepend(arrowSpan);
                 headerDiv.style.cursor = 'pointer';
-                headerDiv.addEventListener('click', function(event) {
+                headerDiv.addEventListener('click', function (event) {
                     if (bodyDiv.style.display == 'none') {
                         bodyDiv.style.display = 'block';
                         arrowSpan.innerText = '⏷';
@@ -761,7 +767,7 @@ function toRaw(gvasArray, parentElement, level = 0) {
                 arrowSpan.innerText = '⏵';
                 headerDiv.prepend(arrowSpan);
                 headerDiv.style.cursor = 'pointer';
-                headerDiv.addEventListener('click', function(event) {
+                headerDiv.addEventListener('click', function (event) {
                     if (bodyDiv.style.display == 'none') {
                         bodyDiv.style.display = 'block';
                         arrowSpan.innerText = '⏷';
@@ -776,7 +782,7 @@ function toRaw(gvasArray, parentElement, level = 0) {
             bodyDiv.style.display = 'none';
             for (const [entryKey, entryValue] of property.value.entries) {
                 let subWrapper = document.createElement('div');
-                subWrapper.classList.add('raw-property-wrapper', `level-${level+1}`);
+                subWrapper.classList.add('raw-property-wrapper', `level-${level + 1}`);
                 let keyDiv = document.createElement('DIV');
                 toRaw(entryKey, keyDiv, level + 2);
                 let entryDiv = document.createElement('DIV');

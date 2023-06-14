@@ -14,37 +14,59 @@
     <script src="main.js"></script>
     <script src="obduction.js"></script>
     <script src="myst.js"></script>
+    <script src="firmament.js"></script>
 </head>
 
 <body>
     <div id="main">
         <div id="intro">
-            <div>Welcome, explorer, to Floydman's <b>Save Swapper</b>! You can use this tool to edit save files from Unreal Engine 4 games developed by Cyan: <i><a href="https://cyan.com/games/obduction/" target="_blank">Obduction</a></i> (2016) and <i><a href="https://cyan.com/games/myst/" target="_blank">Myst</a></i>                (2020). Support is planned for <i><a href="https://fulfillment.fangamer.com/kindling/firmament" target="_blank">Firmament</a></i> (2023) but is currently untested and unsupported.</div>
-            <div class="intro-sub">This app was built using only HTML, JavaScript, and CSS and operates completely client-side within your browser, so your files are never sent anywhere, nor are they handled by anyone other than you. This means the editor is also portable,
-                so you can download it and use it anywhere you have access to a modern browser whether or not you have access to the Internet.</div>
+            <div>Welcome, explorer, to Floydman's <b>Save Swapper</b>! You can use this tool to edit save files from
+                Unreal Engine 4 games developed by Cyan: <i><a href="https://cyan.com/games/obduction/"
+                        target="_blank">Obduction</a></i> (2016), <i><a href="https://cyan.com/games/myst/"
+                        target="_blank">Myst</a></i> (2020), and <i><a href="https://cyan.com/games/firmament/"
+                        target="_blank">Firmament</a></i> (2023).</div>
+            <div class="intro-sub">This app was built using only HTML, JavaScript, and CSS and operates completely
+                client-side within your browser, so your files are never sent anywhere, nor are they handled by anyone
+                other than you. This means the editor is also portable,
+                so you can download it and use it anywhere you have access to a modern browser whether or not you have
+                access to the Internet.</div>
             <div class="intro-sub">
                 <div id="instructions-wrapper" onclick="toggleInstructions()">
-                    <div id="arrow-explainer">Here's how it works: <span id="instruction-arrow">⏵</span> <i>(Click to <span id="show">show</span>.)</i></div>
+                    <div id="arrow-explainer">Here's how it works: <span id="instruction-arrow">⏵</span> <i>(Click to
+                            <span id="show">show</span>.)</i></div>
                     <div id="instructions">
                         <ol>
                             <li>Fully pause or close the game whose save file you are editing.</li>
-                            <li>Locate the save file you want to edit (a single file that ends in ".sav"). On Windows, this should be at C:\Users\<i>YOUR_USERNAME</i>\AppData\Local\<i>GAME_NAME</i>\Saved\SaveGames.</li>
-                            <li>Create a backup of your original save file, just in case. Put it somewhere else and/or change its name.</li>
+                            <li>Locate the save file you want to edit (a single file that ends in ".sav"). On Windows,
+                                this should be at
+                                C:\Users\<i>YOUR_USERNAME</i>\AppData\Local\<i>GAME_NAME</i>\Saved\SaveGames
+                                (alternatively %LOCALAPPDATA%\<i>GAME_NAME</i>\Saved\SaveGames).</li>
+                            <li>Create a backup of your original save file, just in case. Put it somewhere else and/or
+                                change its name.</li>
                             <li>Load the file into this editor by pressing the button.</li>
                             <li>Edit away. Or don't. I'm not here to tell you what to do.</li>
                             <li>Click the save button to download the edited version of your save file.</li>
-                            <li>Put the edited save file where the original was located. Make sure it has the same name as the original.</li>
-                            <li>Return to your game. <b>Do not</b> click "Resume". Instead, explicitly load the save file you edited.</li>
+                            <li>Put the edited save file where the original was located. Make sure it has the same name
+                                as the original.</li>
+                            <li>Return to your game. <b>Do not</b> click "Resume". Instead, explicitly load the save
+                                file you edited.</li>
                             <li>Watch that sweet, sweet infinite health and gold make you unstoppable.</li>
                         </ol>
                     </div>
                 </div>
             </div>
-            <div class="intro-sub">Questions? Comments? Suggestions? You can find me on Reddit as <a href="https://www.reddit.com/user/IAmTheFloydman" target="_blank">IAmTheFloydman</a>. I unashamedly adore receiving praise, so please send a "thank you" if you find this tool
+            <div class="intro-sub">Questions? Comments? Suggestions? You can find me on Reddit as <a
+                    href="https://www.reddit.com/user/IAmTheFloydman" target="_blank">IAmTheFloydman</a>. I unashamedly
+                adore receiving praise, so please send a "thank you" if you find this tool
                 useful. Then I'll also know it's being used!</div>
-            <div class="intro-sub">Other tools I've made are listed <a href="https://thefloydman.github.io/">here</a>.</div>
-            <div id="disclaimer" class="intro-sub">This is fan-made software released with absolutely no promises, guarantees, or obligations. User assumes sole responsibility for any and all consequences and effects arising from use of this software. (Seriously, if an ambiguously-sentient
-                space pinecone or definitely-lethal-from-that-height teleportation book crash through your roof, that's on you.) <i>Myst</i>, <i>Obduction</i>, <i>Firmament</i>, and <i>Cyan</i> are copyrighted by—and trademarks of—Cyan Worlds / Cyan,
+            <div class="intro-sub">Other tools I've made are listed <a href="https://thefloydman.github.io/">here</a>.
+            </div>
+            <div id="disclaimer" class="intro-sub">This is fan-made software released with absolutely no promises,
+                guarantees, or obligations. User assumes sole responsibility for any and all consequences and effects
+                arising from use of this software. (Seriously, if an ambiguously-sentient
+                space pinecone or definitely-lethal-from-that-height teleportation book crash through your roof, that's
+                on you.) <i>Myst</i>, <i>Obduction</i>, <i>Firmament</i>, and <i>Cyan</i> are copyrighted by—and
+                trademarks of—Cyan Worlds / Cyan,
                 Inc. All rights reserved.</div>
         </div>
         <div id="buttons-wrapper">
@@ -52,7 +74,8 @@
                 <input type="file" accept=".sav" id="button-open" oninput="fileChosen()">
             </div>
             <div id="raw-button">
-                <button type="button" id="button-raw" onclick="toggleRaw()" disabled>Switch to raw editor</button> (may freeze your browser while loading)
+                <button type="button" id="button-raw" onclick="toggleRaw()" disabled>Switch to raw editor</button> (may
+                freeze your browser while loading)
             </div>
             <div id="save-button">
                 <button type="button" id="button-save" onclick="savePressed()" disabled>Save</button>
@@ -67,6 +90,7 @@
         <div id="raw" class="game-wrapper"></div>
         <div id="obduction" class="game-wrapper"></div>
         <div id="myst" class="game-wrapper"></div>
+        <div id="firmament" class="game-wrapper"></div>
     </div>
 </body>
 
