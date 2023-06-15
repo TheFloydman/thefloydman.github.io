@@ -1,0 +1,191 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+
+* {
+    font-family: 'Inter', sans-serif;
+    box-sizing: border-box;
+}
+
+button {
+    margin-top: 16px;
+}
+
+div#save-button {
+    margin-bottom: 16px;
+}
+
+div#main {
+    max-width: 960px;
+    margin: 0 auto 0 auto;
+    display: flex;
+    flex-direction: column;
+    gap: 32px;
+}
+
+div.box {
+    border: 1px solid black;
+    border-radius: 8px;
+    padding: 16px;
+}
+
+a {
+    font-weight: 600;
+    text-decoration: none;
+}
+
+div.box-sub {
+    margin-top: 16px;
+}
+
+div.bar-above {
+    border-top: 1px solid black;
+    padding-top: 16px;
+}
+
+div.small-font {
+    font-size: small;
+}
+
+div.heading {
+    font-weight: bold;
+    font-size: larger;
+}
+
+div.indent-1 {
+    margin-left: 32px;
+}
+
+div#ue4-version-wrapper {
+    margin-top: 8px;
+}
+
+div#save-type-wrapper {
+    margin-top: 8px;
+    padding-bottom: 8px;
+}
+
+span#ue4-version,
+span#save-type {
+    font-weight: 600;
+}
+
+div#arrow-explainer {
+    font-weight: 600;
+}
+
+ol {
+    margin: 0;
+    padding-left: 16px;
+}
+
+li {
+    margin-top: 16px;
+}
+
+div#instructions-wrapper {
+    background-color: #c2e3f2;
+    border-radius: 8px;
+    padding: 16px;
+    cursor: pointer;
+}
+
+div#instructions {
+    display: none;
+}
+
+div.property-header {
+    font-weight: 600;
+    margin-bottom: 8px;
+}
+
+div.property-description {
+    font-size: small;
+    margin-bottom: 16px;
+}
+
+div.property-wrapper {
+    padding-top: 16px;
+    padding-bottom: 8px;
+    border-top: 1px solid black;
+}
+
+div.property-value-wrapper {
+    margin-bottom: 8px;
+}
+
+div.sub {
+    border: 0;
+    margin: 0;
+    padding: 0;
+}
+
+div.game-wrapper {
+    display: none;
+}
+
+.caps {
+    text-transform: capitalize;
+}
+
+label {
+    margin-right: 8px;
+}
+
+input.checkbox {
+    margin-right: 8px;
+}
+
+label.right {
+    margin-left: 8px;
+}
+
+label.right[type=checkbox] {
+    margin-left: 4px;
+}
+
+div.raw-property-wrapper.level-0 {
+    border-top: 2px solid black;
+    padding-top: 16px;
+    padding-bottom: 16px;
+}
+
+div.raw-property-wrapper.level-1 {
+    border-top: 1px dashed black;
+    padding-top: 16x;
+    padding-bottom: 16px;
+    margin-left: 16px;
+    margin-right: 16px;
+}
+
+div.raw-property-wrapper.level-2 {
+    padding-top: 8px;
+    padding-bottom: 8px;
+    margin-left: 32px;
+}
+
+div.raw-property-wrapper.level-3 {
+    padding-top: 8px;
+    padding-bottom: 8px;
+    margin-left: 32px;
+}
+
+div.raw-property-wrapper.level-4 {
+    padding-top: 8px;
+    padding-bottom: 8px;
+    margin-left: 48px;
+}
+
+div.raw-property-header {
+    margin-bottom: 8px;
+}
+
+span.raw-property-name {
+    font-weight: 600;
+}
+
+span.raw-property-type {
+    margin-left: 4px;
+}
+
+span.raw-property-arrow {
+    margin-right: 4px;
+}

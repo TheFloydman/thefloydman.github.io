@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>Firmament DVD Maker</title>
+    <meta name="description" content="">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="./style.css">
+    <script src="main.js"></script>
+</head>
+
+<body>
+    <div id="main">
+        <div class="box">
+            <div class="heading">Introduction</div>
+            <div class="box-sub bar-above">Are you someone who helped crowdfund <i>Firmament</i> through Kickstarter
+                or Fangamer
+                at the <b>Limited
+                    Edition Box</b> level or above? Would you like to have a DVD or Blu-Ray copy of the game as part of
+                your physical box? Then this is the project for you!</div>
+            <div class="box-sub">Before we get into the details, I want to make it clear I am a big Cyan fan. I think
+                the game studio and its employees and contractors are good people who are good at what they do, and I
+                understand why they
+                chose not to include a physical disk with their physical box. At the same time, I am still disappointed
+                a physical disk wasn't included because I place more value in having a physical version of the game as
+                opposed to not. This project is neither meant to defame nor inflame, but to fill a gap.</div>
+            <div class="box-sub">There are two parts to this project: compression and a label. The
+                former is only necessary if you wish to fit the installer on a single DVD&plusmn;R DL (DVD&plusmn;R9)
+                disk. That's a dual layer DVD. If you are using a Blu-Ray disk, compression isn't necessary.</div>
+            <div class="box-sub bar-above">Questions? Comments? Suggestions? You can find me on <a
+                    href="https://www.reddit.com/user/IAmTheFloydman" target="_blank">Reddit</a> and <a
+                    href="https://discord.com/users/288158592878772224" target="_blank">Discord</a>. I unashamedly
+                adore receiving praise, so please send a "thank you" if you find this project
+                useful.</div>
+            <div class="box-sub">Other tools I've made are listed <a href="https://thefloydman.github.io/">here</a>.
+            </div>
+            <div class="box-sub bar-above small-font">This project is released under the <a
+                    href="https://mit-license.org/" target="_blank">MIT License</a>. <i>Firmament</i> and <i>Cyan</i>
+                are trademarks of Cyan, Inc. &copy; Cyan, Inc. All rights
+                reserved.
+            </div>
+        </div>
+        <div class="box">
+            <div class="heading">Compression</div>
+            <div class="box-sub bar-above">Compressing your installer is straightforward but a bit lengthy. For
+                reference, I'm using an Intel Core i5-9400 CPU with 32 GB of RAM, and compression took about 1.5 hours,
+                while decompression from the DVD took about 20 minutes. Add disk burning time to that.</div>
+            <div class="box-sub"><b>Please note:</b> I highly recommend running this tool only on the official offline
+                GOG
+                installer. This project does not generate a custom installer, and the official one will ensure you end
+                up with all the correct dependencies.</div>
+            <div class="box-sub bar-above">
+                <div><b>Instructions</b></div>
+                <div class="indent-1">
+                    <ol>
+                        <li>Download the compression software: <a
+                                href="./firmament_compressor.zip">firmament_compressor.zip</a> (18.6 MB)</li>
+                        <li>Open README.txt and follow the instructions to create a compressed archive.</li>
+                        <li>Write the contents of the "burn" folder to DVD.</li>
+                        <li>To get your original installer back, just insert your DVD and run "decompress.bat".</li>
+                    </ol>
+                </div>
+            </div>
+            <div class="box-sub bar-above"><b>Explanation</b></div>
+            <div class="box-sub">There are three steps to this compression process: precompression, deduplication, and
+                compression.</div>
+            <div class="box-sub"><i>Precompression</i> is done by XTool. It decompresses anything it can in the hope
+                that we can compress those parts better in a later step. This will result in an archive about twice as
+                big as your original installation directory.</div>
+            <div class="box-sub"><i>Deduplication</i> is the job of SREP. It finds and removes redundant data. This will
+                reduce the size of the precompressed archive by about 25%.</div>
+            <div class="box-sub"><i>Compression</i> is performed by 7-zip and is exactly what you're accustomed to: A
+                compression algorithm (LZMA2 in this case) is used to reduce the size of the deduplicated archive as
+                much as possible, resulting in an archive about 60% smaller than the original.</div>
+        </div>
+        <div class="box">
+            <div class="heading">Label</div>
+            <div class="box-sub bar-above">Coming soon.</div>
+        </div>
+    </div>
+</body>
+
+</html>
