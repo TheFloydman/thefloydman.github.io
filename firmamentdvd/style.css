@@ -54,6 +54,10 @@ div.indent-1 {
     margin-left: 32px;
 }
 
+img {
+    max-width: 50%;
+}
+
 div#ue4-version-wrapper {
     margin-top: 8px;
 }
