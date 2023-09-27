@@ -40,19 +40,25 @@ async function onLoad() {
         }
 
         const scrapHeaderStaticWrapper = document.getElementById("scrap-dedicated-static-wrapper");
-        const user = await getUser();
-        if (user) {
-            if (scrap.get("createdUser")) {
+        getUser().then(async user => {
+            if (scrap.createdUser && scrap.updatedUser && scrap.createdUser.id == scrap.updatedUser.id) {
                 const createdSpan = scrapHeaderStaticWrapper.querySelector(".attribution-user-created");
-                const userDoc = await firebase.getDoc(scrap.get("createdUser"));
-                if (userDoc.get("displayName")) createdSpan.innerText = userDoc.get("displayName");
-            }
-            if (scrap.get("updatedUser")) {
                 const updatedSpan = scrapHeaderStaticWrapper.querySelector(".attribution-user-updated");
-                const userDoc = await firebase.getDoc(scrap.get("updatedUser"));
-                if (userDoc.get("displayName")) updatedSpan.innerText = userDoc.get("displayName");
+                const userDoc = await firebase.getDoc(scrap.get("createdUser"));
+                if (userDoc.get("displayName")) createdSpan.innerText = updatedSpan.innerText = userDoc.get("displayName");
+            } else {
+                if (scrap.get("createdUser")) {
+                    const createdSpan = scrapHeaderStaticWrapper.querySelector(".attribution-user-created");
+                    const userDoc = await firebase.getDoc(scrap.get("createdUser"));
+                    if (userDoc.get("displayName")) createdSpan.innerText = userDoc.get("displayName");
+                }
+                if (scrap.get("updatedUser")) {
+                    const updatedSpan = scrapHeaderStaticWrapper.querySelector(".attribution-user-updated");
+                    const userDoc = await firebase.getDoc(scrap.get("updatedUser"));
+                    if (userDoc.get("displayName")) updatedSpan.innerText = userDoc.get("displayName");
+                }
             }
-        }
+        });
 
         const messageDiv = document.getElementById("scrap-message");
 
@@ -72,16 +78,26 @@ async function onLoad() {
             }
         })
 
-        const allSnippetsReferences = scrap.get("snippets");
         let badSnippets = 0;
-        allSnippetsReferences.forEach(async snippetReference => {
-            const snippet = await firebase.getDoc(snippetReference);
+        const snippetSnapshot = await firebase.getDocs(firebase.query(firebase.collection("snippets"), firebase.where("scrap", "==", scrapReference)));
+        const smallerEditionRefs = [...editionReferences.docs];
+        console.log(smallerEditionRefs);
+        const editionMap = new Map();
+        snippetSnapshot.forEach(async snippet => {
             if (!snippet.data()) {
                 console.error(`Cannot find snippet ${snippet.id}. Skipping.`);
                 badSnippets++;
                 return;
             }
-            const edition = await firebase.getDoc(snippet.get("edition"));
+            for (let i = 0; i < smallerEditionRefs.length; i++) {
+                if (smallerEditionRefs[i].id == snippet.get("edition").id) {
+                    const returnItem = smallerEditionRefs[i];
+                    smallerEditionRefs.splice(i, 1);
+                    editionMap.set(snippet.get("edition").id, returnItem);
+                    break;
+                }
+            }
+            const edition = editionMap.get(snippet.get("edition").id);
             json = {
                 id: snippet.id,
                 scrap: scrap,
@@ -100,15 +116,15 @@ async function onLoad() {
             if (snippet.get("paragraph")) json.paragraph = snippet.get("paragraph");
             if (snippet.get("sentence")) json.sentence = snippet.get("sentence");
             snippets.push(json);
-            if (snippets.length == allSnippetsReferences.length - badSnippets) {
+            if (snippets.length == snippetSnapshot.size - badSnippets) {
                 snippets.sort((a, b) => {
                     return new Date(b.edition.published).getTime() - new Date(a.edition.published).getTime();
                 });
-                fillPage(firebase, scrapReference);
+                fillPage(firebase, scrapReference, editionMap);
             }
         });
 
-        if (allSnippetsReferences.length == 0) {
+        if (snippetSnapshot.size == 0) {
             const snippetsToPost = await createPotentialSnippets(firebase, scrapReference);
             const snippetsWrapper = document.getElementById("snippets-wrapper");
             for (const one of snippetsToPost) {
@@ -148,7 +164,7 @@ async function onLoad() {
     }
 }
 
-async function fillPage(firebase, scrapRef) {
+async function fillPage(firebase, scrapRef, editionMap) {
     const snippetsWrapper = document.getElementById("snippets-wrapper");
     for (const snippet of snippets) {
 
@@ -174,22 +190,27 @@ async function fillPage(firebase, scrapRef) {
         const textSpan = snippetExisting.querySelector(".snippet-text-existing");
         textSpan.innerHTML = snippet.text.replace(/\*(.*)\*/g, "<i>$1</i>").replaceAll("\\n", "<br>");
 
-        const user = await getUser();
-        if (user) {
-            if (snippet.createdUser) {
+        getUser().then(async user => {
+            if (snippet.createdUser && snippet.updatedUser && snippet.createdUser.id == snippet.updatedUser.id) {
                 const createdSpan = snippetExisting.querySelector(".attribution-user-created");
-                const userDoc = await firebase.getDoc(snippet.createdUser);
-                if (userDoc.get("displayName")) createdSpan.innerText = userDoc.get("displayName");
-            }
-            if (snippet.updatedUser) {
                 const updatedSpan = snippetExisting.querySelector(".attribution-user-updated");
-                const userDoc = await firebase.getDoc(snippet.updatedUser);
-                if (userDoc.get("displayName")) updatedSpan.innerText = userDoc.get("displayName");
+                const userDoc = await firebase.getDoc(snippet.createdUser);
+                if (userDoc.get("displayName")) createdSpan.innerText = updatedSpan.innerText = userDoc.get("displayName");
+            } else {
+                if (snippet.createdUser) {
+                    const createdSpan = snippetExisting.querySelector(".attribution-user-created");
+                    const userDoc = await firebase.getDoc(snippet.createdUser);
+                    if (userDoc.get("displayName")) createdSpan.innerText = userDoc.get("displayName");
+                }
+                if (snippet.updatedUser) {
+                    const updatedSpan = snippetExisting.querySelector(".attribution-user-updated");
+                    const userDoc = await firebase.getDoc(snippet.updatedUser);
+                    if (userDoc.get("displayName")) updatedSpan.innerText = userDoc.get("displayName");
+                }
             }
-        }
+        })
 
-        const editionRef = firebase.doc("editions", snippet.edition.id);
-        const editionDoc = await firebase.getDoc(editionRef);
+        const editionDoc = editionMap.get(snippet.edition.id);
         const snippetEditor = await createSnippetEditor(firebase, editionDoc, snippetExisting, "update", scrapRef, snippet.id);
 
         function fillEditorLocation(type) {
