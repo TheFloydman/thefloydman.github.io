@@ -3,28 +3,6 @@ const firebaseGlobal = import("./firebase.js");
 firebaseGlobal.then(firebase => {
     firebase.onAuthStateChanged(firebase.auth, (user) => {
         userGlobal = user;
-        if (userGlobal) {
-            // User is signed in, see docs for a list of available properties
-            // https://firebase.google.com/docs/reference/js/auth.user
-            console.log(userGlobal.toJSON());
-            const loginExit = document.getElementById("login-exit");
-            if (loginExit) {
-                loginExit.style.display = "block";
-            }
-            const loginUsername = document.getElementById("login-username");
-            if (loginUsername) {
-                loginUsername.style.display = "block";
-            }
-            addModMenuItems();
-            onUserLoaded();
-
-        } else {
-            // User is signed out
-            const loginEntry = document.getElementById("login-entry");
-            if (loginEntry) {
-                loginEntry.style.display = "block";
-            }
-        }
     });
 })
     .catch(error => { console.error(error); });
@@ -39,10 +17,10 @@ async function getUser() {
                 resolve(userGlobal);
             }
             tries++
-            if (tries > 100) {
+            if (tries > 10) {
                 resolve(false);
             }
-        }, 100);
+        }, 500);
     });
 }
 
@@ -55,10 +33,10 @@ function getFirebase() {
                 resolve(firebaseGlobal);
             }
             tries++
-            if (tries > 100) {
+            if (tries > 10) {
                 resolve(false);
             }
-        }, 100);
+        }, 500);
     });
 }
 

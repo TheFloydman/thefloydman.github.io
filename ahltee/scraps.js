@@ -4,6 +4,8 @@ async function onLoad() {
     const betterHtml = html.replace("./login.html?origin=&#46;&#47;index.html", "./login.html?origin=&#46;&#47;scraps.html");
     const wrapper = document.getElementById("main-wrapper");
     wrapper.insertAdjacentHTML("afterbegin", betterHtml);
+    const user = await getUser();
+    if (user) { onUserLoaded(); } else { onUserNotLoaded() }
 
     const firebase = await getFirebase();
     if (firebase) {
@@ -264,8 +266,6 @@ async function updateEditions(firebase, novelRef) {
     }
 }
 
-function onUserLoaded() { }
-
 async function filter() {
     const novelsWrapper = document.getElementById("filter-novels-wrapper");
     const checkboxElements = novelsWrapper.getElementsByClassName("novel-input");
@@ -285,4 +285,22 @@ async function filter() {
     const urlParams = new URLSearchParams(data);
     const paramString = urlParams.toString().length > 0 ? "?" + urlParams.toString() : "";
     location.href = "./scraps.html" + paramString;
+}
+
+function onUserLoaded() {
+    // User is signed in, see docs for a list of available properties
+    // https://firebase.google.com/docs/reference/js/auth.user
+    const loginExit = document.getElementById("login-exit");
+    if (loginExit) {
+        loginExit.style.display = "block";
+    }
+    const loginUsername = document.getElementById("login-username");
+    if (loginUsername) {
+        loginUsername.style.display = "block";
+    }
+    addModMenuItems();
+    document.getElementById("login-entry").style.display = "none";
+}
+
+function onUserNotLoaded() {
 }

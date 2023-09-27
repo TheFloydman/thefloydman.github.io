@@ -72,7 +72,6 @@ body {
     display: block;
 }
 
-div#login-entry,
 div#login-exit {
     display: none;
 }

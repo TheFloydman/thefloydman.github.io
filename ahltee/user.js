@@ -4,16 +4,8 @@ async function onLoad() {
     const betterHtml = html.replace("./login.html?origin=&#46;&#47;index.html", "./login.html?origin=&#46;&#47;user.html");
     const wrapper = document.getElementById("main-wrapper");
     wrapper.insertAdjacentHTML("afterbegin", betterHtml);
-}
-
-async function onUserLoaded() {
     const user = await getUser();
-    if (user) {
-        const displayName = document.getElementById("user-username-input");
-        if (user.displayName) {
-            displayName.value = user.displayName;
-        }
-    }
+    if (user) { onUserLoaded(); } else { onUserNotLoaded() }
 }
 
 async function saveChanges() {
@@ -74,4 +66,30 @@ async function saveChanges() {
             return;
         }
     }
+}
+
+async function onUserLoaded() {
+    // User is signed in, see docs for a list of available properties
+    // https://firebase.google.com/docs/reference/js/auth.user
+    const loginExit = document.getElementById("login-exit");
+    if (loginExit) {
+        loginExit.style.display = "block";
+    }
+    const loginUsername = document.getElementById("login-username");
+    if (loginUsername) {
+        loginUsername.style.display = "block";
+    }
+    addModMenuItems();
+    const user = await getUser();
+    if (user) {
+        const displayName = document.getElementById("user-username-input");
+        if (user.displayName) {
+            displayName.value = user.displayName;
+        }
+    }
+
+    document.getElementById("login-entry").style.display = "none";
+}
+
+function onUserNotLoaded() {
 }
