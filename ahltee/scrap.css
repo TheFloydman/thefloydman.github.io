@@ -195,7 +195,7 @@ input#scrap-dedicated-description-editor-input {
 }
 
 div.snippet-wrapper {
-    display: flex;
+    display: none;
 }
 
 div.potential-snippet {

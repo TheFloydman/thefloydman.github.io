@@ -229,3 +229,7 @@ div#filter-novels-wrapper {
     position: relative;
     top: -1px;
 }
+
+div.uncreated-scrap-wrapper {
+    display: none;
+}

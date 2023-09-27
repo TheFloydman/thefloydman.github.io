@@ -291,6 +291,10 @@ async function createPotentialSnippets(firebase, scrapRef, snippetsWrapper) {
         const potentialSnippetTemplate = await fetch("./templates/snippet-potential.html");
         const potentialSnippetHTML = await potentialSnippetTemplate.text();
         const uncreatedSnippetStatic = createElementWithClass("div", "snippet-wrapper", potentialSnippetHTML);
+        const user = await getUser();
+        if (user) {
+            uncreatedSnippetStatic.style.display = "flex";
+        }
         uncreatedSnippetStatic.querySelector(".edition-name").innerText = editionData.name;
         uncreatedSnippetStatic.querySelector(".edition-date").innerText = dateNumToWords(editionData.published);
 
@@ -370,6 +374,10 @@ function onUserLoaded() {
     }
     addModMenuItems();
     document.getElementById("login-entry").style.display = "none";
+    const potentialSnippets = document.getElementsByClassName("snippet-wrapper");
+    for (let i = 0; i < potentialSnippets.length; i++) {
+        potentialSnippets.item(i).style.display = "flex";
+    }
 }
 
 function onUserNotLoaded() {

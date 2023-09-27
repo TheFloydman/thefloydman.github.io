@@ -185,7 +185,11 @@ div.page-title {
     font-size: x-large;
     font-weight: bold;
     font-variant: small-caps;
-    margin-bottom: 16px;
+    text-align: center;
+}
+
+div.page-subtitle {
+    font-size: larger;
     text-align: center;
 }
 

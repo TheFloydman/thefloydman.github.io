@@ -158,6 +158,8 @@ async function onLoad() {
                 messageDiv.style.display = "block";
             }
         });
+        const user = await getUser();
+        if (user) uncreatedScrapWrapper.style.display = "block";
         scrapsWrapper.append(uncreatedScrapWrapper);
 
         let posted = 0;
@@ -300,6 +302,10 @@ function onUserLoaded() {
     }
     addModMenuItems();
     document.getElementById("login-entry").style.display = "none";
+    const potentialScraps = document.getElementsByClassName("uncreated-scrap-wrapper");
+    for (let i = 0; i < potentialScraps.length; i++) {
+        potentialScraps.item(i).style.display = "block";
+    }
 }
 
 function onUserNotLoaded() {
