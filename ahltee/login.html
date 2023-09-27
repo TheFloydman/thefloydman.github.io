@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<!--[if lt IE 7]>      <html class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
+<!--[if IE 7]>         <html class="no-js lt-ie9 lt-ie8"> <![endif]-->
+<!--[if IE 8]>         <html class="no-js lt-ie9"> <![endif]-->
+<!--[if gt IE 8]>      <html class="no-js"> <![endif]-->
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>Ahltee | Sign in</title>
+    <meta name="description" content="Tracking changes in the Myserium 2023 edition of Book of Atrus.">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://use.typekit.net/bhr6yfg.css">
+    <link rel="stylesheet" href="./common.css">
+    <link rel="stylesheet" href="./login.css">
+    <script src="https://www.gstatic.com/firebasejs/10.2.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.2.0/firebase-auth-compat.js"></script>
+    <script type="module" src="./firebase.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/ui/6.1.0/firebase-ui-auth.js"></script>
+    <link type="text/css" rel="stylesheet" href="https://www.gstatic.com/firebasejs/ui/6.1.0/firebase-ui-auth.css" />
+    <script async defer src="./common.js"></script>
+    <script async defer src="./login.js"></script>
+</head>
+
+<body onload="onLoad()">
+    <!--[if lt IE 7]>
+            <p class="browsehappy">You are using an <strong>outdated</strong> browser. Please <a href="#">upgrade your browser</a> to improve your experience.</p>
+        <![endif]-->
+    <div id="main-wrapper">
+        <div class="page-title">Sign In</div>
+        <div id="login-explainer">User accounts are created and handled by Google's Firebase API. No password required!
+        </div>
+
+        <div id="login-container">
+            <label>Email: <input type="email" id="email-input"></label>
+            <button onclick="signInPressed()">Send email</button>
+        </div>
+        <div id="message">Login link sent to your email.</div>
+    </div>
+</body>
+
+</html>

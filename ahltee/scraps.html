@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<!--[if lt IE 7]>      <html class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
+<!--[if IE 7]>         <html class="no-js lt-ie9 lt-ie8"> <![endif]-->
+<!--[if IE 8]>         <html class="no-js lt-ie9"> <![endif]-->
+<!--[if gt IE 8]>      <html class="no-js"> <![endif]-->
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>Ahltee | Scraps</title>
+    <meta name="description" content="Tracking changes in the various editions of Myst: The Book of Atrus.">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://use.typekit.net/bhr6yfg.css">
+    <link rel="stylesheet" href="./libraries/awesomplete.css">
+    <link rel="stylesheet" href="./common.css">
+    <link rel="stylesheet" href="./scraps.css">
+    <script src="https://www.gstatic.com/firebasejs/10.2.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.2.0/firebase-firestore-compat.js"></script>
+    <script async defer src="./libraries/awesomplete.min.js"></script>
+    <script async defer src="./common.js"></script>
+    <script async defer src="./scraps.js"></script>
+</head>
+
+<body onload="onLoad()">
+    <!--[if lt IE 7]>
+            <p class="browsehappy">You are using an <strong>outdated</strong> browser. Please <a href="#">upgrade your browser</a> to improve your experience.</p>
+        <![endif]-->
+
+    <div id="main-wrapper">
+        <div class="page-title">Scraps</div>
+        <div id="search-wrapper">
+            <div id="filter-novels-wrapper" class="snippet-input-wrapper" data-label="Novels">
+            </div>
+            <div class="scrap-tags-wrapper snippet-input-wrapper" data-label="Tags">
+                <input id="filter-tags-input" class="scrap-tags-editor" type="text"
+                    placeholder="Comma-separated tags; whitespace will be removed">
+            </div>
+            <div id="filter-button-wrapper">
+                <button id="filter-button" onclick="filter()">Filter</button>
+            </div>
+        </div>
+        <div id="loader-wrapper"><span class="loader">Loading</span></div>
+        <div id="scraps-wrapper"></div>
+    </div>
+</body>
+
+</html>

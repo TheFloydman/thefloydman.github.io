@@ -1,0 +1,17 @@
+div#message {
+    margin-top: 16px;
+}
+
+div.message-error {
+    background-color: crimson;
+    color: white;
+    padding: 6px;
+    border-radius: 6px;
+}
+
+div.message-success {
+    background-color: green;
+    color: white;
+    padding: 6px;
+    border-radius: 6px;
+}

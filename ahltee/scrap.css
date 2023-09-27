@@ -1,0 +1,261 @@
+div#scrap-dedicated-description-static {
+    font-weight: bold;
+    width: max-content;
+    margin: 0 auto 0 auto;
+}
+
+div.scrap-dedicated-novel {
+    font-style: italic;
+    font-size: large;
+    width: max-content;
+    margin: 0 auto 4px auto;
+}
+
+div#snippets-wrapper {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+span.snippet-edition-name {
+    font-weight: bold;
+}
+
+div.snippet-location-editor {
+    display: flex;
+    gap: 4px;
+}
+
+div.snippet-location-part {
+    text-transform: capitalize;
+}
+
+div.snippet-text-editor {
+    display: none;
+}
+
+div.snippet-edition-editor {
+    display: none;
+}
+
+span.snippet-text-editor {
+    display: inline-block;
+    font-family: "dupincel-variable", serif;
+    font-size: medium;
+    padding: 6px 6px 2px 6px;
+    min-height: 1lh;
+    min-width: 64px;
+    resize: none;
+    border: none;
+    border-radius: 4px;
+    overflow: hidden;
+    background-color: white;
+    max-width: 100%;
+}
+
+.snippet-text-editor[contenteditable]:empty::before {
+    cursor: text;
+    content: "Use * for italics, < > << >> for quotes, and ' for apostrophes.";
+    color: gray;
+}
+
+span.snippet-text-editor:focus {
+    outline: none;
+}
+
+input.snippet-location-editor-part {
+    width: 128px;
+}
+
+input.snippet-location-editor-section,
+input.snippet-location-editor-paragraph,
+input.snippet-location-editor-sentence {
+    width: 64px;
+}
+
+div.potential-snippet {
+    display: flex;
+    background-color: #ccffd5;
+    border-radius: 8px;
+    padding: 8px 12px 8px 12px;
+    width: 100%;
+}
+
+div.potential-snippet:hover {
+    cursor: pointer;
+    box-shadow: 4px 4px 6px rgba(0, 0, 0, 0.5);
+}
+
+div.snippet-editor-update {
+    display: none;
+    flex-direction: column;
+    gap: 8px;
+}
+
+div.snippet-editor-create {
+    display: none;
+    background-color: #ccffd5;
+    border-radius: 8px;
+    padding: 8px 12px 8px 12px;
+    box-shadow: 4px 4px 6px rgba(0, 0, 0, 0.5);
+    flex-direction: column;
+    gap: 8px;
+}
+
+div.message-wrapper {
+    display: none;
+    color: white;
+    border-radius: 4px;
+}
+
+div.message-good {
+    background-color: green;
+    padding: 4px;
+}
+
+div.message-bad {
+    background-color: crimson;
+    padding: 4px;
+}
+
+span.edition-name {
+    font-weight: bold;
+}
+
+div.snippet-existing {
+    display: "none";
+}
+
+div.snippet-existing-wrapper {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    background-color: #9abce8;
+    border-radius: 8px;
+    padding: 8px 12px 8px 12px;
+}
+
+div.snippet-existing-wrapper:hover {
+    box-shadow: 4px 4px 6px rgba(0, 0, 0, 0.5);
+    cursor: pointer;
+}
+
+span.snippet-text-existing {
+    display: inline-block;
+    font-family: "dupincel-variable", serif;
+    background-color: white;
+    padding: 6px 6px 2px 6px;
+    border-radius: 4px;
+    width: max-content;
+    max-width: calc(100% - 12px);
+}
+
+div.snippet-editor-update {
+    background-color: #9abce8;
+    border-radius: 8px;
+    padding: 8px 12px 8px 12px;
+    box-shadow: 4px 4px 6px rgba(0, 0, 0, 0.5);
+}
+
+input#scrap-tags-editor {
+    width: calc(100% - 8px);
+}
+
+div#scrap-tags-existing {
+    width: max-content;
+    margin: 0 auto 0 auto;
+}
+
+div#scrap-dedicated-static-wrapper {
+    background-color: #dfdfdf;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    border-radius: 8px 8px 0 0;
+    padding: 8px 12px 8px 12px;
+}
+
+div#scrap-dedicated-static-wrapper:hover {
+    cursor: pointer;
+    box-shadow: 4px 4px 6px rgba(0, 0, 0, 0.5);
+}
+
+div#scrap-dedicated-editor-wrapper {
+    background-color: #dfdfdf;
+    display: none;
+    flex-direction: column;
+    gap: 4px;
+    border-radius: 8px 8px 0 0;
+    padding: 8px 12px 8px 12px;
+    box-shadow: 4px 4px 6px rgba(0, 0, 0, 0.5);
+}
+
+input#scrap-dedicated-description-editor-input {
+    width: calc(100% - 8px);
+}
+
+div.snippet-wrapper {
+    display: flex;
+}
+
+div.potential-snippet {
+    display: flex;
+    gap: 4px;
+}
+
+div.snippet-input-wrapper::before {
+    content: attr(data-label);
+    position: absolute;
+    font-weight: bold;
+    font-size: small;
+    margin-top: -0.85lh;
+    margin-left: 1px;
+    color: rgb(0, 0, 0, 0.75);
+}
+
+div.snippet-input-wrapper {
+    margin-top: 0.75lh;
+}
+
+div.snippet-location-arrow {
+    margin-top: 0.75lh;
+}
+
+div.snippet-inputspan-wrapper::before {
+    content: attr(data-label);
+    position: absolute;
+    font-weight: bold;
+    font-size: small;
+    margin-top: -1lh;
+    margin-left: 1px;
+    color: rgb(0, 0, 0, 0.75);
+}
+
+div.snippet-inputspan-wrapper {
+    margin-top: 0.9lh;
+}
+
+.awesomplete {
+    width: 100%;
+}
+
+div.snippet-attribution-wrapper {
+    display: flex;
+    justify-content: space-between;
+    border-top: 1px solid black;
+    margin-top: 2px;
+    padding-top: 4px;
+    font-size: small;
+    font-style: italic;
+}
+
+span.attribution-user-created,
+span.attribution-user-updated {
+    font-weight: bold;
+}
+
+div#main-wrapper {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}

@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<!--[if lt IE 7]>      <html class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
+<!--[if IE 7]>         <html class="no-js lt-ie9 lt-ie8"> <![endif]-->
+<!--[if IE 8]>         <html class="no-js lt-ie9"> <![endif]-->
+<!--[if gt IE 8]>      <html class="no-js"> <!--<![endif]-->
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>Ahltee | ...</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://use.typekit.net/bhr6yfg.css">
+    <link rel="stylesheet" href="./libraries/awesomplete.css">
+    <link rel="stylesheet" href="./common.css">
+    <link rel="stylesheet" href="./scrap.css">
+    <script src="https://www.gstatic.com/firebasejs/10.2.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.2.0/firebase-firestore-compat.js"></script>
+    <script async defer src="./libraries/awesomplete.min.js"></script>
+    <script async defer src="./common.js"></script>
+    <script async defer src="./scrap.js"></script>
+</head>
+
+<body onload="onLoad()">
+    <!--[if lt IE 7]>
+            <p class="browsehappy">You are using an <strong>outdated</strong> browser. Please <a href="#">upgrade your browser</a> to improve your experience.</p>
+        <![endif]-->
+
+    <div id="main-wrapper">
+        <div id="loader-wrapper"><span class="loader">Loading</span></div>
+        <div id="scrap-header">
+            <div id="scrap-dedicated-static-wrapper">
+                <div id="scrap-dedicated-description-static"></div>
+                <div class="scrap-dedicated-novel"></div>
+                <div id="scrap-tags-existing">
+                    &#8202;
+                    <span id="scrap-tags-existing-label">Tags:</span>
+                    <span id="scrap-tags-existing-contents"></span>
+                </div>
+                <div class="snippet-attribution-wrapper">
+                    <div class="snippet-attribution-created">
+                        <span class="attribution-label">Created by</span>
+                        <span class="attribution-user-created">Anonymous</span>
+                    </div>
+                    <div class="snippet-attribution-updated">
+                        <span class="attribution-label">Last updated by</span>
+                        <span class="attribution-user-updated">Anonymous</span>
+                    </div>
+                </div>
+            </div>
+            <div id="scrap-dedicated-editor-wrapper">
+                <div id="scrap-dedicated-description-editor">
+                    <input type="text" id="scrap-dedicated-description-editor-input" placeholder="Description">
+                </div>
+                <div class="scrap-dedicated-novel"></div>
+                <div id="scrap-tags-editor-wrapper">
+                    <input type="text" id="scrap-tags-editor"
+                        placeholder="Tags separated by commas; whitespace will be removed">
+                </div>
+                <div id="scrap-dedicated-buttons-wrapper">
+                    <button id="scrap-submit">Submit for review</button>
+                    <button onclick="scrapDiscard()">Discard</button>
+                </div>
+                <div class="message-wrapper" id="scrap-message"></div>
+            </div>
+        </div>
+        <div id="snippets-wrapper"></div>
+    </div>
+</body>
+
+</html>
