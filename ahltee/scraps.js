@@ -188,7 +188,7 @@ async function onLoad() {
             const attributionsCreatedWrapper = createElementWithClass("div", "attribution-created-wrapper");
             attributionsCreatedWrapper.append(attributionCreatedLabel, attributionCreatedUser);
 
-            const attributionUpdatedLabel = createElementWithClass("span", "attribution-label", "Updated by ");
+            const attributionUpdatedLabel = createElementWithClass("span", "attribution-label", "Last updated by ");
             const attributionUpdatedUser = createElementWithClass("span", "attribution-updated-user", "Anonymous");
             const updatedUserDoc = scrap.get("createdUser").id == scrap.get("updatedUser").id ? createdUserDoc : await firebase.getDoc(scrap.get("updatedUser"));
             if (updatedUserDoc.get("displayName")) attributionUpdatedUser.innerText = updatedUserDoc.get("displayName");
