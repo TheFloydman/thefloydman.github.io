@@ -81,7 +81,6 @@ async function onLoad() {
         let badSnippets = 0;
         const snippetSnapshot = await firebase.getDocs(firebase.query(firebase.collection("snippets"), firebase.where("scrap", "==", scrapReference)));
         const smallerEditionRefs = [...editionReferences.docs];
-        console.log(smallerEditionRefs);
         const editionMap = new Map();
         snippetSnapshot.forEach(async snippet => {
             if (!snippet.data()) {
@@ -115,6 +114,7 @@ async function onLoad() {
             if (snippet.get("section")) json.section = snippet.get("section");
             if (snippet.get("paragraph")) json.paragraph = snippet.get("paragraph");
             if (snippet.get("sentence")) json.sentence = snippet.get("sentence");
+            if (edition.get("isbn")) json.edition.isbn = formatISBN(edition.get("isbn"));
             snippets.push(json);
             if (snippets.length == snippetSnapshot.size - badSnippets) {
                 snippets.sort((a, b) => {
@@ -173,9 +173,13 @@ async function fillPage(firebase, scrapRef, editionMap) {
         const snippetExisting = createElementWithClass("div", "snippet-existing-wrapper", html);
 
         const editionNameSpan = snippetExisting.querySelector(".snippet-edition-name");
-        const editionPublishedSpan = snippetExisting.querySelector(".snippet-edition-published");
         editionNameSpan.innerText = snippet.edition.name;
+        const editionPublishedSpan = snippetExisting.querySelector(".snippet-edition-published");
         editionPublishedSpan.innerText = dateNumToWords(snippet.edition.published);
+        if (snippet.edition.isbn) {
+            const editionISBNSpan = snippetExisting.querySelector(".snippet-edition-isbn");
+            editionISBNSpan.innerText = snippet.edition.isbn;
+        }
         usedEditions.push(snippet.edition.id);
 
         function fillExistingLocation(type) {
@@ -246,6 +250,9 @@ async function createSnippetEditor(firebase, editionDoc, staticCounterpart, subm
     const editionData = editionDoc.data();
     snippetEditor.querySelector(".snippet-edition-name").innerText = editionData.name;
     snippetEditor.querySelector(".snippet-edition-published").innerText = dateNumToWords(editionData.published);
+    if (editionData.isbn) {
+        snippetEditor.querySelector(".snippet-edition-isbn").innerText = formatISBN(editionData.isbn);
+    }
     const partInput = snippetEditor.querySelector('.snippet-location-editor-part');
     const textInput = snippetEditor.querySelector('.snippet-text-editor');
 
@@ -312,12 +319,14 @@ async function createPotentialSnippets(firebase, scrapRef, snippetsWrapper) {
         const potentialSnippetTemplate = await fetch("./templates/snippet-potential.html");
         const potentialSnippetHTML = await potentialSnippetTemplate.text();
         const uncreatedSnippetStatic = createElementWithClass("div", "snippet-wrapper", potentialSnippetHTML);
-        const user = await getUser();
-        if (user) {
-            uncreatedSnippetStatic.style.display = "flex";
-        }
+        getUser().then(user => {
+            if (user) {
+                uncreatedSnippetStatic.style.display = "flex";
+            }
+        });
         uncreatedSnippetStatic.querySelector(".edition-name").innerText = editionData.name;
         uncreatedSnippetStatic.querySelector(".edition-date").innerText = dateNumToWords(editionData.published);
+        if (editionData.isbn) uncreatedSnippetStatic.querySelector(".edition-isbn").innerText = formatISBN(editionData.isbn);
 
         const uncreatedSnippetEditor = await createSnippetEditor(firebase, editionRef, uncreatedSnippetStatic, "create", scrapRef);
 

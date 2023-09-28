@@ -4,8 +4,9 @@ async function onLoad() {
     const betterHtml = html.replace("./login.html?origin=&#46;&#47;index.html", "./login.html?origin=&#46;&#47;scraps.html");
     const wrapper = document.getElementById("main-wrapper");
     wrapper.insertAdjacentHTML("afterbegin", betterHtml);
-    const user = await getUser();
-    if (user) { onUserLoaded(); } else { onUserNotLoaded() }
+    getUser().then(user => {
+        if (user) { onUserLoaded(); } else { onUserNotLoaded() }
+    });
 
     const firebase = await getFirebase();
     if (firebase) {
@@ -44,8 +45,12 @@ async function onLoad() {
         const uncreatedScrapEditor = uncreatedScrapWrapper.querySelector(".uncreated-scrap-editor");
         const scrapNovelEditor = uncreatedScrapEditor.querySelector(".scrap-novel-editor");
         const novelDocs = await firebase.getDocs(firebase.collection("novels"));
+        const novelMap = new Map();
+        for (let i = 0; i < novelDocs.size; i++) {
+            novelMap.set(novelDocs.docs[i].id, novelDocs.docs[i]);
+        }
         let novelNumber = 0;
-        novelDocs.forEach(async novelDoc => {
+        novelDocs.forEach(novelDoc => {
             const novelData = novelDoc.data();
             const option = createElementWithClass("option", "", novelData.title);
             option.value = novelDoc.id;
@@ -78,7 +83,6 @@ async function onLoad() {
         const scrapTagsInput = uncreatedScrapWrapper.querySelector(".scrap-tags-editor");
         const saveButton = buttonsDiv.querySelector(".scrap-create-submit");
         const novelRef = firebase.doc("novels", scrapNovelEditor.value);
-        updateEditions(firebase, novelRef);
         scrapNovelEditor.addEventListener("input", () => {
             updateEditions(firebase, firebase.doc("novels", scrapNovelEditor.value));
         });
@@ -158,13 +162,15 @@ async function onLoad() {
                 messageDiv.style.display = "block";
             }
         });
-        const user = await getUser();
-        if (user) uncreatedScrapWrapper.style.display = "block";
-        scrapsWrapper.append(uncreatedScrapWrapper);
+        getUser().then(user => {
+            if (user) uncreatedScrapWrapper.style.display = "block";
+            scrapsWrapper.prepend(uncreatedScrapWrapper);
+            updateEditions(firebase, novelRef);
+        });
 
         let posted = 0;
         allScraps.forEach(async scrap => {
-            const novel = await firebase.getDoc(scrap.get("novel"));
+            const novel = novelMap.get(scrap.get("novel").id);
             const novelDiv = createElementWithClass("div", "scrap-general-novel", novel.get("title"));
             const descDiv = createElementWithClass("div", "scrap-general-description", scrap.get("description"));
             let tagsString = "<i>no tags</i>";
@@ -184,7 +190,7 @@ async function onLoad() {
 
             const attributionUpdatedLabel = createElementWithClass("span", "attribution-label", "Updated by ");
             const attributionUpdatedUser = createElementWithClass("span", "attribution-updated-user", "Anonymous");
-            const updatedUserDoc = await firebase.getDoc(scrap.get("updatedUser"));
+            const updatedUserDoc = scrap.get("createdUser").id == scrap.get("updatedUser").id ? createdUserDoc : await firebase.getDoc(scrap.get("updatedUser"));
             if (updatedUserDoc.get("displayName")) attributionUpdatedUser.innerText = updatedUserDoc.get("displayName");
             const attributionsUpdatedWrapper = createElementWithClass("div", "attribution-updated-wrapper");
             attributionsUpdatedWrapper.append(attributionUpdatedLabel, attributionUpdatedUser);
@@ -262,7 +268,7 @@ async function updateEditions(firebase, novelRef) {
         validEditions.forEach(edition => {
             const option = document.createElement("option");
             option.value = edition.id;
-            option.innerText = `${edition.get("name")} (${dateNumToWords(edition.get("published"))})`;
+            option.innerText = `${edition.get("name")} (${dateNumToWords(edition.get("published"))}) — ISBN ${edition.get("isbn") ? formatISBN(edition.get("isbn")) : "Unknown"}`;
             select.append(option)
         });
     }
@@ -283,7 +289,6 @@ async function filter() {
     const numberOfNovels = snapshot.data().count;
     if (checkedNovels.length > 0 && checkedNovels.length < numberOfNovels) data.novels = checkedNovels.join(",");
     if (filterTags.length > 0) data.tags = filterTags;
-    console.log(data.tags);
     const urlParams = new URLSearchParams(data);
     const paramString = urlParams.toString().length > 0 ? "?" + urlParams.toString() : "";
     location.href = "./scraps.html" + paramString;

@@ -122,6 +122,10 @@ function toggleVisibilityFlex(makeVisible, makeInvisible, strings = false) {
     makeInvisible.style.display = "none";
 }
 
+function formatISBN(unformatted) {
+    return unformatted.substring(0, 3) + "-" + unformatted.substring(3, 4) + "-" + unformatted.substring(4, 11) + "-" + unformatted.substring(11, 12) + "-" + unformatted.substring(12);
+}
+
 /** From https://stackoverflow.com/a/3866442 */
 function cursorToEndOfContentEditable(contentEditableElement) {
     var range, selection;
