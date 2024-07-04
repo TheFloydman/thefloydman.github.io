@@ -1,140 +1,95 @@
-/**
- * GVAS Parser written by Floydman. Use at your own risk.
- */
-var __extends = (this && this.__extends) || (function () {
-    var extendStatics = function (d, b) {
-        extendStatics = Object.setPrototypeOf ||
-            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
-        return extendStatics(d, b);
-    };
-    return function (d, b) {
-        if (typeof b !== "function" && b !== null)
-            throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
-        extendStatics(d, b);
-        function __() { this.constructor = d; }
-        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-    };
-})();
-var GvasProperty = /** @class */ (function () {
-    function GvasProperty() {
-    }
-    /** Returns an int counting the number of bytes that were deserialized. */
-    GvasProperty.prototype.deserializeBody = function (buffer, index) {
+class GvasProperty {
+    deserializeBody(buffer, index, ueVersion) {
         return 0;
-    };
+    }
     ;
-    /** Returns a Uint8Array representation of this property's body. */
-    GvasProperty.prototype.serializeBody = function () {
+    serializeBody(ueVersion) {
         return new Uint8Array(0);
-    };
-    return GvasProperty;
-}());
-var GvasUnknown = /** @class */ (function (_super) {
-    __extends(GvasUnknown, _super);
-    function GvasUnknown() {
-        return _super !== null && _super.apply(this, arguments) || this;
     }
-    return GvasUnknown;
-}(GvasProperty));
-var LongNone = /** @class */ (function (_super) {
-    __extends(LongNone, _super);
-    function LongNone() {
-        var _this = _super.call(this) || this;
-        _this.type = 'None';
-        return _this;
+}
+class GvasUnknown extends GvasProperty {
+}
+class LongNone extends GvasProperty {
+    constructor() {
+        super();
+        this.type = 'None';
     }
-    LongNone.prototype.deserializeBody = function (buffer, startIndex) {
+    deserializeBody(buffer, startIndex, ueVersion = 4) {
         return 4;
-    };
-    LongNone.prototype.serializeBody = function () {
-        var buffer = new ArrayBuffer(4);
-        var output = new Uint8Array(buffer);
-        return output;
-    };
-    return LongNone;
-}(GvasProperty));
-var GvasString = /** @class */ (function (_super) {
-    __extends(GvasString, _super);
-    function GvasString() {
-        return _super !== null && _super.apply(this, arguments) || this;
     }
-    GvasString.prototype.deserializeBody = function (buffer, startIndex) {
-        var dataView = new DataView(buffer);
-        var index = startIndex;
+    serializeBody(ueVersion) {
+        let buffer = new ArrayBuffer(4);
+        let output = new Uint8Array(buffer);
+        return output;
+    }
+}
+class GvasString extends GvasProperty {
+    deserializeBody(buffer, startIndex, ueVersion = 4) {
+        let dataView = new DataView(buffer);
+        let index = startIndex;
         if (this.name || this.type) {
-            var extendedValueLength = dataView.getInt32(index, true);
+            let extendedValueLength = dataView.getInt32(index, true);
             index += 9;
         }
-        var valueLength = dataView.getInt32(index, true);
+        let valueLength = dataView.getInt32(index, true);
         this.value = parseString(buffer, index);
         index += valueLength + 4;
         return index - startIndex;
-    };
-    GvasString.prototype.serializeBody = function () {
-        var textEncoder = new TextEncoder();
-        var outputLength = 4 + (this.value.length > 0 ? this.value.length + 1 : 0);
+    }
+    serializeBody(ueVersion) {
+        let textEncoder = new TextEncoder();
+        let outputLength = 4 + (this.value.length > 0 ? this.value.length + 1 : 0);
         if (this.name || this.type) {
             outputLength += 9;
         }
-        var buffer = new ArrayBuffer(outputLength);
-        var dataView = new DataView(buffer);
-        var output = new Uint8Array(buffer);
-        var index = 0;
+        let buffer = new ArrayBuffer(outputLength);
+        let dataView = new DataView(buffer);
+        let output = new Uint8Array(buffer);
+        let index = 0;
         if (this.name || this.type) {
-            var longValueLength = this.value.length > 0 ? this.value.length + 5 : 4;
+            let longValueLength = this.value.length > 0 ? this.value.length + 5 : 4;
             dataView.setUint32(index, longValueLength, true);
             index += 9;
         }
-        var shortValueLength = this.value.length > 0 ? this.value.length + 1 : 0;
+        let shortValueLength = this.value.length > 0 ? this.value.length + 1 : 0;
         dataView.setUint32(index, shortValueLength, true);
         if (shortValueLength > 0) {
             index += 4;
             output.set(textEncoder.encode(this.value), index);
         }
         return output;
-    };
-    return GvasString;
-}(GvasProperty));
-var GvasBoolean = /** @class */ (function (_super) {
-    __extends(GvasBoolean, _super);
-    function GvasBoolean() {
-        return _super !== null && _super.apply(this, arguments) || this;
     }
-    GvasBoolean.prototype.deserializeBody = function (buffer, startIndex) {
-        var padding = 8;
-        var index = startIndex;
+}
+class GvasBoolean extends GvasProperty {
+    deserializeBody(buffer, startIndex, ueVersion = 4) {
+        const padding = 8;
+        let index = startIndex;
         index += padding;
         this.value = new DataView(buffer).getInt8(index) == 0 ? false : true;
         index += 2;
         return index - startIndex;
-    };
-    GvasBoolean.prototype.serializeBody = function () {
-        var textEncoder = new TextEncoder();
-        var outputLength = 10;
-        var buffer = new ArrayBuffer(outputLength);
-        var dataView = new DataView(buffer);
-        var output = new Uint8Array(buffer);
+    }
+    serializeBody(ueVersion) {
+        let textEncoder = new TextEncoder();
+        let outputLength = 10;
+        let buffer = new ArrayBuffer(outputLength);
+        let dataView = new DataView(buffer);
+        let output = new Uint8Array(buffer);
         dataView.setUint8(8, this.value ? 1 : 0);
         return output;
-    };
-    return GvasBoolean;
-}(GvasProperty));
-var GvasByte = /** @class */ (function (_super) {
-    __extends(GvasByte, _super);
-    function GvasByte() {
-        return _super !== null && _super.apply(this, arguments) || this;
     }
-    GvasByte.prototype.deserializeBody = function (buffer, startIndex) {
-        var padding = 4;
-        var index = startIndex;
-        var longValueLength = new DataView(buffer.slice(index, index + 4)).getUint32(0, true);
+}
+class GvasByte extends GvasProperty {
+    deserializeBody(buffer, startIndex, ueVersion = 4) {
+        const padding = 4;
+        let index = startIndex;
+        let longValueLength = new DataView(buffer.slice(index, index + 4)).getUint32(0, true);
         index += 4 + padding;
-        var descriptorLength = new DataView(buffer.slice(index, index + 4)).getUint32(0, true);
+        let descriptorLength = new DataView(buffer.slice(index, index + 4)).getUint32(0, true);
         index += 4;
-        var descriptor = new TextDecoder().decode(buffer.slice(index, index + descriptorLength - 1));
+        let descriptor = new TextDecoder().decode(buffer.slice(index, index + descriptorLength - 1));
         index += descriptorLength + 1;
-        var valueLength = new DataView(buffer.slice(index, index + 4)).getUint32(0, true);
+        let valueLength = new DataView(buffer.slice(index, index + 4)).getUint32(0, true);
         index += 4;
         this.value = {
             descriptor: descriptor,
@@ -142,40 +97,35 @@ var GvasByte = /** @class */ (function (_super) {
         };
         index += valueLength;
         return index - startIndex;
-    };
-    GvasByte.prototype.serializeBody = function () {
-        var textEncoder = new TextEncoder();
-        var outputLength = this.value.descriptor.length + this.value.details.length + 19;
-        var buffer = new ArrayBuffer(outputLength);
-        var dataView = new DataView(buffer);
-        var output = new Uint8Array(buffer);
-        var index = 0;
-        var longValueLength = 4 + this.value.details.length + 1;
+    }
+    serializeBody(ueVersion) {
+        let textEncoder = new TextEncoder();
+        let outputLength = this.value.descriptor.length + this.value.details.length + 19;
+        let buffer = new ArrayBuffer(outputLength);
+        let dataView = new DataView(buffer);
+        let output = new Uint8Array(buffer);
+        let index = 0;
+        let longValueLength = 4 + this.value.details.length + 1;
         dataView.setUint32(index, longValueLength, true);
         index += 8;
-        var descriptorLength = this.value.descriptor.length + 1;
+        let descriptorLength = this.value.descriptor.length + 1;
         dataView.setUint32(index, descriptorLength, true);
         index += 4;
-        var descriptor = textEncoder.encode(this.value.descriptor);
+        let descriptor = textEncoder.encode(this.value.descriptor);
         output.set(descriptor, index);
         index += this.value.descriptor.length + 2;
         dataView.setUint32(index, this.value.details.length + 1, true);
         index += 4;
-        var details = textEncoder.encode(this.value.details);
+        let details = textEncoder.encode(this.value.details);
         output.set(details, index);
         return output;
-    };
-    return GvasByte;
-}(GvasProperty));
-var GvasInteger = /** @class */ (function (_super) {
-    __extends(GvasInteger, _super);
-    function GvasInteger() {
-        return _super !== null && _super.apply(this, arguments) || this;
     }
-    GvasInteger.prototype.deserializeBody = function (buffer, startIndex) {
-        var dataView = new DataView(buffer);
-        var index = startIndex;
-        var numberOfBytes = dataView.getUint32(index, true);
+}
+class GvasInteger extends GvasProperty {
+    deserializeBody(buffer, startIndex, ueVersion = 4) {
+        let dataView = new DataView(buffer);
+        let index = startIndex;
+        let numberOfBytes = dataView.getUint32(index, true);
         index += 9;
         this.value = 0;
         switch (numberOfBytes) {
@@ -206,14 +156,14 @@ var GvasInteger = /** @class */ (function (_super) {
         }
         index += numberOfBytes;
         return index - startIndex;
-    };
-    GvasInteger.prototype.serializeBody = function () {
-        var textEncoder = new TextEncoder();
-        var outputLength = this.value.bytes + 9;
-        var buffer = new ArrayBuffer(outputLength);
-        var dataView = new DataView(buffer);
-        var output = new Uint8Array(buffer);
-        var index = 0;
+    }
+    serializeBody(ueVersion) {
+        let textEncoder = new TextEncoder();
+        let outputLength = this.value.bytes + 9;
+        let buffer = new ArrayBuffer(outputLength);
+        let dataView = new DataView(buffer);
+        let output = new Uint8Array(buffer);
+        let index = 0;
         dataView.setUint32(index, this.value.bytes, true);
         index += 9;
         switch (this.value.bytes) {
@@ -231,30 +181,25 @@ var GvasInteger = /** @class */ (function (_super) {
                 break;
         }
         return output;
-    };
-    return GvasInteger;
-}(GvasProperty));
-var GvasFloat = /** @class */ (function (_super) {
-    __extends(GvasFloat, _super);
-    function GvasFloat() {
-        return _super !== null && _super.apply(this, arguments) || this;
     }
-    GvasFloat.prototype.deserializeBody = function (buffer, startIndex) {
-        var index = startIndex;
-        var numberOfBytes = new DataView(buffer.slice(index, index + 4)).getUint32(0, true);
+}
+class GvasFloat extends GvasProperty {
+    deserializeBody(buffer, startIndex, ueVersion = 4) {
+        let index = startIndex;
+        let numberOfBytes = new DataView(buffer.slice(index, index + 4)).getUint32(0, true);
         index += 9;
-        var dataView = new DataView(buffer.slice(index, index + numberOfBytes));
+        let dataView = new DataView(buffer.slice(index, index + numberOfBytes));
         index += numberOfBytes;
         this.value = { bytes: numberOfBytes, float: numberOfBytes == 4 ? dataView.getFloat32(0, true) : dataView.getFloat64(0, true) };
         return index - startIndex;
-    };
-    GvasFloat.prototype.serializeBody = function () {
-        var textEncoder = new TextEncoder();
-        var newLength = this.value.bytes + 9;
-        var buffer = new ArrayBuffer(newLength);
-        var dataView = new DataView(buffer);
-        var output = new Uint8Array(buffer);
-        var index = 0;
+    }
+    serializeBody(ueVersion) {
+        let textEncoder = new TextEncoder();
+        let newLength = this.value.bytes + 9;
+        let buffer = new ArrayBuffer(newLength);
+        let dataView = new DataView(buffer);
+        let output = new Uint8Array(buffer);
+        let index = 0;
         dataView.setUint32(index, this.value.bytes, true);
         index += 9;
         if (this.value.bytes == 4) {
@@ -264,41 +209,36 @@ var GvasFloat = /** @class */ (function (_super) {
             dataView.setFloat64(index, this.value.float, true);
         }
         return output;
-    };
-    return GvasFloat;
-}(GvasProperty));
-var GvasMap = /** @class */ (function (_super) {
-    __extends(GvasMap, _super);
-    function GvasMap() {
-        return _super !== null && _super.apply(this, arguments) || this;
     }
-    GvasMap.prototype.deserializeBody = function (buffer, startIndex) {
-        var dataView = new DataView(buffer);
-        var textDecoder = new TextDecoder();
-        var index = startIndex;
-        var firstValue = dataView.getBigUint64(index, true); // Length from end of valueType (including trailing 0 byte) + 1 to end of map.
+}
+class GvasMap extends GvasProperty {
+    deserializeBody(buffer, startIndex, ueVersion) {
+        let dataView = new DataView(buffer);
+        let textDecoder = new TextDecoder();
+        let index = startIndex;
+        let firstValue = dataView.getBigUint64(index, true);
         index += 8;
-        var keyTypeLength = dataView.getUint32(index, true);
+        let keyTypeLength = dataView.getUint32(index, true);
         index += 4;
-        var keyType = textDecoder.decode(buffer.slice(index, index + keyTypeLength - 1));
+        let keyType = textDecoder.decode(buffer.slice(index, index + keyTypeLength - 1));
         index += keyTypeLength;
-        var valueTypeLength = dataView.getUint32(index, true);
+        let valueTypeLength = dataView.getUint32(index, true);
         index += 4;
-        var valueType = textDecoder.decode(buffer.slice(index, index + valueTypeLength - 1));
+        let valueType = textDecoder.decode(buffer.slice(index, index + valueTypeLength - 1));
         index += valueTypeLength + 5;
-        var numberOfEntries = dataView.getUint32(index, true);
+        let numberOfEntries = dataView.getUint32(index, true);
         index += 4;
-        var map = new Map();
-        for (var i = 0; i < numberOfEntries; i++) {
-            var keyClass = propertyClasses.get(keyType);
-            var valueClass = propertyClasses.get(valueType);
+        let map = new Map();
+        for (let i = 0; i < numberOfEntries; i++) {
+            let keyClass = propertyClasses.get(keyType);
+            let valueClass = propertyClasses.get(valueType);
             if (keyClass == undefined || valueClass == undefined) {
                 continue;
             }
-            var entryKey = new (keyClass)();
-            index += entryKey.deserializeBody(buffer, index);
-            var entryValue = new (valueClass)();
-            index += entryValue.deserializeBody(buffer, index);
+            let entryKey = new (keyClass)();
+            index += entryKey.deserializeBody(buffer, index, ueVersion);
+            let entryValue = new (valueClass)();
+            index += entryValue.deserializeBody(buffer, index, ueVersion);
             map.set(entryKey, entryValue);
         }
         this.value = {
@@ -307,23 +247,22 @@ var GvasMap = /** @class */ (function (_super) {
             entries: map
         };
         return index - startIndex;
-    };
-    GvasMap.prototype.serializeBody = function () {
-        //35 too many
-        var outputLength = this.name.length + this.type.length + this.value.key.length + this.value.value.length + 37;
-        var outputArray = new Array();
-        this.value.entries.forEach(function (value, key, map) {
-            var encodedKey = serializeProperty(key);
-            var encodedValue = serializeProperty(value);
+    }
+    serializeBody(ueVersion) {
+        let outputLength = this.name.length + this.type.length + this.value.key.length + this.value.value.length + 37;
+        let outputArray = new Array();
+        this.value.entries.forEach((value, key, map) => {
+            let encodedKey = serializeProperty(key, ueVersion);
+            let encodedValue = serializeProperty(value, ueVersion);
             outputLength += encodedKey.byteLength + encodedValue.byteLength;
             outputArray.push([encodedKey, encodedValue]);
         });
-        var textEncoder = new TextEncoder();
-        var buffer = new ArrayBuffer(outputLength - this.name.length - this.type.length - 10);
-        var dataView = new DataView(buffer);
-        var output = new Uint8Array(buffer);
-        var index = 0;
-        var bigFirstNumber = outputLength - this.name.length - this.type.length - this.value.key.length - this.value.value.length - 29;
+        let textEncoder = new TextEncoder();
+        let buffer = new ArrayBuffer(outputLength - this.name.length - this.type.length - 10);
+        let dataView = new DataView(buffer);
+        let output = new Uint8Array(buffer);
+        let index = 0;
+        let bigFirstNumber = outputLength - this.name.length - this.type.length - this.value.key.length - this.value.value.length - 29;
         dataView.setUint32(index, bigFirstNumber, true);
         index += 8;
         dataView.setUint32(index, this.value.key.length + 1, true);
@@ -336,57 +275,51 @@ var GvasMap = /** @class */ (function (_super) {
         index += this.value.value.length + 6;
         dataView.setUint32(index, this.value.entries.size, true);
         index += 4;
-        for (var _i = 0, outputArray_1 = outputArray; _i < outputArray_1.length; _i++) {
-            var pair = outputArray_1[_i];
+        for (const pair of outputArray) {
             output.set(pair[0], index);
             index += pair[0].byteLength;
             output.set(pair[1], index);
             index += pair[1].byteLength;
         }
         return output;
-    };
-    return GvasMap;
-}(GvasProperty));
-var GvasArray = /** @class */ (function (_super) {
-    __extends(GvasArray, _super);
-    function GvasArray() {
-        return _super !== null && _super.apply(this, arguments) || this;
     }
-    GvasArray.prototype.deserializeBody = function (buffer, startIndex) {
-        var dataView = new DataView(buffer);
-        var textDecoder = new TextDecoder();
-        var index = startIndex;
-        var totalArrayBytesQuantity = dataView.getUint32(index, true); // From declaration of number of entries to end.
+}
+class GvasArray extends GvasProperty {
+    deserializeBody(buffer, startIndex, ueVersion) {
+        const dataView = new DataView(buffer);
+        const textDecoder = new TextDecoder();
+        let index = startIndex;
+        let totalArrayBytesQuantity = dataView.getUint32(index, true);
         index += 8;
-        var type1Length = dataView.getUint32(index, true);
+        let type1Length = dataView.getUint32(index, true);
         index += 4;
-        var type1 = textDecoder.decode(buffer.slice(index, index + type1Length - 1));
+        let type1 = textDecoder.decode(buffer.slice(index, index + type1Length - 1));
         index += type1Length + 1;
-        var numberOfEntries = dataView.getUint32(index, true);
+        let numberOfEntries = dataView.getUint32(index, true);
         index += 4;
-        var nameAgainLength = dataView.getUint32(index, true);
+        let nameAgainLength = dataView.getUint32(index, true);
         index += 4;
-        var nameAgain = textDecoder.decode(buffer.slice(index, index + nameAgainLength - 1));
+        let nameAgain = textDecoder.decode(buffer.slice(index, index + nameAgainLength - 1));
         index += nameAgainLength;
-        var type2Length = dataView.getUint32(index, true);
+        let type2Length = dataView.getUint32(index, true);
         index += 4;
-        var type2 = textDecoder.decode(buffer.slice(index, index + type2Length - 1));
+        let type2 = textDecoder.decode(buffer.slice(index, index + type2Length - 1));
         index += type2Length;
-        var totalEntriesBytesQuantity = dataView.getUint32(index, true);
+        let totalEntriesBytesQuantity = dataView.getUint32(index, true);
         index += 4 + 4;
-        var entryNameLength = dataView.getUint32(index, true);
+        let entryNameLength = dataView.getUint32(index, true);
         index += 4;
-        var entryName = textDecoder.decode(buffer.slice(index, index + entryNameLength - 1));
+        let entryName = textDecoder.decode(buffer.slice(index, index + entryNameLength - 1));
         index += entryNameLength + 17;
-        var output = index - startIndex;
-        var properties = new Array();
-        for (var i = 0; i < numberOfEntries; i++) {
-            var propertyClass = propertyClasses.get(type1);
+        let output = index - startIndex;
+        let properties = new Array();
+        for (let i = 0; i < numberOfEntries; i++) {
+            let propertyClass = propertyClasses.get(type1);
             if (propertyClass == undefined) {
                 continue;
             }
-            var property = new (propertyClass)();
-            var shortLength = property.deserializeBody(buffer, index);
+            let property = new (propertyClass)();
+            let shortLength = property.deserializeBody(buffer, index, ueVersion);
             output += shortLength;
             properties.push(property);
             index += shortLength;
@@ -397,23 +330,22 @@ var GvasArray = /** @class */ (function (_super) {
             properties: properties
         };
         return output;
-    };
-    GvasArray.prototype.serializeBody = function () {
-        var outputLength = this.name.length + this.type.length + this.value.type.length + this.value.entryName.length + 59;
-        var outputArray = new Array();
-        var propertiesLength = 0;
-        for (var _i = 0, _a = this.value.properties; _i < _a.length; _i++) {
-            var property = _a[_i];
-            var array = serializeProperty(property);
+    }
+    serializeBody(ueVersion) {
+        let outputLength = this.name.length + this.type.length + this.value.type.length + this.value.entryName.length + 59;
+        let outputArray = new Array();
+        let propertiesLength = 0;
+        for (const property of this.value.properties) {
+            let array = serializeProperty(property, ueVersion);
             propertiesLength += array.byteLength;
             outputArray.push(array);
         }
         outputLength += propertiesLength;
-        var textEncoder = new TextEncoder();
-        var buffer = new ArrayBuffer(outputLength);
-        var dataView = new DataView(buffer);
-        var output = new Uint8Array(buffer);
-        var index = 0;
+        let textEncoder = new TextEncoder();
+        let buffer = new ArrayBuffer(outputLength);
+        let dataView = new DataView(buffer);
+        let output = new Uint8Array(buffer);
+        let index = 0;
         dataView.setUint32(index, outputLength - this.value.type.length - 14, true);
         index += 8;
         dataView.setUint32(index, this.value.type.length + 1, true);
@@ -436,48 +368,41 @@ var GvasArray = /** @class */ (function (_super) {
         index += 4;
         output.set(textEncoder.encode(this.value.entryName), index);
         index += this.value.entryName.length + 18;
-        for (var _b = 0, outputArray_2 = outputArray; _b < outputArray_2.length; _b++) {
-            var property = outputArray_2[_b];
+        for (const property of outputArray) {
             output.set(property, index);
             index += property.byteLength;
         }
         return output;
-    };
-    return GvasArray;
-}(GvasProperty));
-var GvasStruct = /** @class */ (function (_super) {
-    __extends(GvasStruct, _super);
-    function GvasStruct() {
-        return _super !== null && _super.apply(this, arguments) || this;
     }
-    GvasStruct.prototype.deserializeBody = function (buffer, startIndex) {
-        var index = startIndex;
-        var properties = new Array();
+}
+class GvasStruct extends GvasProperty {
+    deserializeBody(buffer, startIndex, ueVersion) {
+        let index = startIndex;
+        let properties = new Array();
         if (this.name || this.type) {
-            var dataView = new DataView(buffer);
-            var padding = 17;
-            var structLength = dataView.getInt32(index, true);
+            let dataView = new DataView(buffer);
+            let structLength = dataView.getInt32(index, true);
             index += 4 + 4;
-            var typeLength = dataView.getInt32(index, true);
+            let typeLength = dataView.getInt32(index, true);
             index += 4;
-            var type = new TextDecoder().decode(buffer.slice(index, index + typeLength - 1));
+            let type = new TextDecoder().decode(buffer.slice(index, index + typeLength - 1));
+            let padding = 17;
             index += typeLength + padding;
-            var rawValue = buffer.slice(index, index + structLength);
-            for (var i = 0; i < structLength;) {
-                var propertyContainer = void 0;
+            let rawValue = buffer.slice(index, index + structLength);
+            for (let i = 0; i < structLength;) {
+                let propertyContainer;
                 if (type.endsWith('Property')) {
-                    propertyContainer = deserializeProperty(rawValue, i);
+                    propertyContainer = deserializeProperty(rawValue, i, ueVersion);
                     propertyContainer.property.type = type;
                     properties.push(propertyContainer);
                 }
                 else {
-                    var structClass = structClasses.get(type);
+                    let structClass = structClasses.get(type);
                     if (structClass == undefined) {
                         continue;
                     }
-                    var property = new (structClass);
-                    property.deserializeBody(rawValue, i);
-                    var shortLength = property.deserializeBody(rawValue, i);
+                    let property = new (structClass);
+                    let shortLength = property.deserializeBody(rawValue, i, ueVersion);
                     property.type = type;
                     propertyContainer = {
                         property: property,
@@ -494,198 +419,225 @@ var GvasStruct = /** @class */ (function (_super) {
             }
         }
         else {
-            var finished = false;
+            let finished = false;
             while (!finished) {
-                var propertyContainer = deserializeProperty(buffer, index);
+                let propertyContainer = deserializeProperty(buffer, index, ueVersion);
                 properties.push(propertyContainer);
                 index += propertyContainer.length;
                 finished = propertyContainer.property instanceof ShortNone;
             }
         }
         this.value = [];
-        var output = 0;
-        for (var _i = 0, properties_1 = properties; _i < properties_1.length; _i++) {
-            var container = properties_1[_i];
+        let output = 0;
+        for (const container of properties) {
             this.value.push(container.property);
             output += container.length;
         }
         return output;
-    };
-    GvasStruct.prototype.serializeBody = function () {
-        var outputLength = 0;
-        var outputArray = new Array();
-        for (var _i = 0, _a = this.value; _i < _a.length; _i++) {
-            var property = _a[_i];
-            var array = property.name || property instanceof ShortNone ? serializeProperty(property) : property.serializeBody();
+    }
+    serializeBody(ueVersion) {
+        let outputLength = 0;
+        let outputArray = new Array();
+        for (const property of this.value) {
+            let array = property.name || property instanceof ShortNone ? serializeProperty(property, ueVersion) : property.serializeBody(ueVersion);
             outputLength += array.byteLength;
             outputArray.push(array);
         }
-        var buffer = new ArrayBuffer(outputLength);
-        var output = new Uint8Array(buffer);
-        var index = 0;
-        for (var _b = 0, outputArray_3 = outputArray; _b < outputArray_3.length; _b++) {
-            var property = outputArray_3[_b];
+        let buffer = new ArrayBuffer(outputLength);
+        let output = new Uint8Array(buffer);
+        let index = 0;
+        for (const property of outputArray) {
             output.set(property, index);
             index += property.byteLength;
         }
         return output;
-    };
-    return GvasStruct;
-}(GvasProperty));
-var StructSub = /** @class */ (function (_super) {
-    __extends(StructSub, _super);
-    function StructSub() {
-        return _super !== null && _super.apply(this, arguments) || this;
     }
-    return StructSub;
-}(GvasProperty));
-var ShortNone = /** @class */ (function (_super) {
-    __extends(ShortNone, _super);
-    function ShortNone() {
-        var _this = _super.call(this) || this;
-        _this.type = 'None';
-        return _this;
+}
+class StructSub extends GvasProperty {
+}
+class ShortNone extends StructSub {
+    constructor() {
+        super();
+        this.type = 'None';
     }
-    ShortNone.prototype.deserializeBody = function (buffer, index) {
+    deserializeBody(buffer, index) {
         return 0;
-    };
-    ShortNone.prototype.serializeBody = function () {
-        return new Uint8Array(0);
-    };
-    return ShortNone;
-}(StructSub));
-var Vector = /** @class */ (function (_super) {
-    __extends(Vector, _super);
-    function Vector() {
-        return _super !== null && _super.apply(this, arguments) || this;
     }
-    Vector.prototype.deserializeBody = function (buffer, index) {
-        var dataView = new DataView(buffer);
-        var x = dataView.getFloat32(index, true);
-        index += 4;
-        var y = dataView.getFloat32(index, true);
-        index += 4;
-        var z = dataView.getFloat32(index, true);
+    serializeBody(ueVersion) {
+        return new Uint8Array(0);
+    }
+}
+class Vector extends StructSub {
+    deserializeBody(buffer, index, ueVersion) {
+        let dataView = new DataView(buffer);
+        let x = 0;
+        let y = 0;
+        let z = 0;
+        if (ueVersion == 5) {
+            x = dataView.getFloat64(index, true);
+            index += 8;
+            y = dataView.getFloat64(index, true);
+            index += 8;
+            z = dataView.getFloat64(index, true);
+        }
+        else {
+            x = dataView.getFloat32(index, true);
+            index += 4;
+            y = dataView.getFloat32(index, true);
+            index += 4;
+            z = dataView.getFloat32(index, true);
+        }
         this.value = { x: x, y: y, z: z };
-        return 12;
-    };
-    Vector.prototype.serializeBody = function () {
-        var textEncoder = new TextEncoder();
-        var newLength = 4 + 4 + 4 + 7 + 17 + 4 + 4 + 4;
-        var buffer = new ArrayBuffer(newLength);
-        var dataView = new DataView(buffer);
-        var output = new Uint8Array(buffer);
-        var index = 0;
-        dataView.setUint32(index, 12, true);
+        return 24;
+    }
+    serializeBody(ueVersion) {
+        let textEncoder = new TextEncoder();
+        let newLength = 4 + 4 + 4 + 7 + 17 + 8 + 8 + 8;
+        let buffer = new ArrayBuffer(newLength);
+        let dataView = new DataView(buffer);
+        let output = new Uint8Array(buffer);
+        let index = 0;
+        dataView.setUint32(index, 24, true);
         index += 8;
         dataView.setUint32(index, this.type.length + 1, true);
         index += 4;
         output.set(textEncoder.encode(this.type), index);
         index += this.type.length + 18;
-        dataView.setFloat32(index, this.value.x, true);
-        index += 4;
-        dataView.setFloat32(index, this.value.y, true);
-        index += 4;
-        dataView.setFloat32(index, this.value.z, true);
+        if (ueVersion == 5) {
+            dataView.setFloat64(index, this.value.x, true);
+            index += 8;
+            dataView.setFloat64(index, this.value.y, true);
+            index += 8;
+            dataView.setFloat64(index, this.value.z, true);
+        }
+        else {
+            dataView.setFloat32(index, this.value.x, true);
+            index += 4;
+            dataView.setFloat32(index, this.value.y, true);
+            index += 4;
+            dataView.setFloat32(index, this.value.z, true);
+        }
         return output;
-    };
-    return Vector;
-}(StructSub));
-var Vector2D = /** @class */ (function (_super) {
-    __extends(Vector2D, _super);
-    function Vector2D() {
-        return _super !== null && _super.apply(this, arguments) || this;
     }
-    Vector2D.prototype.deserializeBody = function (buffer, index) {
-        var dataView = new DataView(buffer);
-        var x = dataView.getFloat32(index, true);
-        index += 4;
-        var y = dataView.getFloat32(index, true);
+}
+class Vector2D extends StructSub {
+    deserializeBody(buffer, index, ueVersion) {
+        let dataView = new DataView(buffer);
+        let x = 0;
+        let y = 0;
+        if (ueVersion == 5) {
+            x = dataView.getFloat64(index, true);
+            index += 8;
+            y = dataView.getFloat64(index, true);
+        }
+        else {
+            x = dataView.getFloat32(index, true);
+            index += 4;
+            y = dataView.getFloat32(index, true);
+        }
         this.value = { x: x, y: y };
-        return 8;
-    };
-    Vector2D.prototype.serializeBody = function () {
-        var textEncoder = new TextEncoder();
-        var newLength = 4 + 4 + 4 + 9 + 17 + 4 + 4;
-        var buffer = new ArrayBuffer(newLength);
-        var dataView = new DataView(buffer);
-        var output = new Uint8Array(buffer);
-        var index = 0;
-        dataView.setUint32(index, 8, true);
+        return 16;
+    }
+    serializeBody(ueVersion) {
+        let textEncoder = new TextEncoder();
+        let newLength = 4 + 4 + 4 + 9 + 17 + 8 + 8;
+        let buffer = new ArrayBuffer(newLength);
+        let dataView = new DataView(buffer);
+        let output = new Uint8Array(buffer);
+        let index = 0;
+        dataView.setUint32(index, 16, true);
         index += 8;
         dataView.setUint32(index, this.type.length + 1, true);
         index += 4;
-        var typeName = textEncoder.encode(this.type);
+        let typeName = textEncoder.encode(this.type);
         output.set(typeName, index);
         index += this.type.length + 18;
-        dataView.setFloat32(index, this.value.x, true);
-        index += 4;
-        dataView.setFloat32(index, this.value.y, true);
+        if (ueVersion == 5) {
+            dataView.setFloat64(index, this.value.x, true);
+            index += 8;
+            dataView.setFloat64(index, this.value.y, true);
+        }
+        else {
+            dataView.setFloat32(index, this.value.x, true);
+            index += 4;
+            dataView.setFloat32(index, this.value.y, true);
+        }
         return output;
-    };
-    return Vector2D;
-}(StructSub));
-var Rotator = /** @class */ (function (_super) {
-    __extends(Rotator, _super);
-    function Rotator() {
-        return _super !== null && _super.apply(this, arguments) || this;
     }
-    Rotator.prototype.deserializeBody = function (buffer, index) {
-        var dataView = new DataView(buffer);
-        var x = dataView.getFloat32(index, true);
-        index += 4;
-        var y = dataView.getFloat32(index, true);
-        index += 4;
-        var z = dataView.getFloat32(index, true);
+}
+class Rotator extends StructSub {
+    deserializeBody(buffer, index, ueVersion) {
+        let dataView = new DataView(buffer);
+        let x = 0;
+        let y = 0;
+        let z = 0;
+        if (ueVersion == 5) {
+            x = dataView.getFloat64(index, true);
+            index += 8;
+            y = dataView.getFloat64(index, true);
+            index += 8;
+            z = dataView.getFloat64(index, true);
+        }
+        else {
+            x = dataView.getFloat32(index, true);
+            index += 4;
+            y = dataView.getFloat32(index, true);
+            index += 4;
+            z = dataView.getFloat32(index, true);
+        }
         this.value = { x: x, y: y, z: z };
-        return 12;
-    };
-    Rotator.prototype.serializeBody = function () {
-        var textEncoder = new TextEncoder();
-        var newLength = 4 + 4 + 4 + this.type.length + 18 + 4 + 4 + 4;
-        var buffer = new ArrayBuffer(newLength);
-        var dataView = new DataView(buffer);
-        var output = new Uint8Array(buffer);
-        var index = 0;
-        dataView.setUint32(index, 12, true);
+        return 24;
+    }
+    serializeBody(ueVersion) {
+        let textEncoder = new TextEncoder();
+        let newLength = 4 + 4 + 4 + this.type.length + 18 + 8 + 8 + 8;
+        let buffer = new ArrayBuffer(newLength);
+        let dataView = new DataView(buffer);
+        let output = new Uint8Array(buffer);
+        let index = 0;
+        dataView.setUint32(index, 24, true);
         index += 8;
         dataView.setUint32(index, this.type.length + 1, true);
         index += 4;
         output.set(textEncoder.encode(this.type), index);
         index += this.type.length + 18;
-        dataView.setFloat32(index, this.value.x, true);
-        index += 4;
-        dataView.setFloat32(index, this.value.y, true);
-        index += 4;
-        dataView.setFloat32(index, this.value.z, true);
+        if (ueVersion == 5) {
+            dataView.setFloat64(index, this.value.x, true);
+            index += 8;
+            dataView.setFloat64(index, this.value.y, true);
+            index += 8;
+            dataView.setFloat64(index, this.value.z, true);
+        }
+        else {
+            dataView.setFloat32(index, this.value.x, true);
+            index += 4;
+            dataView.setFloat32(index, this.value.y, true);
+            index += 4;
+            dataView.setFloat32(index, this.value.z, true);
+        }
         return output;
-    };
-    return Rotator;
-}(StructSub));
-var Guid = /** @class */ (function (_super) {
-    __extends(Guid, _super);
-    function Guid() {
-        return _super !== null && _super.apply(this, arguments) || this;
     }
-    Guid.prototype.deserializeBody = function (buffer, index) {
-        var dataView = new DataView(buffer);
-        var a = dataView.getFloat32(index, true);
+}
+class Guid extends StructSub {
+    deserializeBody(buffer, index) {
+        let dataView = new DataView(buffer);
+        let a = dataView.getFloat32(index, true);
         index += 4;
-        var b = dataView.getFloat32(index, true);
+        let b = dataView.getFloat32(index, true);
         index += 4;
-        var c = dataView.getFloat32(index, true);
+        let c = dataView.getFloat32(index, true);
         index += 4;
-        var d = dataView.getFloat32(index, true);
+        let d = dataView.getFloat32(index, true);
         this.value = { a: a, b: b, c: c, d: d };
         return 16;
-    };
-    Guid.prototype.serializeBody = function () {
-        var textEncoder = new TextEncoder();
-        var newLength = 4 + 4 + 4 + 7 + 17 + 4 + 4 + 4 + 2;
-        var buffer = new ArrayBuffer(newLength);
-        var dataView = new DataView(buffer);
-        var output = new Uint8Array(buffer);
-        var index = 0;
+    }
+    serializeBody(ueVersion) {
+        let textEncoder = new TextEncoder();
+        let newLength = 4 + 4 + 4 + 7 + 17 + 4 + 4 + 4 + 2;
+        let buffer = new ArrayBuffer(newLength);
+        let dataView = new DataView(buffer);
+        let output = new Uint8Array(buffer);
+        let index = 0;
         dataView.setUint32(index, 16, true);
         index += 8;
         dataView.setUint32(index, this.type.length + 1, true);
@@ -700,25 +652,20 @@ var Guid = /** @class */ (function (_super) {
         index += 4;
         dataView.setFloat32(index, this.value.d, true);
         return output;
-    };
-    return Guid;
-}(StructSub));
-var DateTime = /** @class */ (function (_super) {
-    __extends(DateTime, _super);
-    function DateTime() {
-        return _super !== null && _super.apply(this, arguments) || this;
     }
-    DateTime.prototype.deserializeBody = function (buffer, index) {
-        var rawDate = new DataView(buffer).getBigUint64(index, true);
+}
+class DateTime extends StructSub {
+    deserializeBody(buffer, index) {
+        let rawDate = new DataView(buffer).getBigUint64(index, true);
         this.value = rawDate;
         return 8;
-    };
-    DateTime.prototype.serializeBody = function () {
-        var newLength = 4 + 4 + 4 + 9 + 17 + 8;
-        var buffer = new ArrayBuffer(newLength);
-        var dataView = new DataView(buffer);
-        var output = new Uint8Array(buffer);
-        var index = 0;
+    }
+    serializeBody(ueVersion) {
+        let newLength = 4 + 4 + 4 + 9 + 17 + 8;
+        let buffer = new ArrayBuffer(newLength);
+        let dataView = new DataView(buffer);
+        let output = new Uint8Array(buffer);
+        let index = 0;
         dataView.setUint32(index, 8, true);
         index += 8;
         dataView.setUint32(index, this.type.length + 1, true);
@@ -727,22 +674,16 @@ var DateTime = /** @class */ (function (_super) {
         index += this.type.length + 18;
         dataView.setBigUint64(index, this.value, true);
         return output;
-    };
-    return DateTime;
-}(StructSub));
-/** Made up of a Rotation (Quat), a Translation (Vector), and a Scale3D (Vector), all of which are StructProperties. */
-var Transform = /** @class */ (function (_super) {
-    __extends(Transform, _super);
-    function Transform() {
-        return _super !== null && _super.apply(this, arguments) || this;
     }
-    Transform.prototype.deserializeBody = function (buffer, startIndex) {
-        var index = startIndex;
-        var rotation = deserializeProperty(buffer, index);
+}
+class Transform extends StructSub {
+    deserializeBody(buffer, startIndex, ueVersion) {
+        let index = startIndex;
+        let rotation = deserializeProperty(buffer, index, ueVersion);
         index += rotation.length;
-        var translation = deserializeProperty(buffer, index);
+        let translation = deserializeProperty(buffer, index, ueVersion);
         index += translation.length;
-        var scale = deserializeProperty(buffer, index);
+        let scale = deserializeProperty(buffer, index, ueVersion);
         index += scale.length;
         this.value = {
             rotation: rotation.property,
@@ -751,18 +692,18 @@ var Transform = /** @class */ (function (_super) {
         };
         index += 9;
         return index - startIndex;
-    };
-    Transform.prototype.serializeBody = function () {
-        var rotation = serializeProperty(this.value.rotation);
-        var translation = serializeProperty(this.value.translation);
-        var scale = serializeProperty(this.value.scale);
-        var none = serializeProperty(new ShortNone());
-        var outputLength = rotation.byteLength + translation.byteLength + scale.byteLength + none.byteLength + this.type.length + 30;
-        var textEncoder = new TextEncoder();
-        var buffer = new ArrayBuffer(outputLength);
-        var dataView = new DataView(buffer);
-        var output = new Uint8Array(buffer);
-        var index = 0;
+    }
+    serializeBody(ueVersion) {
+        let rotation = serializeProperty(this.value.rotation, ueVersion);
+        let translation = serializeProperty(this.value.translation, ueVersion);
+        let scale = serializeProperty(this.value.scale, ueVersion);
+        let none = serializeProperty(new ShortNone(), ueVersion);
+        let outputLength = rotation.byteLength + translation.byteLength + scale.byteLength + none.byteLength + this.type.length + 30;
+        let textEncoder = new TextEncoder();
+        let buffer = new ArrayBuffer(outputLength);
+        let dataView = new DataView(buffer);
+        let output = new Uint8Array(buffer);
+        let index = 0;
         dataView.setUint32(index, rotation.byteLength + translation.byteLength + scale.byteLength + 9, true);
         index += 8;
         dataView.setUint32(index, this.type.length + 1, true);
@@ -777,57 +718,76 @@ var Transform = /** @class */ (function (_super) {
         index += scale.byteLength;
         output.set(none, index);
         return output;
-    };
-    return Transform;
-}(StructSub));
-var Quat = /** @class */ (function (_super) {
-    __extends(Quat, _super);
-    function Quat() {
-        return _super !== null && _super.apply(this, arguments) || this;
     }
-    Quat.prototype.deserializeBody = function (buffer, index) {
-        var dataView = new DataView(buffer);
-        var a = dataView.getFloat32(index, true);
-        index += 4;
-        var b = dataView.getFloat32(index, true);
-        index += 4;
-        var c = dataView.getFloat32(index, true);
-        index += 4;
-        var d = dataView.getFloat32(index, true);
+}
+class Quat extends StructSub {
+    deserializeBody(buffer, index, ueVersion) {
+        let dataView = new DataView(buffer);
+        let a = 0;
+        let b = 0;
+        let c = 0;
+        let d = 0;
+        if (ueVersion == 5) {
+            a = dataView.getFloat64(index, true);
+            index += 8;
+            b = dataView.getFloat64(index, true);
+            index += 8;
+            c = dataView.getFloat64(index, true);
+            index += 8;
+            d = dataView.getFloat64(index, true);
+        }
+        else {
+            a = dataView.getFloat32(index, true);
+            index += 4;
+            b = dataView.getFloat32(index, true);
+            index += 4;
+            c = dataView.getFloat32(index, true);
+            index += 4;
+            d = dataView.getFloat32(index, true);
+        }
         this.value = { a: a, b: b, c: c, d: d };
-        return 16;
-    };
-    Quat.prototype.serializeBody = function () {
-        var textEncoder = new TextEncoder();
-        var newLength = 4 + 4 + 4 + 5 + 17 + 4 + 4 + 4 + 4;
-        var buffer = new ArrayBuffer(newLength);
-        var dataView = new DataView(buffer);
-        var output = new Uint8Array(buffer);
-        var index = 0;
-        dataView.setUint32(index, 16, true);
+        return 32;
+    }
+    serializeBody(ueVersion) {
+        let textEncoder = new TextEncoder();
+        let newLength = 4 + 4 + 4 + 5 + 17 + 8 + 8 + 8 + 8;
+        let buffer = new ArrayBuffer(newLength);
+        let dataView = new DataView(buffer);
+        let output = new Uint8Array(buffer);
+        let index = 0;
+        dataView.setUint32(index, 32, true);
         index += 8;
         dataView.setUint32(index, this.type.length + 1, true);
         index += 4;
         output.set(textEncoder.encode(this.type), index);
         index += this.type.length + 18;
-        dataView.setFloat32(index, this.value.a, true);
-        index += 4;
-        dataView.setFloat32(index, this.value.b, true);
-        index += 4;
-        dataView.setFloat32(index, this.value.c, true);
-        index += 4;
-        dataView.setFloat32(index, this.value.d, true);
+        if (ueVersion == 5) {
+            dataView.setFloat64(index, this.value.a, true);
+            index += 8;
+            dataView.setFloat64(index, this.value.b, true);
+            index += 8;
+            dataView.setFloat64(index, this.value.c, true);
+            index += 8;
+            dataView.setFloat64(index, this.value.d, true);
+        }
+        else {
+            dataView.setFloat32(index, this.value.a, true);
+            index += 4;
+            dataView.setFloat32(index, this.value.b, true);
+            index += 4;
+            dataView.setFloat32(index, this.value.c, true);
+            index += 4;
+            dataView.setFloat32(index, this.value.d, true);
+        }
         return output;
-    };
-    return Quat;
-}(StructSub));
-var GvasSave = /** @class */ (function () {
-    function GvasSave() {
-        this.ue4Version = 'Unknown';
+    }
+}
+class GvasSave {
+    constructor() {
+        this.ueVersion = 'Unknown';
         this.saveType = 'Unknown';
     }
-    return GvasSave;
-}());
+}
 var propertyClasses = new Map([
     ['UnknownProperty', GvasUnknown],
     ['StrProperty', GvasString],
@@ -850,144 +810,111 @@ var structClasses = new Map([
     ['Quat', Quat],
     ['Transform', Transform]
 ]);
-/**
- *
- * Converts a GvasSave object into a Uint8Array for saving to disk.
- *
- * @param saveObject The object to be saved.
- *
- * @returns A Uint8Array for saving to disk.
- *
- */
 function toGvas(saveObject) {
-    var length = saveObject.fileStart.byteLength + saveObject.saveType.length + 5;
-    var properties = new Array();
-    for (var _i = 0, _a = saveObject.properties; _i < _a.length; _i++) {
-        var property = _a[_i];
-        var encoded = serializeProperty(property);
+    const ueVersion = saveObject.ueVersion.includes('UE5') ? 5 : 4;
+    let length = saveObject.fileStart.byteLength + saveObject.saveType.length + 5 + (ueVersion == 5 ? 4 : 0);
+    let properties = new Array();
+    for (const property of saveObject.properties) {
+        let encoded = serializeProperty(property, ueVersion);
         properties.push(encoded);
         length += encoded.byteLength;
     }
-    var buffer = new ArrayBuffer(length);
-    var dataView = new DataView(buffer);
-    var output = new Uint8Array(buffer);
-    var index = 0;
+    let buffer = new ArrayBuffer(length);
+    let dataView = new DataView(buffer);
+    let output = new Uint8Array(buffer);
+    let index = 0;
     output.set(new Uint8Array(saveObject.fileStart), index);
     index += saveObject.fileStart.byteLength;
     dataView.setUint32(index, saveObject.saveType.length + 1, true);
     index += 4;
     output.set(new TextEncoder().encode(saveObject.saveType), index);
     index += saveObject.saveType.length + 1;
-    for (var _b = 0, properties_2 = properties; _b < properties_2.length; _b++) {
-        var property = properties_2[_b];
+    for (const property of properties) {
         output.set(property, index);
         index += property.byteLength;
     }
     return output;
 }
-/**
- *
- * Synchronously reads the provided ArrayBuffer and returns a GvasSave object with file details.
- *
- * @param {ArrayBuffer} buffer The save file contents as an ArrayBuffer.
- *
- * @returns {GvasSave} A GvasSave object containing all the save file info.
- *
- */
 function fromGvas(buffer) {
-    var saveObject = new GvasSave();
-    // Validate GVAS format.
-    var isGvas = buffer.byteLength >= 4 && new TextDecoder().decode(buffer.slice(0, 4)) == 'GVAS';
+    let saveObject = new GvasSave();
+    const isGvas = buffer.byteLength >= 4 && new TextDecoder().decode(buffer.slice(0, 4)) == 'GVAS';
     if (!isGvas) {
         logErrors('File not correctly formatted as GVAS.');
         return saveObject;
     }
-    // Parse UE4 version.
-    saveObject.ue4Version = parseString(buffer, 22);
-    // Find starting point for rest of data.
-    var first = saveObject.ue4Version.length + 31;
-    var currentIndex = (new DataView(buffer).getUint32(first, true) * 20) + first + 4;
+    saveObject.ueVersion = parseString(buffer, 22);
+    if (saveObject.ueVersion.trim() == '') {
+        saveObject.ueVersion = parseString(buffer, 26);
+    }
+    const ueVersion = saveObject.ueVersion.includes('UE5') ? 5 : 4;
+    let first = saveObject.ueVersion.length + 31 + (saveObject.ueVersion.includes('UE5') ? 4 : 0);
+    let currentIndex = (new DataView(buffer).getUint32(first, true) * 20) + first + 4;
     saveObject.fileStart = buffer.slice(0, currentIndex);
-    // Parse save file type
     saveObject.saveType = parseString(buffer, currentIndex);
     currentIndex += saveObject.saveType.length + 5;
-    // Parse properties.
-    var i = 0;
+    let i = 0;
     saveObject.properties = [];
-    while (currentIndex < buffer.byteLength && i < 10000) {
-        var propertyContainer = deserializeProperty(buffer, currentIndex);
+    while (currentIndex < buffer.byteLength - 9 && i < 10000) {
+        let propertyContainer = deserializeProperty(buffer, currentIndex, ueVersion);
         saveObject.properties.push(propertyContainer.property);
-        currentIndex += propertyContainer ? propertyContainer.length : 0;
+        currentIndex += propertyContainer.length;
         i++;
     }
     return saveObject;
 }
-/**
- * Use to parse strings from an ArrayBuffer.
- *
- * @param buffer The ArrayBuffer.
- *
- * @param offset Optional. If provided, the string is parsed starting at this position.
- *
- * @returns The string contained in the buffer at index 0 or the provided offset.
- */
-function parseString(buffer, offset) {
-    if (offset === void 0) { offset = 0; }
-    var stringlength = new DataView(buffer).getUint32(offset, true);
+function parseString(buffer, offset = 0) {
+    let stringlength = new DataView(buffer).getUint32(offset, true);
     return new TextDecoder().decode(buffer.slice(offset + 4, offset + stringlength + 3));
 }
-function deserializeProperty(buffer, startIndex, named, typed) {
-    if (named === void 0) { named = true; }
-    if (typed === void 0) { typed = true; }
-    var dataView = new DataView(buffer);
-    var textDecoder = new TextDecoder();
-    var index = startIndex;
-    var name = '';
+function deserializeProperty(buffer, startIndex, ueVersion, named = true, typed = true) {
+    let dataView = new DataView(buffer);
+    let index = startIndex;
+    let name = '';
     if (named) {
         name = parseString(buffer, index);
         index += name.length + 5;
         if (name == 'None') {
-            var none = dataView.getUint32(index, true) == 0 ? new LongNone() : new ShortNone();
-            var shortLength_1 = none.deserializeBody(buffer, index);
+            let none = dataView.getUint32(index, true) == 0 ? new LongNone() : new ShortNone();
+            let shortLength = none.deserializeBody(buffer, index, ueVersion);
             return {
                 property: none,
-                length: shortLength_1 + 9
+                length: shortLength + 9
             };
         }
     }
-    var type = '';
+    let type = '';
     if (typed) {
         type = parseString(buffer, index);
         index += type.length + 5;
     }
-    var propertyClass = propertyClasses.get(type);
+    let propertyClass = propertyClasses.get(type);
     if (propertyClass == undefined) {
-        logErrors("Encountered unknown property with name '".concat(name, "' and type '").concat(type, "'"));
+        logErrors(`Encountered unknown property with name '${name}' and type '${type}'`);
         return { length: 0, property: new GvasUnknown() };
     }
-    var property = new (propertyClass)();
+    let property = new (propertyClass)();
     if (named) {
         property.name = name;
     }
     if (typed) {
         property.type = type;
     }
-    var shortLength = property.deserializeBody(buffer, index);
+    let shortLength = property.deserializeBody(buffer, index, ueVersion);
     return { property: property, length: index - startIndex + shortLength };
 }
-function serializeProperty(property) {
-    var headerLength = 0;
+function serializeProperty(property, ueVersion) {
+    let headerLength = 0;
     if (property.name) {
         headerLength += property.name.length + 5;
     }
     if (property.type) {
         headerLength += property.type.length + 5;
     }
-    var textEncoder = new TextEncoder();
-    var buffer = new ArrayBuffer(headerLength);
-    var dataView = new DataView(buffer);
-    var header = new Uint8Array(buffer);
-    var index = 0;
+    let textEncoder = new TextEncoder();
+    let buffer = new ArrayBuffer(headerLength);
+    let dataView = new DataView(buffer);
+    let header = new Uint8Array(buffer);
+    let index = 0;
     if (property.name) {
         dataView.setUint32(index, property.name.length + 1, true);
         index += 4;
@@ -1000,15 +927,14 @@ function serializeProperty(property) {
         header.set(textEncoder.encode(property.type), index);
         index += property.type.length + 1;
     }
-    var body = property.serializeBody();
-    var combined = new Uint8Array(header.length + body.length);
+    let body = property.serializeBody(ueVersion);
+    let combined = new Uint8Array(header.length + body.length);
     combined.set(header);
     combined.set(body, header.length);
     return combined;
 }
 function fetchNamedPropertyFromArray(name, array) {
-    for (var _i = 0, array_1 = array; _i < array_1.length; _i++) {
-        var property = array_1[_i];
+    for (const property of array) {
         if (property.name == name) {
             return property;
         }
@@ -1016,9 +942,9 @@ function fetchNamedPropertyFromArray(name, array) {
     return new GvasUnknown();
 }
 function fetchPropertyFromMap(key, map) {
-    var returnProperty = new GvasUnknown();
-    var skip = false;
-    map.forEach(function (entryValue, entryKey, mapRef) {
+    let returnProperty = new GvasUnknown();
+    let skip = false;
+    map.forEach((entryValue, entryKey, mapRef) => {
         if (skip)
             return;
         if (JSON.stringify(entryKey) == JSON.stringify(key)) {
@@ -1029,10 +955,7 @@ function fetchPropertyFromMap(key, map) {
     });
     return returnProperty;
 }
-function logErrors() {
-    var args = [];
-    for (var _i = 0; _i < arguments.length; _i++) {
-        args[_i] = arguments[_i];
-    }
+function logErrors(...args) {
     console.error(args);
 }
+//# sourceMappingURL=gvasparser.js.map

@@ -15,17 +15,19 @@
     <script src="obduction.js"></script>
     <script src="myst.js"></script>
     <script src="firmament.js"></script>
+    <script src="riven.js"></script>
 </head>
 
 <body>
     <div id="main">
         <div id="intro">
             <div>Welcome, explorer, to Floydman's <b>Save Swapper</b>! You can use this tool to edit save files from
-                Unreal Engine 4 games developed by Cyan: <i><a href="https://cyan.com/games/obduction/"
+                Unreal Engine 4/5 games developed by Cyan: <i><a href="https://cyan.com/games/obduction/"
                         target="_blank">Obduction</a></i> (2016), <i><a href="https://cyan.com/games/myst/"
-                        target="_blank">Myst</a></i> (2020), and <i><a href="https://cyan.com/games/firmament/"
-                        target="_blank">Firmament</a></i> (2023).</div>
-            <div class="intro-sub">This app was built using only HTML, JavaScript, and CSS and operates completely
+                        target="_blank">Myst</a></i> (2020), <i><a href="https://cyan.com/games/firmament/"
+                        target="_blank">Firmament</a></i> (2023), and <i><a href="https://cyan.com/games/riven/"
+                        target="_blank">Riven</a></i> (2024).</div>
+            <div class="intro-sub">This app was built using HTML, JavaScript, and CSS and operates completely
                 client-side within your browser, so your files are never sent anywhere, nor are they handled by anyone
                 other than you. This means the editor is also portable,
                 so you can download it and use it anywhere you have access to a modern browser whether or not you have
@@ -61,13 +63,16 @@
                 useful. Then I'll also know it's being used!</div>
             <div class="intro-sub">Other tools I've made are listed <a href="https://thefloydman.github.io/">here</a>.
             </div>
-            <div id="disclaimer" class="intro-sub">This is fan-made software released with absolutely no promises,
-                guarantees, or obligations. User assumes sole responsibility for any and all consequences and effects
-                arising from use of this software. (Seriously, if an ambiguously-sentient
-                space pinecone or definitely-lethal-from-that-height teleportation book crash through your roof, that's
-                on you.) <i>Myst</i>, <i>Obduction</i>, <i>Firmament</i>, and <i>Cyan</i> are copyrighted by—and
-                trademarks of—Cyan Worlds / Cyan,
-                Inc. All rights reserved.</div>
+            <div id="disclaimer" class="intro-sub">
+                <p>This is fan-made software released with absolutely no promises, guarantees, or obligations. User
+                    assumes sole responsibility for any and all consequences and effects arising from use of this
+                    software. (Seriously, if an ambiguously-sentient space pinecone or
+                    definitely-lethal-from-that-height teleportation book crash through your roof,
+                    that's on you.)</p>
+                <p><i>Myst</i>, <i>Obduction</i>, <i>Firmament</i>, and <i>Cyan</i> are copyrighted by—and
+                    trademarks of—Cyan Worlds / Cyan,
+                    Inc. All rights reserved.</p>
+            </div>
         </div>
         <div id="buttons-wrapper">
             <div id="open-button">
@@ -81,8 +86,8 @@
                 <button type="button" id="button-save" onclick="savePressed()" disabled>Save</button>
             </div>
         </div>
-        <div id="ue4-version-wrapper">
-            UE4 version: <span id="ue4-version">Unknown</span>
+        <div id="ue-version-wrapper">
+            UE version: <span id="ue-version">Unknown</span>
         </div>
         <div id="save-type-wrapper">
             Save type: <span id="save-type">Unknown</span>
@@ -91,6 +96,7 @@
         <div id="obduction" class="game-wrapper"></div>
         <div id="myst" class="game-wrapper"></div>
         <div id="firmament" class="game-wrapper"></div>
+        <div id="riven" class="game-wrapper"></div>
     </div>
 </body>
 

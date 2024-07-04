@@ -21,7 +21,7 @@ function refresh() {
     let rawButton = document.getElementById('button-raw');
     rawButton.disabled = true;
     document.getElementById('button-raw').innerText = 'Switch to raw editor';
-    document.getElementById('ue4-version').innerText = 'Unknown';
+    document.getElementById('ue-version').innerText = 'Unknown';
     document.getElementById('save-type').innerText = 'Unknown';
     for (const wrapper of document.getElementsByClassName('game-wrapper')) {
         wrapper.style.display = 'none';
@@ -40,7 +40,7 @@ function fileChosen() {
     let reader = new FileReader();
     reader.addEventListener('load', () => {
         saveFile = fromGvas(reader.result);
-        document.getElementById('ue4-version').innerText = saveFile.ue4Version;
+        document.getElementById('ue-version').innerText = saveFile.ueVersion;
         document.getElementById('save-type').innerText = saveFile.saveType;
         console.log(saveFile);
         let saveButton = document.getElementById('button-save');
@@ -58,10 +58,14 @@ function fileChosen() {
                 let firmamentDiv = document.getElementById('firmament');
                 firmamentDiv.style.display = 'block';
                 toCurated(firmamentProperties, saveFile.properties, firmamentDiv, 'firmament', true);
-            } else {
+            } else if (saveFile.properties[1].name == 'RedPagesAccrued') {
                 let mystDiv = document.getElementById('myst');
                 mystDiv.style.display = 'block';
                 toCurated(mystProperties, saveFile.properties, mystDiv, 'myst', true);
+            } else {
+                let rivenDiv = document.getElementById('riven');
+                rivenDiv.style.display = 'block';
+                toCurated(rivenProperties, saveFile.properties, rivenDiv, 'riven', true);
             }
             saveButton.disabled = false;
             rawButton.disabled = false;
@@ -141,7 +145,7 @@ function toCurated(json, gvasArray, parentElement, prefix, isMain = true) {
         let gvas = Array.isArray(propertyInfo.gvas) ? propertyInfo.gvas[0] : propertyInfo.gvas;
         let property = fetchNamedPropertyFromArray(gvas, gvasArray);
         if (property instanceof GvasMap) {
-            if (prefix == 'myst' || prefix == 'firmament') {
+            if (prefix == 'myst' || prefix == 'firmament' || prefix == 'riven') {
                 let key = new GvasString();
                 key.value = propertyInfo.gvas[1];
                 let property2 = fetchPropertyFromMap(key, property.value.entries);

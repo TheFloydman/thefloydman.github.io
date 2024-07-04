@@ -9,18 +9,18 @@ class GvasProperty {
     name: string;
 
     /** Returns an int counting the number of bytes that were deserialized. */
-    deserializeBody(buffer: ArrayBuffer, index: number): number {
+    deserializeBody(buffer: ArrayBuffer, index: number, ueVersion: number): number {
         return 0;
     };
 
     /** Returns a Uint8Array representation of this property's body. */
-    serializeBody(): Uint8Array {
+    serializeBody(ueVersion: number): Uint8Array {
         return new Uint8Array(0);
     }
 
 }
 
-class GvasUnknown extends GvasProperty {}
+class GvasUnknown extends GvasProperty { }
 
 class LongNone extends GvasProperty {
 
@@ -29,11 +29,11 @@ class LongNone extends GvasProperty {
         this.type = 'None';
     }
 
-    override deserializeBody(buffer: ArrayBuffer, startIndex: number) {
+    override deserializeBody(buffer: ArrayBuffer, startIndex: number, ueVersion: number = 4) {
         return 4;
     }
 
-    override serializeBody() {
+    override serializeBody(ueVersion: number) {
         let buffer = new ArrayBuffer(4);
         let output = new Uint8Array(buffer);
         return output;
@@ -43,7 +43,7 @@ class LongNone extends GvasProperty {
 
 class GvasString extends GvasProperty {
 
-    override deserializeBody(buffer: ArrayBuffer, startIndex: number) {
+    override deserializeBody(buffer: ArrayBuffer, startIndex: number, ueVersion: number = 4) {
         let dataView = new DataView(buffer);
         let index = startIndex;
 
@@ -57,7 +57,7 @@ class GvasString extends GvasProperty {
         return index - startIndex;
     }
 
-    override serializeBody() {
+    override serializeBody(ueVersion: number) {
         let textEncoder = new TextEncoder();
         let outputLength = 4 + (this.value.length > 0 ? this.value.length + 1 : 0);
         if (this.name || this.type) {
@@ -89,7 +89,7 @@ class GvasString extends GvasProperty {
 
 class GvasBoolean extends GvasProperty {
 
-    override deserializeBody(buffer: ArrayBuffer, startIndex: number) {
+    override deserializeBody(buffer: ArrayBuffer, startIndex: number, ueVersion: number = 4) {
         const padding = 8;
         let index = startIndex;
         index += padding;
@@ -98,7 +98,7 @@ class GvasBoolean extends GvasProperty {
         return index - startIndex;
     }
 
-    override serializeBody() {
+    override serializeBody(ueVersion: number) {
         let textEncoder = new TextEncoder();
         let outputLength = 10;
         let buffer = new ArrayBuffer(outputLength);
@@ -114,7 +114,7 @@ class GvasBoolean extends GvasProperty {
 
 class GvasByte extends GvasProperty {
 
-    override deserializeBody(buffer: ArrayBuffer, startIndex: number) {
+    override deserializeBody(buffer: ArrayBuffer, startIndex: number, ueVersion: number = 4) {
         const padding = 4;
         let index = startIndex;
         let longValueLength = new DataView(buffer.slice(index, index + 4)).getUint32(0, true);
@@ -133,7 +133,7 @@ class GvasByte extends GvasProperty {
         return index - startIndex;
     }
 
-    override serializeBody() {
+    override serializeBody(ueVersion: number) {
         let textEncoder = new TextEncoder();
         let outputLength = this.value.descriptor.length + this.value.details.length + 19;
         let buffer = new ArrayBuffer(outputLength);
@@ -166,7 +166,7 @@ class GvasByte extends GvasProperty {
 
 class GvasInteger extends GvasProperty {
 
-    override deserializeBody(buffer: ArrayBuffer, startIndex: number) {
+    override deserializeBody(buffer: ArrayBuffer, startIndex: number, ueVersion: number = 4) {
         let dataView = new DataView(buffer);
         let index = startIndex;
         let numberOfBytes = dataView.getUint32(index, true);
@@ -202,7 +202,7 @@ class GvasInteger extends GvasProperty {
         return index - startIndex;
     }
 
-    override serializeBody() {
+    override serializeBody(ueVersion: number) {
         let textEncoder = new TextEncoder();
         let outputLength = this.value.bytes + 9;
         let buffer = new ArrayBuffer(outputLength);
@@ -235,7 +235,7 @@ class GvasInteger extends GvasProperty {
 
 class GvasFloat extends GvasProperty {
 
-    override deserializeBody(buffer: ArrayBuffer, startIndex: number) {
+    override deserializeBody(buffer: ArrayBuffer, startIndex: number, ueVersion: number = 4) {
         let index = startIndex;
         let numberOfBytes = new DataView(buffer.slice(index, index + 4)).getUint32(0, true);
         index += 9;
@@ -245,7 +245,7 @@ class GvasFloat extends GvasProperty {
         return index - startIndex;
     }
 
-    override serializeBody() {
+    override serializeBody(ueVersion: number) {
         let textEncoder = new TextEncoder();
         let newLength = this.value.bytes + 9;
         let buffer = new ArrayBuffer(newLength);
@@ -276,7 +276,7 @@ class GvasMap extends GvasProperty {
         entries: Map<GvasProperty, GvasProperty>
     };
 
-    override deserializeBody(buffer: ArrayBuffer, startIndex: number) {
+    override deserializeBody(buffer: ArrayBuffer, startIndex: number, ueVersion: number) {
         let dataView = new DataView(buffer);
         let textDecoder = new TextDecoder();
 
@@ -301,10 +301,10 @@ class GvasMap extends GvasProperty {
             if (keyClass == undefined || valueClass == undefined) {
                 continue;
             }
-            let entryKey = new(keyClass)();
-            index += entryKey.deserializeBody(buffer, index);
-            let entryValue = new(valueClass)();
-            index += entryValue.deserializeBody(buffer, index);
+            let entryKey = new (keyClass)();
+            index += entryKey.deserializeBody(buffer, index, ueVersion);
+            let entryValue = new (valueClass)();
+            index += entryValue.deserializeBody(buffer, index, ueVersion);
             map.set(entryKey, entryValue);
         }
 
@@ -317,13 +317,13 @@ class GvasMap extends GvasProperty {
         return index - startIndex;
     }
 
-    override serializeBody() {
+    override serializeBody(ueVersion: number) {
         //35 too many
         let outputLength = this.name.length + this.type.length + this.value.key.length + this.value.value.length + 37;
         let outputArray = new Array<[Uint8Array, Uint8Array]>();
         this.value.entries.forEach((value, key, map) => {
-            let encodedKey = serializeProperty(key);
-            let encodedValue = serializeProperty(value);
+            let encodedKey = serializeProperty(key, ueVersion);
+            let encodedValue = serializeProperty(value, ueVersion);
             outputLength += encodedKey.byteLength + encodedValue.byteLength;
             outputArray.push([encodedKey, encodedValue]);
         });
@@ -362,7 +362,7 @@ class GvasMap extends GvasProperty {
 
 class GvasArray extends GvasProperty {
 
-    override deserializeBody(buffer: ArrayBuffer, startIndex: number) {
+    override deserializeBody(buffer: ArrayBuffer, startIndex: number, ueVersion: number) {
         const dataView = new DataView(buffer);
         const textDecoder = new TextDecoder();
         let index = startIndex;
@@ -391,12 +391,12 @@ class GvasArray extends GvasProperty {
         let output = index - startIndex;
         let properties = new Array<GvasProperty>();
         for (let i = 0; i < numberOfEntries; i++) {
-            let propertyClass = propertyClasses.get(type1); 
+            let propertyClass = propertyClasses.get(type1);
             if (propertyClass == undefined) {
                 continue;
             }
-            let property = new(propertyClass)();
-            let shortLength = property.deserializeBody(buffer, index);
+            let property = new (propertyClass)();
+            let shortLength = property.deserializeBody(buffer, index, ueVersion);
             output += shortLength;
             properties.push(property);
             index += shortLength;
@@ -409,12 +409,12 @@ class GvasArray extends GvasProperty {
         return output;
     }
 
-    override serializeBody() {
+    override serializeBody(ueVersion: number) {
         let outputLength = this.name.length + this.type.length + this.value.type.length + this.value.entryName.length + 59;
         let outputArray = new Array<Uint8Array>();
         let propertiesLength = 0;
         for (const property of this.value.properties) {
-            let array = serializeProperty(property);
+            let array = serializeProperty(property, ueVersion);
             propertiesLength += array.byteLength;
             outputArray.push(array);
         }
@@ -462,24 +462,24 @@ class GvasStruct extends GvasProperty {
 
     override value: Array<GvasProperty>;
 
-    override deserializeBody(buffer: ArrayBuffer, startIndex: number) {
+    override deserializeBody(buffer: ArrayBuffer, startIndex: number, ueVersion: number) {
         let index = startIndex;
-        let properties = new Array<{length: number, property: GvasProperty}>();
+        let properties = new Array<{ length: number, property: GvasProperty }>();
 
         if (this.name || this.type) {
             let dataView = new DataView(buffer);
-            const padding = 17;
             let structLength = dataView.getInt32(index, true);
             index += 4 + 4;
             let typeLength = dataView.getInt32(index, true);
             index += 4;
             let type = new TextDecoder().decode(buffer.slice(index, index + typeLength - 1));
+            let padding = 17;
             index += typeLength + padding;
             let rawValue = buffer.slice(index, index + structLength);
             for (let i = 0; i < structLength;) {
-                let propertyContainer: {length: number, property: GvasProperty};
+                let propertyContainer: { length: number, property: GvasProperty };
                 if (type.endsWith('Property')) {
-                    propertyContainer = deserializeProperty(rawValue, i);
+                    propertyContainer = deserializeProperty(rawValue, i, ueVersion);
                     propertyContainer.property.type = type;
                     properties.push(propertyContainer);
                 } else {
@@ -487,9 +487,8 @@ class GvasStruct extends GvasProperty {
                     if (structClass == undefined) {
                         continue;
                     }
-                    let property = new(structClass);
-                    property.deserializeBody(rawValue,i);
-                    let shortLength = property.deserializeBody(rawValue, i);
+                    let property = new (structClass);
+                    let shortLength = property.deserializeBody(rawValue, i, ueVersion);
                     property.type = type;
                     propertyContainer = {
                         property: property,
@@ -507,7 +506,7 @@ class GvasStruct extends GvasProperty {
         } else {
             let finished = false;
             while (!finished) {
-                let propertyContainer = deserializeProperty(buffer, index);
+                let propertyContainer = deserializeProperty(buffer, index, ueVersion);
                 properties.push(propertyContainer);
                 index += propertyContainer.length;
                 finished = propertyContainer.property instanceof ShortNone;
@@ -523,11 +522,11 @@ class GvasStruct extends GvasProperty {
         return output;
     }
 
-    override serializeBody() {
+    override serializeBody(ueVersion: number) {
         let outputLength = 0;
         let outputArray = new Array<Uint8Array>();
         for (const property of this.value) {
-            let array = property.name || property instanceof ShortNone ? serializeProperty(property) : property.serializeBody();
+            let array = property.name || property instanceof ShortNone ? serializeProperty(property, ueVersion) : property.serializeBody(ueVersion);
             outputLength += array.byteLength;
             outputArray.push(array);
         }
@@ -546,7 +545,7 @@ class GvasStruct extends GvasProperty {
 
 }
 
-class StructSub extends GvasProperty {}
+class StructSub extends GvasProperty { }
 
 class ShortNone extends StructSub {
 
@@ -559,7 +558,7 @@ class ShortNone extends StructSub {
         return 0;
     }
 
-    override serializeBody() {
+    override serializeBody(ueVersion: number) {
         return new Uint8Array(0);
     }
 
@@ -567,36 +566,56 @@ class ShortNone extends StructSub {
 
 class Vector extends StructSub {
 
-    override deserializeBody(buffer: ArrayBuffer, index: number) {
+    override deserializeBody(buffer: ArrayBuffer, index: number, ueVersion: number) {
         let dataView = new DataView(buffer);
-        let x = dataView.getFloat32(index, true);
-        index += 4;
-        let y = dataView.getFloat32(index, true);
-        index += 4;
-        let z = dataView.getFloat32(index, true);
+        let x = 0;
+        let y = 0;
+        let z = 0;
+        if (ueVersion == 5) {
+            x = dataView.getFloat64(index, true);
+            index += 8;
+            y = dataView.getFloat64(index, true);
+            index += 8;
+            z = dataView.getFloat64(index, true);
+        } else {
+            x = dataView.getFloat32(index, true);
+            index += 4;
+            y = dataView.getFloat32(index, true);
+            index += 4;
+            z = dataView.getFloat32(index, true);
+        }
         this.value = { x: x, y: y, z: z };
-        return 12;
+        return 24;
     }
 
-    override serializeBody() {
+    override serializeBody(ueVersion: number) {
         let textEncoder = new TextEncoder();
-        let newLength = 4 + 4 + 4 + 7 + 17 + 4 + 4 + 4;
+        let newLength = 4 + 4 + 4 + 7 + 17 + 8 + 8 + 8;
         let buffer = new ArrayBuffer(newLength);
         let dataView = new DataView(buffer);
         let output = new Uint8Array(buffer);
 
         let index = 0;
-        dataView.setUint32(index, 12, true);
+        dataView.setUint32(index, 24, true);
         index += 8;
         dataView.setUint32(index, this.type.length + 1, true);
         index += 4;
         output.set(textEncoder.encode(this.type), index);
         index += this.type.length + 18
-        dataView.setFloat32(index, this.value.x, true);
-        index += 4;
-        dataView.setFloat32(index, this.value.y, true);
-        index += 4;
-        dataView.setFloat32(index, this.value.z, true);
+
+        if (ueVersion == 5) {
+            dataView.setFloat64(index, this.value.x, true);
+            index += 8;
+            dataView.setFloat64(index, this.value.y, true);
+            index += 8;
+            dataView.setFloat64(index, this.value.z, true);
+        } else {
+            dataView.setFloat32(index, this.value.x, true);
+            index += 4;
+            dataView.setFloat32(index, this.value.y, true);
+            index += 4;
+            dataView.setFloat32(index, this.value.z, true);
+        }
 
         return output;
     }
@@ -605,33 +624,48 @@ class Vector extends StructSub {
 
 class Vector2D extends StructSub {
 
-    override deserializeBody(buffer: ArrayBuffer, index: number) {
+    override deserializeBody(buffer: ArrayBuffer, index: number, ueVersion: number) {
         let dataView = new DataView(buffer);
-        let x = dataView.getFloat32(index, true);
-        index += 4;
-        let y = dataView.getFloat32(index, true);
+        let x = 0;
+        let y = 0;
+        if (ueVersion == 5) {
+            x = dataView.getFloat64(index, true);
+            index += 8;
+            y = dataView.getFloat64(index, true);
+        } else {
+            x = dataView.getFloat32(index, true);
+            index += 4;
+            y = dataView.getFloat32(index, true);
+        }
         this.value = { x: x, y: y };
-        return 8;
+        return 16;
     }
 
-    override serializeBody() {
+    override serializeBody(ueVersion: number) {
         let textEncoder = new TextEncoder();
-        let newLength = 4 + 4 + 4 + 9 + 17 + 4 + 4;
+        let newLength = 4 + 4 + 4 + 9 + 17 + 8 + 8;
         let buffer = new ArrayBuffer(newLength);
         let dataView = new DataView(buffer);
         let output = new Uint8Array(buffer);
 
         let index = 0;
-        dataView.setUint32(index, 8, true);
+        dataView.setUint32(index, 16, true);
         index += 8;
         dataView.setUint32(index, this.type.length + 1, true);
         index += 4;
         let typeName = textEncoder.encode(this.type);
         output.set(typeName, index);
         index += this.type.length + 18;
-        dataView.setFloat32(index, this.value.x, true);
-        index += 4;
-        dataView.setFloat32(index, this.value.y, true);
+
+        if (ueVersion == 5) {
+            dataView.setFloat64(index, this.value.x, true);
+            index += 8;
+            dataView.setFloat64(index, this.value.y, true);
+        } else {
+            dataView.setFloat32(index, this.value.x, true);
+            index += 4;
+            dataView.setFloat32(index, this.value.y, true);
+        }
 
         return output;
     }
@@ -640,36 +674,56 @@ class Vector2D extends StructSub {
 
 class Rotator extends StructSub {
 
-    override deserializeBody(buffer: ArrayBuffer, index: number) {
+    override deserializeBody(buffer: ArrayBuffer, index: number, ueVersion: number) {
         let dataView = new DataView(buffer);
-        let x = dataView.getFloat32(index, true);
-        index += 4;
-        let y = dataView.getFloat32(index, true);
-        index += 4;
-        let z = dataView.getFloat32(index, true);
+        let x = 0;
+        let y = 0;
+        let z = 0;
+        if (ueVersion == 5) {
+            x = dataView.getFloat64(index, true);
+            index += 8;
+            y = dataView.getFloat64(index, true);
+            index += 8;
+            z = dataView.getFloat64(index, true);
+        } else {
+            x = dataView.getFloat32(index, true);
+            index += 4;
+            y = dataView.getFloat32(index, true);
+            index += 4;
+            z = dataView.getFloat32(index, true);
+        }
         this.value = { x: x, y: y, z: z };
-        return 12;
+        return 24;
     }
 
-    override serializeBody() {
+    override serializeBody(ueVersion: number) {
         let textEncoder = new TextEncoder();
-        let newLength = 4 + 4 + 4 + this.type.length + 18 + 4 + 4 + 4;
+        let newLength = 4 + 4 + 4 + this.type.length + 18 + 8 + 8 + 8;
         let buffer = new ArrayBuffer(newLength);
         let dataView = new DataView(buffer);
         let output = new Uint8Array(buffer);
 
         let index = 0;
-        dataView.setUint32(index, 12, true);
+        dataView.setUint32(index, 24, true);
         index += 8;
         dataView.setUint32(index, this.type.length + 1, true);
         index += 4;
         output.set(textEncoder.encode(this.type), index);
         index += this.type.length + 18
-        dataView.setFloat32(index, this.value.x, true);
-        index += 4;
-        dataView.setFloat32(index, this.value.y, true);
-        index += 4;
-        dataView.setFloat32(index, this.value.z, true);
+
+        if (ueVersion == 5) {
+            dataView.setFloat64(index, this.value.x, true);
+            index += 8;
+            dataView.setFloat64(index, this.value.y, true);
+            index += 8;
+            dataView.setFloat64(index, this.value.z, true);
+        } else {
+            dataView.setFloat32(index, this.value.x, true);
+            index += 4;
+            dataView.setFloat32(index, this.value.y, true);
+            index += 4;
+            dataView.setFloat32(index, this.value.z, true);
+        }
 
         return output;
     }
@@ -692,7 +746,7 @@ class Guid extends StructSub {
         return 16;
     }
 
-    override serializeBody() {
+    override serializeBody(ueVersion: number) {
         let textEncoder = new TextEncoder();
         let newLength = 4 + 4 + 4 + 7 + 17 + 4 + 4 + 4 + 2;
         let buffer = new ArrayBuffer(newLength);
@@ -727,7 +781,7 @@ class DateTime extends StructSub {
         return 8;
     }
 
-    override serializeBody() {
+    override serializeBody(ueVersion: number) {
         let newLength = 4 + 4 + 4 + 9 + 17 + 8;
         let buffer = new ArrayBuffer(newLength);
         let dataView = new DataView(buffer);
@@ -750,13 +804,13 @@ class DateTime extends StructSub {
 /** Made up of a Rotation (Quat), a Translation (Vector), and a Scale3D (Vector), all of which are StructProperties. */
 class Transform extends StructSub {
 
-    override deserializeBody(buffer: ArrayBuffer, startIndex: number) {
+    override deserializeBody(buffer: ArrayBuffer, startIndex: number, ueVersion: number) {
         let index = startIndex;
-        let rotation = deserializeProperty(buffer, index);
+        let rotation = deserializeProperty(buffer, index, ueVersion);
         index += rotation.length;
-        let translation = deserializeProperty(buffer, index);
+        let translation = deserializeProperty(buffer, index, ueVersion);
         index += translation.length;
-        let scale = deserializeProperty(buffer, index);
+        let scale = deserializeProperty(buffer, index, ueVersion);
         index += scale.length;
         this.value = {
             rotation: rotation.property,
@@ -767,11 +821,11 @@ class Transform extends StructSub {
         return index - startIndex;
     }
 
-    override serializeBody() {
-        let rotation = serializeProperty(this.value.rotation);
-        let translation = serializeProperty(this.value.translation);
-        let scale = serializeProperty(this.value.scale);
-        let none = serializeProperty(new ShortNone());
+    override serializeBody(ueVersion: number) {
+        let rotation = serializeProperty(this.value.rotation, ueVersion);
+        let translation = serializeProperty(this.value.translation, ueVersion);
+        let scale = serializeProperty(this.value.scale, ueVersion);
+        let none = serializeProperty(new ShortNone(), ueVersion);
         let outputLength = rotation.byteLength + translation.byteLength + scale.byteLength + none.byteLength + this.type.length + 30;
 
         let textEncoder = new TextEncoder();
@@ -801,41 +855,65 @@ class Transform extends StructSub {
 
 class Quat extends StructSub {
 
-    override deserializeBody(buffer: ArrayBuffer, index: number) {
+    override deserializeBody(buffer: ArrayBuffer, index: number, ueVersion: number) {
         let dataView = new DataView(buffer);
-
-        let a = dataView.getFloat32(index, true);
-        index += 4;
-        let b = dataView.getFloat32(index, true);
-        index += 4;
-        let c = dataView.getFloat32(index, true);
-        index += 4;
-        let d = dataView.getFloat32(index, true);
+        let a = 0;
+        let b = 0;
+        let c = 0;
+        let d = 0;
+        if (ueVersion == 5) {
+            a = dataView.getFloat64(index, true);
+            index += 8;
+            b = dataView.getFloat64(index, true);
+            index += 8;
+            c = dataView.getFloat64(index, true);
+            index += 8;
+            d = dataView.getFloat64(index, true);
+        } else {
+            a = dataView.getFloat32(index, true);
+            index += 4;
+            b = dataView.getFloat32(index, true);
+            index += 4;
+            c = dataView.getFloat32(index, true);
+            index += 4;
+            d = dataView.getFloat32(index, true);
+        }
         this.value = { a: a, b: b, c: c, d: d };
-        return 16;
+        return 32;
     }
 
-    override serializeBody() {
+    override serializeBody(ueVersion: number) {
         let textEncoder = new TextEncoder();
-        let newLength = 4 + 4 + 4 + 5 + 17 + 4 + 4 + 4 + 4;
+        let newLength = 4 + 4 + 4 + 5 + 17 + 8 + 8 + 8 + 8;
         let buffer = new ArrayBuffer(newLength);
         let dataView = new DataView(buffer);
         let output = new Uint8Array(buffer);
 
         let index = 0;
-        dataView.setUint32(index, 16, true);
+        dataView.setUint32(index, 32, true);
         index += 8;
         dataView.setUint32(index, this.type.length + 1, true);
         index += 4;
         output.set(textEncoder.encode(this.type), index);
         index += this.type.length + 18
-        dataView.setFloat32(index, this.value.a, true);
-        index += 4;
-        dataView.setFloat32(index, this.value.b, true);
-        index += 4;
-        dataView.setFloat32(index, this.value.c, true);
-        index += 4;
-        dataView.setFloat32(index, this.value.d, true);
+
+        if (ueVersion == 5) {
+            dataView.setFloat64(index, this.value.a, true);
+            index += 8;
+            dataView.setFloat64(index, this.value.b, true);
+            index += 8;
+            dataView.setFloat64(index, this.value.c, true);
+            index += 8;
+            dataView.setFloat64(index, this.value.d, true);
+        } else {
+            dataView.setFloat32(index, this.value.a, true);
+            index += 4;
+            dataView.setFloat32(index, this.value.b, true);
+            index += 4;
+            dataView.setFloat32(index, this.value.c, true);
+            index += 4;
+            dataView.setFloat32(index, this.value.d, true);
+        }
 
         return output;
     }
@@ -843,7 +921,7 @@ class Quat extends StructSub {
 }
 
 class GvasSave {
-    ue4Version = 'Unknown';
+    ueVersion = 'Unknown';
     saveType = 'Unknown';
     fileStart: ArrayBuffer;
     properties: Array<GvasProperty>;
@@ -882,10 +960,11 @@ var structClasses = new Map<string, typeof GvasProperty>([
  * 
  */
 function toGvas(saveObject: GvasSave): Uint8Array {
-    let length = saveObject.fileStart.byteLength + saveObject.saveType.length + 5;
+    const ueVersion = saveObject.ueVersion.includes('UE5') ? 5 : 4;
+    let length = saveObject.fileStart.byteLength + saveObject.saveType.length + 5 + (ueVersion == 5 ? 4 : 0);
     let properties = new Array<Uint8Array>();
     for (const property of saveObject.properties) {
-        let encoded = serializeProperty(property);
+        let encoded = serializeProperty(property, ueVersion);
         properties.push(encoded);
         length += encoded.byteLength;
     }
@@ -929,11 +1008,15 @@ function fromGvas(buffer: ArrayBuffer): GvasSave {
         return saveObject;
     }
 
-    // Parse UE4 version.
-    saveObject.ue4Version = parseString(buffer, 22);
+    // Parse UE version.
+    saveObject.ueVersion = parseString(buffer, 22);
+    if (saveObject.ueVersion.trim() == '') {
+        saveObject.ueVersion = parseString(buffer, 26);
+    }
+    const ueVersion = saveObject.ueVersion.includes('UE5') ? 5 : 4;
 
     // Find starting point for rest of data.
-    let first = saveObject.ue4Version.length + 31;
+    let first = saveObject.ueVersion.length + 31 + (saveObject.ueVersion.includes('UE5') ? 4 : 0);
     let currentIndex = (new DataView(buffer).getUint32(first, true) * 20) + first + 4;
     saveObject.fileStart = buffer.slice(0, currentIndex);
 
@@ -944,10 +1027,10 @@ function fromGvas(buffer: ArrayBuffer): GvasSave {
     // Parse properties.
     let i = 0;
     saveObject.properties = [];
-    while (currentIndex < buffer.byteLength && i < 10000) {
-        let propertyContainer = deserializeProperty(buffer, currentIndex);
+    while (currentIndex < buffer.byteLength - 9 && i < 10000) {
+        let propertyContainer = deserializeProperty(buffer, currentIndex, ueVersion);
         saveObject.properties.push(propertyContainer.property);
-        currentIndex += propertyContainer ? propertyContainer.length : 0;
+        currentIndex += propertyContainer.length;
         i++;
     }
 
@@ -968,9 +1051,8 @@ function parseString(buffer: ArrayBuffer, offset = 0): string {
     return new TextDecoder().decode(buffer.slice(offset + 4, offset + stringlength + 3));
 }
 
-function deserializeProperty(buffer: ArrayBuffer, startIndex: number, named = true, typed = true): {length: number, property: GvasProperty} {
+function deserializeProperty(buffer: ArrayBuffer, startIndex: number, ueVersion: number, named = true, typed = true): { length: number, property: GvasProperty } {
     let dataView = new DataView(buffer);
-    let textDecoder = new TextDecoder();
 
     let index = startIndex;
     let name = '';
@@ -979,7 +1061,7 @@ function deserializeProperty(buffer: ArrayBuffer, startIndex: number, named = tr
         index += name.length + 5;
         if (name == 'None') {
             let none = dataView.getUint32(index, true) == 0 ? new LongNone() : new ShortNone();
-            let shortLength = none.deserializeBody(buffer, index);
+            let shortLength = none.deserializeBody(buffer, index, ueVersion);
             return {
                 property: none,
                 length: shortLength + 9
@@ -994,20 +1076,20 @@ function deserializeProperty(buffer: ArrayBuffer, startIndex: number, named = tr
     let propertyClass = propertyClasses.get(type);
     if (propertyClass == undefined) {
         logErrors(`Encountered unknown property with name '${name}' and type '${type}'`);
-        return {length: 0, property: new GvasUnknown()};
+        return { length: 0, property: new GvasUnknown() };
     }
-    let property = new(propertyClass)();
+    let property = new (propertyClass)();
     if (named) {
         property.name = name;
     }
     if (typed) {
         property.type = type;
     }
-    let shortLength = property.deserializeBody(buffer, index);
+    let shortLength = property.deserializeBody(buffer, index, ueVersion);
     return { property: property, length: index - startIndex + shortLength };
 }
 
-function serializeProperty(property: GvasProperty): Uint8Array {
+function serializeProperty(property: GvasProperty, ueVersion: number): Uint8Array {
     let headerLength = 0;
     if (property.name) {
         headerLength += property.name.length + 5;
@@ -1036,7 +1118,7 @@ function serializeProperty(property: GvasProperty): Uint8Array {
         index += property.type.length + 1;
     }
 
-    let body = property.serializeBody();
+    let body = property.serializeBody(ueVersion);
 
     let combined = new Uint8Array(header.length + body.length);
     combined.set(header);
@@ -1056,7 +1138,7 @@ function fetchNamedPropertyFromArray(name: string, array: Array<GvasProperty>): 
 function fetchPropertyFromMap(key: GvasProperty, map: Map<GvasProperty, GvasProperty>): GvasProperty {
     let returnProperty = new GvasUnknown();
     let skip = false;
-    map.forEach((entryValue, entryKey, mapRef)=>{
+    map.forEach((entryValue, entryKey, mapRef) => {
         if (skip) return;
         if (JSON.stringify(entryKey) == JSON.stringify(key)) {
             returnProperty = entryValue.value;
@@ -1067,5 +1149,5 @@ function fetchPropertyFromMap(key: GvasProperty, map: Map<GvasProperty, GvasProp
 }
 
 function logErrors(...args: string[]) {
-        console.error(args);
+    console.error(args);
 }
