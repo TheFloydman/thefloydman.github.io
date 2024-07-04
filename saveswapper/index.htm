@@ -18,15 +18,25 @@
     <script src="riven.js"></script>
 </head>
 
-<body>
+<body onload="pickRandomWarning();">
     <div id="main">
         <div id="intro">
             <div>Welcome, explorer, to Floydman's <b>Save Swapper</b>! You can use this tool to edit save files from
-                Unreal Engine 4/5 games developed by Cyan: <i><a href="https://cyan.com/games/obduction/"
-                        target="_blank">Obduction</a></i> (2016), <i><a href="https://cyan.com/games/myst/"
-                        target="_blank">Myst</a></i> (2020), <i><a href="https://cyan.com/games/firmament/"
-                        target="_blank">Firmament</a></i> (2023), and <i><a href="https://cyan.com/games/riven/"
-                        target="_blank">Riven</a></i> (2024).</div>
+                Unreal Engine 4/5 games developed by Cyan:</div>
+            <div class="intro-sub">
+                <div class="game-list">
+                    <i><a href="https://cyan.com/games/obduction/" target="_blank">Obduction</a></i> (2016)
+                </div>
+                <div class="game-list">
+                    <i><a href="https://cyan.com/games/myst/" target="_blank">Myst</a></i> (2020)
+                </div>
+                <div class="game-list">
+                    <i><a href="https://cyan.com/games/firmament/" target="_blank">Firmament</a></i> (2023)
+                </div>
+                <div class="game-list">
+                    <i><a href="https://cyan.com/games/riven/" target="_blank">Riven</a></i> (2024)
+                </div>
+            </div>
             <div class="intro-sub">This app was built using HTML, JavaScript, and CSS and operates completely
                 client-side within your browser, so your files are never sent anywhere, nor are they handled by anyone
                 other than you. This means the editor is also portable,
@@ -64,14 +74,13 @@
             <div class="intro-sub">Other tools I've made are listed <a href="https://thefloydman.github.io/">here</a>.
             </div>
             <div id="disclaimer" class="intro-sub">
-                <p>This is fan-made software released with absolutely no promises, guarantees, or obligations. User
+                <div>This is fan-made software released with absolutely no promises, guarantees, or obligations. User
                     assumes sole responsibility for any and all consequences and effects arising from use of this
-                    software. (Seriously, if an ambiguously-sentient space pinecone or
-                    definitely-lethal-from-that-height teleportation book crash through your roof,
-                    that's on you.)</p>
-                <p><i>Myst</i>, <i>Obduction</i>, <i>Firmament</i>, and <i>Cyan</i> are copyrighted by—and
+                    software. (<span id="random-warning"></span>)</div>
+                <div><i>Myst</i>, <i>Riven</i>, <i>Firmament</i>, <i>Obduction</i>, and <i>Cyan</i> are copyrighted
+                    by—and
                     trademarks of—Cyan Worlds / Cyan,
-                    Inc. All rights reserved.</p>
+                    Inc. All rights reserved.</div>
             </div>
         </div>
         <div id="buttons-wrapper">

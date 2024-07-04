@@ -1,5 +1,20 @@
 var saveFile;
 
+function pickRandomWarning() {
+    const allWarnings = [
+        "Seriously, if an ambiguously-sentient space pinecone crashes through your roof, that's on you.",
+        "Seriously, if you forget to take a return Linking Book with you into that new Age, that's on you.",
+        "Seriously, if you trap yourself in that cool-looking Trap Book, that's on you.",
+        "Seriosuly, if you mess up and can't maintain the Firmament, that's on you.",
+        "Seriously, if you get stuck listening to Mayor Janssen rambling on for hours, that's on you.",
+        "Seriously, if the apparition of an ambiguously-French woman convinces you to do something stupid, that's on you.",
+        "Seriously, if your deficient Writing ability causes the very fabric of reality to unravel, that's on you.",
+        "Seriously, if you take a poison dart right to the neck while you're just trying to do your job, that's on you."
+    ];
+    const randomIndex = Math.floor(Math.random() * allWarnings.length);
+    document.getElementById("random-warning").innerText = allWarnings[randomIndex];
+}
+
 function toggleInstructions() {
     let instructions = document.getElementById('instructions');
     let arrow = document.getElementById('instruction-arrow');

@@ -25,6 +25,10 @@ div#intro {
     margin-bottom: 16px;
 }
 
+div.game-list {
+    margin-top: 4px;
+}
+
 a {
     font-weight: 600;
     text-decoration: none;
@@ -118,6 +122,9 @@ div#disclaimer {
     border-top: 1px solid black;
     padding-top: 16px;
     font-size: small;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
 }
 
 label.right {
