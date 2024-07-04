@@ -585,18 +585,18 @@ class Vector extends StructSub {
             z = dataView.getFloat32(index, true);
         }
         this.value = { x: x, y: y, z: z };
-        return 24;
+        return 12 + (ueVersion == 5 ? 12 : 0);
     }
 
     override serializeBody(ueVersion: number) {
         let textEncoder = new TextEncoder();
-        let newLength = 4 + 4 + 4 + 7 + 17 + 8 + 8 + 8;
+        let newLength = 4 + 4 + 4 + 7 + 17 + 4 + 4 + 4 + (ueVersion == 5 ? 12 : 0);
         let buffer = new ArrayBuffer(newLength);
         let dataView = new DataView(buffer);
         let output = new Uint8Array(buffer);
 
         let index = 0;
-        dataView.setUint32(index, 24, true);
+        dataView.setUint32(index, 12 + (ueVersion == 5 ? 12 : 0), true);
         index += 8;
         dataView.setUint32(index, this.type.length + 1, true);
         index += 4;
@@ -638,18 +638,18 @@ class Vector2D extends StructSub {
             y = dataView.getFloat32(index, true);
         }
         this.value = { x: x, y: y };
-        return 16;
+        return 8 + (ueVersion == 5 ? 8 : 0);
     }
 
     override serializeBody(ueVersion: number) {
         let textEncoder = new TextEncoder();
-        let newLength = 4 + 4 + 4 + 9 + 17 + 8 + 8;
+        let newLength = 4 + 4 + 4 + 9 + 17 + 4 + 4 + (ueVersion == 5 ? 8 : 0);
         let buffer = new ArrayBuffer(newLength);
         let dataView = new DataView(buffer);
         let output = new Uint8Array(buffer);
 
         let index = 0;
-        dataView.setUint32(index, 16, true);
+        dataView.setUint32(index, 8 + (ueVersion == 5 ? 8 : 0), true);
         index += 8;
         dataView.setUint32(index, this.type.length + 1, true);
         index += 4;
@@ -693,18 +693,18 @@ class Rotator extends StructSub {
             z = dataView.getFloat32(index, true);
         }
         this.value = { x: x, y: y, z: z };
-        return 24;
+        return 12 + (ueVersion == 5 ? 12 : 0);
     }
 
     override serializeBody(ueVersion: number) {
         let textEncoder = new TextEncoder();
-        let newLength = 4 + 4 + 4 + this.type.length + 18 + 8 + 8 + 8;
+        let newLength = 4 + 4 + 4 + this.type.length + 18 + 4 + 4 + 4 + (ueVersion == 5 ? 12 : 0);
         let buffer = new ArrayBuffer(newLength);
         let dataView = new DataView(buffer);
         let output = new Uint8Array(buffer);
 
         let index = 0;
-        dataView.setUint32(index, 24, true);
+        dataView.setUint32(index, 12 + (ueVersion == 5 ? 12 : 0), true);
         index += 8;
         dataView.setUint32(index, this.type.length + 1, true);
         index += 4;
@@ -879,18 +879,18 @@ class Quat extends StructSub {
             d = dataView.getFloat32(index, true);
         }
         this.value = { a: a, b: b, c: c, d: d };
-        return 32;
+        return 16 + (ueVersion == 5 ? 16 : 0);
     }
 
     override serializeBody(ueVersion: number) {
         let textEncoder = new TextEncoder();
-        let newLength = 4 + 4 + 4 + 5 + 17 + 8 + 8 + 8 + 8;
+        let newLength = 4 + 4 + 4 + 5 + 17 + 4 + 4 + 4 + 4 + (ueVersion == 5 ? 16 : 0);
         let buffer = new ArrayBuffer(newLength);
         let dataView = new DataView(buffer);
         let output = new Uint8Array(buffer);
 
         let index = 0;
-        dataView.setUint32(index, 32, true);
+        dataView.setUint32(index, 16 + (ueVersion == 5 ? 16 : 0), true);
         index += 8;
         dataView.setUint32(index, this.type.length + 1, true);
         index += 4;
