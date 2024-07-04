@@ -65,13 +65,13 @@
                 </div>
             </div>
             <div class="box-sub bar-above"><b>Explanation</b></div>
-            <div class="box-sub">There are three steps to this compression process: precompression, deduplication, and
+            <div class="box-sub">There are three steps to this whole process: precompression, deduplication, and
                 compression.</div>
             <div class="box-sub"><i>Precompression</i> is done by XTool. It decompresses anything it can in the hope
                 that we can compress those parts better in a later step. This will result in an archive about twice as
-                big as your original installation directory.</div>
-            <div class="box-sub"><i>Deduplication</i> is the job of SREP. It finds and removes redundant data. This will
-                reduce the size of the precompressed archive by about 25%.</div>
+                large as your original installer.</div>
+            <div class="box-sub"><i>Deduplication</i> is the job of SREP. It finds and removes redundant data. This
+                reduces the size of the precompressed archive by about 25%.</div>
             <div class="box-sub"><i>Compression</i> is performed by 7-zip and is exactly what you're accustomed to: A
                 compression algorithm (LZMA2 in this case) is used to reduce the size of the deduplicated archive as
                 much as possible, resulting in an archive about 60% smaller than the original.</div>
