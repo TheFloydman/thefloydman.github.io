@@ -55,9 +55,10 @@ function fileChosen() {
     let reader = new FileReader();
     reader.addEventListener('load', () => {
         saveFile = fromGvas(reader.result);
+        saveFile.fileName = file.name;
+        console.log(saveFile.fileName);
         document.getElementById('ue-version').innerText = saveFile.ueVersion;
         document.getElementById('save-type').innerText = saveFile.saveType;
-        console.log(saveFile);
         let saveButton = document.getElementById('button-save');
         let rawButton = document.getElementById('button-raw');
         saveButton.disabled = true;
@@ -97,7 +98,7 @@ function fileChosen() {
 
 function savePressed() {
     let output = toGvas(saveFile);
-    let file = new File([output], 'GameState.sav', { type: 'application/octet-stream' });
+    let file = new File([output], saveFile.fileName, { type: 'application/octet-stream' });
     saveAs(file);
 }
 
