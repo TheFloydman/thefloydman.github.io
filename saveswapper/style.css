@@ -65,6 +65,20 @@ li {
     margin-top: 16px;
 }
 
+ol.alpha {
+    list-style-type: lower-alpha;
+}
+
+ol.alpha>li {
+    margin-top: 8px;
+}
+
+span.filepath {
+    background-color: rgba(255, 255, 255, 0.65);
+    padding: 2px 6px;
+    border-radius: 4px;
+}
+
 div#instructions-wrapper {
     background-color: #c2e3f2;
     border-radius: 8px;

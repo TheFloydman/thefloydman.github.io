@@ -39,9 +39,8 @@
             </div>
             <div class="intro-sub">This app was built using HTML, JavaScript, and CSS and operates completely
                 client-side within your browser, so your files are never sent anywhere, nor are they handled by anyone
-                other than you. This means the editor is also portable,
-                so you can download it and use it anywhere you have access to a modern browser whether or not you have
-                access to the Internet.</div>
+                other than you. This means the editor is also portable, so you can download it and use it anywhere you
+                have access to a modern browser whether or not you have access to the Internet.</div>
             <div class="intro-sub">
                 <div id="instructions-wrapper" onclick="toggleInstructions()">
                     <div id="arrow-explainer">Here's how it works: <span id="instruction-arrow">⏵</span> <i>(Click to
@@ -49,10 +48,16 @@
                     <div id="instructions">
                         <ol>
                             <li>Fully pause or close the game whose save file you are editing.</li>
-                            <li>Locate the save file you want to edit (a single file that ends in ".sav"). On Windows,
-                                this should be at
-                                C:\Users\<i>YOUR_USERNAME</i>\AppData\Local\<i>GAME_NAME</i>\Saved\SaveGames
-                                (alternatively %LOCALAPPDATA%\<i>GAME_NAME</i>\Saved\SaveGames).</li>
+                            <li>Locate the save file you want to edit (a single file that ends in ".sav"). Known save
+                                locations are:</li>
+                            <ol class="alpha">
+                                <li><u>Windows</u>: <span class="filepath">C:\Users\[USERNAME]\AppData\Local\[GAME
+                                        NAME]\Saved\SaveGames</span></li>
+                                <li><u>Mac</u>:
+                                    <span class="filepath">~/Library/Application Support/Epic/[GAME
+                                        NAME]/Saved/SaveGames</span>
+                                </li>
+                            </ol>
                             <li>Create a backup of your original save file, just in case. Put it somewhere else and/or
                                 change its name.</li>
                             <li>Load the file into this editor by pressing the button.</li>
