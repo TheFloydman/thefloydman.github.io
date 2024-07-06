@@ -1,0 +1,130 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+
+* {
+    font-family: 'Inter', sans-serif;
+    box-sizing: border-box;
+}
+
+a {
+    text-decoration: none;
+    font-weight: 600;
+    color: black;
+}
+
+a:hover {
+    color: gray;
+}
+
+div#page-container {
+    max-width: 960px;
+    border: 2px solid black;
+    border-radius: 16px;
+    margin-left: auto;
+    margin-right: auto;
+    padding: 12px 16px;
+}
+
+div#hr {
+    border-bottom: 2px solid black;
+    width: 256px;
+    margin-top: 32px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+div#title {
+    font-weight: 700;
+}
+
+div#attribution {
+    margin-top: 4px;
+}
+
+div#instructions-container {
+    margin-top: 16px;
+}
+
+div#instructions-header {
+    font-style: italic;
+}
+
+div.instructions-body {
+    margin-top: 8px;
+}
+
+input.details {
+    margin-left: 8px;
+}
+
+div.input-container {
+    margin-top: 16px;
+}
+
+div#divSvg {
+    margin: 16px auto 0 auto;
+    width: max-content;
+}
+
+div#interactArea {
+    margin-left: auto;
+    margin-right: auto;
+    display: block;
+    text-align: center;
+}
+
+div.bottom-button {
+    margin-top: 8px;
+}
+
+div#templates {
+    display: none;
+}
+
+svg#svgTemplates {
+    width: 100%;
+    background-color: lavender;
+}
+
+svg#digit-container {
+    background-color: transparent;
+}
+
+svg#svgMain {
+    border: 1px solid rgba(0, 0, 0, 0.75);
+    border-radius: 12px;
+    background-color: white;
+}
+
+input#input-field,
+input#size-field {
+    width: 100%;
+    height: 2lh;
+    margin: 2px 0 0 0;
+}
+
+div#play-area {
+    width: 100%;
+    max-width: 512px;
+    margin: 0 auto 0 auto;
+}
+
+div#inputs-container {
+    display: flex;
+    gap: 32px;
+    margin-top: 16px;
+    margin-bottom: 16px;
+}
+
+div.input-label {
+    font-weight: bold;
+    text-align: left;
+    font-size: small;
+}
+
+div.input-container {
+    width: 100%;
+}
+
+div#about {
+    margin: 16px 0 0 0;
+}

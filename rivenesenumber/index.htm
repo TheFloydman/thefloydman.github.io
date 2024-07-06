@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>Rivenese Number Converter</title>
+    <meta name="description" content="Convert to and from Rivenese numbers from Riven (2024).">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="style.css">
+    <script src="script.js" type="text/javascript"></script>
+</head>
+
+<body onload="onBodyLoad()">
+    <div id="page-container">
+        <div id="header">
+            <div id="title">Rivenese Number Converter</div>
+        </div>
+        <div id="play-area">
+            <div id="divSvg">
+                <svg id="svgMain" width="512" height="512" viewbox="0 0 256 256"></svg>
+            </div>
+            <div id="interactArea">
+                <div id="inputs-container">
+                    <div class="input-container">
+                        <div class="input-label">Canvas Size (in pixels)</div>
+                        <div><input class="details" type="number" id="size-field" value="256" min="192"></div>
+                    </div>
+                    <div class="input-container">
+                        <div class="input-label">Number</div>
+                        <div><input type="number" id="input-field" value="0" min="0"></div>
+                    </div>
+                </div>
+                <div class="bottom-button"><input type="button" id="buttonClear" value="Clear" onclick="clearFields()">
+                </div>
+                <div class="bottom-button"><input type="button" id="buttonSave" value="Save Image"
+                        onclick="saveImage()">
+                </div>
+            </div>
+        </div>
+        <div id="about">
+            <hr>
+            <div id="attribution">Written by Floydman. See my other projects and contact info <a
+                    href="../index.htm">here</a>. Inspired by the video game <a href="https://cyan.com/games/riven/"
+                    target="_blank"><i>Riven</i> (2024)</a> by Cyan. <i>Riven</i> and all related material
+                &copy; Cyan, Inc.</div>
+        </div>
+    </div>
+    <div id="templates">
+        <svg id="svg-templates" viewbox="0 0 128 128">
+            <svg id="circle-container">
+                <circle id="circle" cx="64" cy="64" r="12" fill="#404040" />
+            </svg>
+            <svg id="digit-container">
+                <path id="digit" fill="#404040" d="M 64,64
+                m 0,18.4756
+                l 45.6556,26.3589
+                a 64,64,0,0,1,-91.3112,0" />
+            </svg>
+        </svg>
+    </div>
+</body>
+
+</html>

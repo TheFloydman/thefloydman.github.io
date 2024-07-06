@@ -1,0 +1,18 @@
+{
+  "compilerOptions": {
+    "module": "commonjs",
+    "noImplicitAny": true,
+    "noImplicitOverride": true,
+    "removeComments": true,
+    "preserveConstEnums": true,
+    "sourceMap": true,
+    "lib": [
+      "dom",
+      "es2021"
+    ],
+    "target": "es2021"
+  },
+  "files": [
+    "script.ts"
+  ]
+}
