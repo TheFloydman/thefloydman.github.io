@@ -62,7 +62,8 @@ div.input-container {
 
 div#divSvg {
     margin: 16px auto 0 auto;
-    width: max-content;
+    width: 512px;
+    max-width: 100%;
 }
 
 div#interactArea {
@@ -93,6 +94,9 @@ svg#svgMain {
     border: 1px solid rgba(0, 0, 0, 0.75);
     border-radius: 12px;
     background-color: white;
+    max-width: 512px;
+    width: 100%;
+    aspect-ratio: 1 / 1;
 }
 
 input#input-field,
