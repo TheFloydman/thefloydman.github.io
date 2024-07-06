@@ -56,7 +56,6 @@ function fileChosen() {
     reader.addEventListener('load', () => {
         saveFile = fromGvas(reader.result);
         saveFile.fileName = file.name;
-        console.log(saveFile.fileName);
         document.getElementById('ue-version').innerText = saveFile.ueVersion;
         document.getElementById('save-type').innerText = saveFile.saveType;
         let saveButton = document.getElementById('button-save');
