@@ -441,4 +441,13 @@ const rivenProperties = [{
     alt: 'The five possible solutions for the Moiety Cave puzzle.',
     type: 'dropdown',
     values: [0, 1, 2, 3, 4]
+}, {
+    gvas: ['IntGameStates', '22BA75C942980718DFBBE29C89486F91', 'Value'],
+    html: 'temple-main-door',
+    title: 'Temple Main Door',
+    type: 'dropdown',
+    values: [
+        { actual: 0, display: 'Closed' },
+        { actual: 1, display: 'Open' }
+    ]
 }]
