@@ -2,7 +2,9 @@ body {
     font-family: sans-serif;
 }
 
-div#main-container {}
+div#main-container {
+    width: 100%;
+}
 
 div#svg-container {
     display: flex;

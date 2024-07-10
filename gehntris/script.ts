@@ -460,39 +460,100 @@ function tick() {
 }
 
 function addEventListeners() {
+    // Event listener for keyboard input
     document.addEventListener("keydown", event => {
         if (!isGameOver && pieceInPlay) {
             if (event.code == "ArrowLeft" || event.code == "KeyA") {
-                if (pieceInPlay.canMove(-1, 0)) {
-                    pieceInPlay.move(-1, 0);
-                    for (let i = 0; i < pieceInPlay.squares.length; i++) {
-                        pieceInPlay.squares[i].svgElement.remove();
-                    }
-                    pieceInPlay.draw(0, 0);
-                }
+                movePieceLeft();
             } else if (event.code == "ArrowRight" || event.code == "KeyD") {
-                if (pieceInPlay.canMove(1, 0)) {
-                    pieceInPlay.move(1, 0);
-                    for (let i = 0; i < pieceInPlay.squares.length; i++) {
-                        pieceInPlay.squares[i].svgElement.remove();
-                    }
-                    pieceInPlay.draw(0, 0);
-                }
+                movePieceRight();
             } else if (event.code == "ArrowDown" || event.code == "KeyS") {
-                if (pieceInPlay.canMove(0, 1)) {
-                    pieceInPlay.move(0, 1);
-                    for (let i = 0; i < pieceInPlay.squares.length; i++) {
-                        pieceInPlay.squares[i].svgElement.remove();
-                    }
-                    pieceInPlay.draw(0, 0);
-                }
+                movePieceDown();
             } else if (event.code == "ArrowUp" || event.code == "KeyW") {
-                for (let i = 0; i < pieceInPlay.squares.length; i++) {
-                    pieceInPlay.squares[i].svgElement.remove();
-                }
-                pieceInPlay.rotate();
-                pieceInPlay.draw(0, 0);
+                rotatePiece();
             }
         }
-    })
+    });
+
+    // Variables to track touch start position
+    let touchStartX = 0;
+    let touchStartY = 0;
+    let touchEndX = 0;
+    let touchEndY = 0;
+
+    // Event listener for touch start
+    document.addEventListener("touchstart", event => {
+        touchStartX = event.touches[0].clientX;
+        touchStartY = event.touches[0].clientY;
+    });
+
+    // Event listener for touch end
+    document.addEventListener("touchend", event => {
+        touchEndX = event.changedTouches[0].clientX;
+        touchEndY = event.changedTouches[0].clientY;
+        handleTouchGesture();
+    });
+
+    // Event listener for clicks (taps)
+    document.addEventListener("click", event => {
+        if (!isGameOver && pieceInPlay) {
+            rotatePiece();
+        }
+    });
+
+    function handleTouchGesture() {
+        const deltaX = touchEndX - touchStartX;
+        const deltaY = touchEndY - touchStartY;
+
+        // Determine if the swipe was primarily horizontal or vertical
+        if (Math.abs(deltaX) > Math.abs(deltaY)) {
+            // Horizontal swipe
+            if (deltaX > 50) {
+                movePieceRight();
+            } else if (deltaX < -50) {
+                movePieceLeft();
+            }
+        } else {
+            // Vertical swipe
+            if (deltaY > 50) {
+                movePieceDown();
+            }
+        }
+    }
+
+    function movePieceLeft() {
+        if (pieceInPlay.canMove(-1, 0)) {
+            pieceInPlay.move(-1, 0);
+            redrawPieceInPlay();
+        }
+    }
+
+    function movePieceRight() {
+        if (pieceInPlay.canMove(1, 0)) {
+            pieceInPlay.move(1, 0);
+            redrawPieceInPlay();
+        }
+    }
+
+    function movePieceDown() {
+        if (pieceInPlay.canMove(0, 1)) {
+            pieceInPlay.move(0, 1);
+            redrawPieceInPlay();
+        }
+    }
+
+    function rotatePiece() {
+        for (let i = 0; i < pieceInPlay.squares.length; i++) {
+            pieceInPlay.squares[i].svgElement.remove();
+        }
+        pieceInPlay.rotate();
+        pieceInPlay.draw(0, 0);
+    }
+
+    function redrawPieceInPlay() {
+        for (let i = 0; i < pieceInPlay.squares.length; i++) {
+            pieceInPlay.squares[i].svgElement.remove();
+        }
+        pieceInPlay.draw(0, 0);
+    }
 }
