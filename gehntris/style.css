@@ -3,7 +3,8 @@ body {
 }
 
 div#main-container {
-    width: 100%;
+    width: max-content;
+    max-width: 400px;
 }
 
 div#svg-container {
@@ -38,6 +39,43 @@ div#below {
 
 button#pause-button {
     width: 100%;
-    aspect-ratio: 5 / 1;
+    aspect-ratio: 6 / 1;
     font-size: large;
+    margin-top: 8px;
+}
+
+div#header {
+    background-color: #ccebff;
+    margin-bottom: 16px;
+    padding: 8px;
+}
+
+div#title {
+    font-weight: bold;
+    font-size: large;
+    text-transform: uppercase;
+    text-align: center;
+}
+
+div#info-container {
+    display: flex;
+    flex-direction: column;
+    gap: 64px;
+}
+
+div#score-label,
+div#level-label {
+    text-align: center;
+    font-weight: bold;
+    text-decoration: underline;
+}
+
+div#score-value,
+div#level-value {
+    text-align: center;
+    margin-top: 8px;
+}
+
+div#info-container {
+    height: max-content;
 }

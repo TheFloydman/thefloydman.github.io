@@ -20,17 +20,32 @@
             <div class="browsehappy">You are using an <strong>outdated</strong> browser. Please upgrade your browser to improve your experience.</div>
         <![endif]-->
     <div id="main-container">
+        <div id="header">
+            <div id="title">Gehn-tris</div>
+            <div id="disclaimer">This product contains trademarks and/or copyrighted works of Cyan. All rights reserved
+                by Cyan. This product is not official and is not endorsed by Cyan.</div>
+        </div>
         <div id="svg-container">
             <div>
                 <svg id="svg-main"></svg>
-                <div id="below">
-                    <button id="pause-button" onclick="togglePause();">Pause</button>
-                </div>
             </div>
             <div id="info-container">
-                <div id="upcoming">Upcoming</div>
-                <div><svg id="svg-info"></svg></div>
+                <div id="upcoming-container">
+                    <div id="upcoming">Upcoming</div>
+                    <div><svg id="svg-info"></svg></div>
+                </div>
+                <div id="score-container">
+                    <div id="score-label">Score</div>
+                    <div id="score-value">0</div>
+                </div>
+                <div id="level-container">
+                    <div id="level-label">Level</div>
+                    <div id="level-value">1</div>
+                </div>
             </div>
+        </div>
+        <div id="below">
+            <button id="pause-button" onclick="togglePause();">Pause</button>
         </div>
     </div>
 </body>

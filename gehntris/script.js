@@ -225,6 +225,8 @@ let okayToAddPiece = true;
 let isGameOver = false;
 let isPaused = false;
 let score = 0;
+let level = 0;
+let linesCleared = 0;
 function onBodyLoad() {
     setBoardProperties();
     addEventListeners();
@@ -261,8 +263,10 @@ function convertPiece(piece) {
     return continueGame;
 }
 function clearLines() {
+    let currentLinesCleared = 0;
     let fullLine = scanForFullLines();
     while (fullLine >= 0) {
+        currentLinesCleared += 1;
         for (let i = fullLine; i > 0; i--) {
             for (let j = 0; j < board[i].length; j++) {
                 if (board[i - 1][j]) {
@@ -279,6 +283,20 @@ function clearLines() {
         }
         fullLine = scanForFullLines();
     }
+    addToScore(currentLinesCleared == 5 ? currentLinesCleared * 125 : currentLinesCleared * 5);
+    increaseLinesCleared(currentLinesCleared);
+}
+function addToScore(points) {
+    score += points;
+    document.getElementById("score-value").innerHTML = score.toString();
+}
+function increaseLinesCleared(lines) {
+    linesCleared += lines;
+    level = Math.floor(linesCleared / 5) + 1;
+    document.getElementById("level-value").innerHTML = level.toString();
+    let tickTime = 1050 - (50 * level);
+    clearInterval(tickTimer);
+    tickTimer = setInterval(tick, tickTime);
 }
 function scanForFullLines() {
     for (let i = 0; i < board.length; i++) {
@@ -385,6 +403,11 @@ function tick() {
     }
 }
 function addEventListeners() {
+    const pauseButton = document.getElementById("pause-button");
+    pauseButton.addEventListener("click", (event) => {
+        pauseButton.blur();
+        event.stopPropagation();
+    });
     document.addEventListener("keydown", event => {
         if (!isGameOver && pieceInPlay) {
             if (event.code == "ArrowLeft" || event.code == "KeyA") {
@@ -401,6 +424,9 @@ function addEventListeners() {
             }
             else if (event.code == "Space") {
                 dropPiece();
+            }
+            else if (event.code == "Escape") {
+                togglePause();
             }
         }
     });
