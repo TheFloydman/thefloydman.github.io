@@ -153,6 +153,15 @@ class PieceInPlay {
 
     }
 
+    drop() {
+        let yOffset = 1;
+        while (this.canMove(0, yOffset)) {
+            yOffset++;
+        }
+        yOffset--;
+        this.move(0, yOffset);
+    }
+
     /** Returns true if the spaces this piece occupies are empty. */
     convert(): boolean {
         for (let i = 0; i < this.squares.length; i++) {
@@ -471,6 +480,8 @@ function addEventListeners() {
                 movePieceDown();
             } else if (event.code == "ArrowUp" || event.code == "KeyW") {
                 rotatePiece();
+            } else if (event.code == "Space") {
+                dropPiece();
             }
         }
     });
@@ -517,6 +528,8 @@ function addEventListeners() {
             // Vertical swipe
             if (deltaY > 50) {
                 movePieceDown();
+            } else if (deltaY < -50) {
+                dropPiece();
             }
         }
     }
@@ -538,6 +551,13 @@ function addEventListeners() {
     function movePieceDown() {
         if (pieceInPlay.canMove(0, 1)) {
             pieceInPlay.move(0, 1);
+            redrawPieceInPlay();
+        }
+    }
+
+    function dropPiece() {
+        if (pieceInPlay.canMove(0, 1)) {
+            pieceInPlay.drop();
             redrawPieceInPlay();
         }
     }
