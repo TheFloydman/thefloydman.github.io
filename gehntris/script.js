@@ -434,39 +434,44 @@ function addEventListeners() {
     let touchStartY = 0;
     let touchEndX = 0;
     let touchEndY = 0;
+    let moving = false;
+    let moveInterval;
     document.addEventListener("touchstart", event => {
         touchStartX = event.touches[0].clientX;
         touchStartY = event.touches[0].clientY;
+        moving = true;
+        movePieceContinuously();
+    });
+    document.addEventListener("touchmove", event => {
+        touchEndX = event.touches[0].clientX;
+        touchEndY = event.touches[0].clientY;
     });
     document.addEventListener("touchend", event => {
-        touchEndX = event.changedTouches[0].clientX;
-        touchEndY = event.changedTouches[0].clientY;
-        handleTouchGesture();
+        moving = false;
+        if (moveInterval !== undefined) {
+            clearInterval(moveInterval);
+            moveInterval = undefined;
+        }
     });
     document.addEventListener("click", event => {
         if (!isGameOver && pieceInPlay) {
             rotatePiece();
         }
     });
-    function handleTouchGesture() {
-        const deltaX = touchEndX - touchStartX;
-        const deltaY = touchEndY - touchStartY;
-        if (Math.abs(deltaX) > Math.abs(deltaY)) {
-            if (deltaX > 50) {
-                movePieceRight();
+    function movePieceContinuously() {
+        moveInterval = setInterval(() => {
+            if (moving && !isGameOver && pieceInPlay) {
+                const deltaX = touchEndX - touchStartX;
+                if (deltaX > 50) {
+                    movePieceRight();
+                    touchStartX = touchEndX;
+                }
+                else if (deltaX < -50) {
+                    movePieceLeft();
+                    touchStartX = touchEndX;
+                }
             }
-            else if (deltaX < -50) {
-                movePieceLeft();
-            }
-        }
-        else {
-            if (deltaY > 50) {
-                movePieceDown();
-            }
-            else if (deltaY < -50) {
-                dropPiece();
-            }
-        }
+        }, 100);
     }
     function movePieceLeft() {
         if (pieceInPlay.canMove(-1, 0)) {
