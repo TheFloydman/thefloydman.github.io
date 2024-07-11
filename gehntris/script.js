@@ -462,18 +462,8 @@ function addEventListeners() {
     function handleTouchGesture() {
         const deltaX = touchEndX - touchStartX;
         const deltaY = touchEndY - touchStartY;
-        if (Math.abs(deltaX) > Math.abs(deltaY)) {
-            if (deltaX > 50) {
-                movePieceRight();
-            }
-            else if (deltaX < -50) {
-                movePieceLeft();
-            }
-        }
-        else {
-            if (deltaY < -100) {
-                dropPiece();
-            }
+        if (Math.abs(deltaY) > Math.abs(deltaX) && deltaY < -150) {
+            dropPiece();
         }
     }
     function movePieceContinuously() {

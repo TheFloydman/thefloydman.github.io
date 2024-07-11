@@ -557,19 +557,10 @@ function addEventListeners() {
         const deltaX = touchEndX - touchStartX;
         const deltaY = touchEndY - touchStartY;
 
-        // Determine if the swipe was primarily horizontal or vertical
-        if (Math.abs(deltaX) > Math.abs(deltaY)) {
-            // Horizontal swipe
-            if (deltaX > 50) {
-                movePieceRight();
-            } else if (deltaX < -50) {
-                movePieceLeft();
-            }
-        } else {
+        // Determine if the swipe was primarily vertical
+        if (Math.abs(deltaY) > Math.abs(deltaX) && deltaY < -150) {
             // Vertical swipe
-            if (deltaY < -100) {
-                dropPiece();
-            }
+            dropPiece();
         }
     }
 
