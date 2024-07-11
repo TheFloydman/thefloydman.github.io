@@ -567,9 +567,7 @@ function addEventListeners() {
             }
         } else {
             // Vertical swipe
-            if (deltaY > 50) {
-                movePieceDown();
-            } else if (deltaY < -50) {
+            if (deltaY < -100) {
                 dropPiece();
             }
         }
