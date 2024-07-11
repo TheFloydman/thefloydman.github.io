@@ -79,3 +79,8 @@ div#level-value {
 div#info-container {
     height: max-content;
 }
+
+div#version {
+    font-size: small;
+    text-align: center;
+}
