@@ -404,8 +404,13 @@ function tick() {
 }
 function addEventListeners() {
     const pauseButton = document.getElementById("pause-button");
-    pauseButton.addEventListener("click", (event) => {
+    pauseButton.addEventListener("click", event => {
         pauseButton.blur();
+        event.stopPropagation();
+    });
+    const dropButton = document.getElementById("drop-button");
+    dropButton.addEventListener("click", event => {
+        dropButton.blur();
         event.stopPropagation();
     });
     document.addEventListener("keydown", event => {
@@ -452,20 +457,12 @@ function addEventListeners() {
             clearInterval(moveInterval);
             moveInterval = undefined;
         }
-        handleTouchGesture();
     });
     document.addEventListener("click", event => {
         if (!isGameOver && pieceInPlay) {
             rotatePiece();
         }
     });
-    function handleTouchGesture() {
-        const deltaX = touchEndX - touchStartX;
-        const deltaY = touchEndY - touchStartY;
-        if (Math.abs(deltaY) > Math.abs(deltaX) && deltaY < -150) {
-            dropPiece();
-        }
-    }
     function movePieceContinuously() {
         moveInterval = setInterval(() => {
             if (moving && !isGameOver && pieceInPlay) {
@@ -479,7 +476,7 @@ function addEventListeners() {
                     touchStartX = touchEndX;
                 }
             }
-        }, 100);
+        }, 75);
     }
     function movePieceLeft() {
         if (pieceInPlay.canMove(-1, 0)) {
@@ -499,12 +496,6 @@ function addEventListeners() {
             redrawPieceInPlay();
         }
     }
-    function dropPiece() {
-        if (pieceInPlay.canMove(0, 1)) {
-            pieceInPlay.drop();
-            redrawPieceInPlay();
-        }
-    }
     function rotatePiece() {
         for (let i = 0; i < pieceInPlay.squares.length; i++) {
             pieceInPlay.squares[i].svgElement.remove();
@@ -512,11 +503,17 @@ function addEventListeners() {
         pieceInPlay.rotate();
         pieceInPlay.draw(0, 0);
     }
-    function redrawPieceInPlay() {
-        for (let i = 0; i < pieceInPlay.squares.length; i++) {
-            pieceInPlay.squares[i].svgElement.remove();
-        }
-        pieceInPlay.draw(0, 0);
+}
+function dropPiece() {
+    if (pieceInPlay.canMove(0, 1)) {
+        pieceInPlay.drop();
+        redrawPieceInPlay();
     }
+}
+function redrawPieceInPlay() {
+    for (let i = 0; i < pieceInPlay.squares.length; i++) {
+        pieceInPlay.squares[i].svgElement.remove();
+    }
+    pieceInPlay.draw(0, 0);
 }
 //# sourceMappingURL=script.js.map

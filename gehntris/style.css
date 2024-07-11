@@ -84,3 +84,8 @@ div#version {
     font-size: small;
     text-align: center;
 }
+
+button#drop-button {
+    width: 100%;
+    aspect-ratio: 3 / 1;
+}

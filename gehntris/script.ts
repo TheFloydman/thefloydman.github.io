@@ -490,8 +490,14 @@ function tick() {
 
 function addEventListeners() {
     const pauseButton: HTMLButtonElement = <HTMLButtonElement><unknown>document.getElementById("pause-button");
-    pauseButton.addEventListener("click", (event) => {
+    pauseButton.addEventListener("click", event => {
         pauseButton.blur();
+        event.stopPropagation();
+    });
+
+    const dropButton: HTMLButtonElement = <HTMLButtonElement><unknown>document.getElementById("drop-button");
+    dropButton.addEventListener("click", event => {
+        dropButton.blur();
         event.stopPropagation();
     });
 
@@ -543,7 +549,6 @@ function addEventListeners() {
             clearInterval(moveInterval);
             moveInterval = undefined;
         }
-        handleTouchGesture();
     });
 
     // Event listener for clicks (taps)
@@ -552,17 +557,6 @@ function addEventListeners() {
             rotatePiece();
         }
     });
-
-    function handleTouchGesture() {
-        const deltaX = touchEndX - touchStartX;
-        const deltaY = touchEndY - touchStartY;
-
-        // Determine if the swipe was primarily vertical
-        if (Math.abs(deltaY) > Math.abs(deltaX) && deltaY < -150) {
-            // Vertical swipe
-            dropPiece();
-        }
-    }
 
     function movePieceContinuously() {
         moveInterval = setInterval(() => {
@@ -577,7 +571,7 @@ function addEventListeners() {
                     touchStartX = touchEndX; // Update the start position to the current position
                 }
             }
-        }, 100); // Adjust the interval time to control the movement speed
+        }, 75); // Adjust the interval time to control the movement speed
     }
 
     function movePieceLeft() {
@@ -601,13 +595,6 @@ function addEventListeners() {
         }
     }
 
-    function dropPiece() {
-        if (pieceInPlay.canMove(0, 1)) {
-            pieceInPlay.drop();
-            redrawPieceInPlay();
-        }
-    }
-
     function rotatePiece() {
         for (let i = 0; i < pieceInPlay.squares.length; i++) {
             pieceInPlay.squares[i].svgElement.remove();
@@ -615,11 +602,18 @@ function addEventListeners() {
         pieceInPlay.rotate();
         pieceInPlay.draw(0, 0);
     }
+}
 
-    function redrawPieceInPlay() {
-        for (let i = 0; i < pieceInPlay.squares.length; i++) {
-            pieceInPlay.squares[i].svgElement.remove();
-        }
-        pieceInPlay.draw(0, 0);
+function dropPiece() {
+    if (pieceInPlay.canMove(0, 1)) {
+        pieceInPlay.drop();
+        redrawPieceInPlay();
     }
+}
+
+function redrawPieceInPlay() {
+    for (let i = 0; i < pieceInPlay.squares.length; i++) {
+        pieceInPlay.squares[i].svgElement.remove();
+    }
+    pieceInPlay.draw(0, 0);
 }
