@@ -543,6 +543,7 @@ function addEventListeners() {
             clearInterval(moveInterval);
             moveInterval = undefined;
         }
+        handleTouchGesture();
     });
 
     // Event listener for clicks (taps)
@@ -551,6 +552,28 @@ function addEventListeners() {
             rotatePiece();
         }
     });
+
+    function handleTouchGesture() {
+        const deltaX = touchEndX - touchStartX;
+        const deltaY = touchEndY - touchStartY;
+
+        // Determine if the swipe was primarily horizontal or vertical
+        if (Math.abs(deltaX) > Math.abs(deltaY)) {
+            // Horizontal swipe
+            if (deltaX > 50) {
+                movePieceRight();
+            } else if (deltaX < -50) {
+                movePieceLeft();
+            }
+        } else {
+            // Vertical swipe
+            if (deltaY > 50) {
+                movePieceDown();
+            } else if (deltaY < -50) {
+                dropPiece();
+            }
+        }
+    }
 
     function movePieceContinuously() {
         moveInterval = setInterval(() => {

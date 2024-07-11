@@ -452,12 +452,33 @@ function addEventListeners() {
             clearInterval(moveInterval);
             moveInterval = undefined;
         }
+        handleTouchGesture();
     });
     document.addEventListener("click", event => {
         if (!isGameOver && pieceInPlay) {
             rotatePiece();
         }
     });
+    function handleTouchGesture() {
+        const deltaX = touchEndX - touchStartX;
+        const deltaY = touchEndY - touchStartY;
+        if (Math.abs(deltaX) > Math.abs(deltaY)) {
+            if (deltaX > 50) {
+                movePieceRight();
+            }
+            else if (deltaX < -50) {
+                movePieceLeft();
+            }
+        }
+        else {
+            if (deltaY > 50) {
+                movePieceDown();
+            }
+            else if (deltaY < -50) {
+                dropPiece();
+            }
+        }
+    }
     function movePieceContinuously() {
         moveInterval = setInterval(() => {
             if (moving && !isGameOver && pieceInPlay) {
