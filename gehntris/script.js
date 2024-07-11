@@ -249,6 +249,7 @@ function addPieceToWaiting() {
 }
 function addPieceToBoard() {
     pieceInPlay = pieceInWaiting;
+    pieceInPlay.move(3, 0);
     pieceInPlay.waiting = false;
     addPieceToWaiting();
     okayToAddPiece = false;
@@ -404,13 +405,8 @@ function tick() {
 }
 function addEventListeners() {
     const pauseButton = document.getElementById("pause-button");
-    pauseButton.addEventListener("click", event => {
+    pauseButton.addEventListener("click", (event) => {
         pauseButton.blur();
-        event.stopPropagation();
-    });
-    const dropButton = document.getElementById("drop-button");
-    dropButton.addEventListener("click", event => {
-        dropButton.blur();
         event.stopPropagation();
     });
     document.addEventListener("keydown", event => {
@@ -439,44 +435,39 @@ function addEventListeners() {
     let touchStartY = 0;
     let touchEndX = 0;
     let touchEndY = 0;
-    let moving = false;
-    let moveInterval;
     document.addEventListener("touchstart", event => {
         touchStartX = event.touches[0].clientX;
         touchStartY = event.touches[0].clientY;
-        moving = true;
-        movePieceContinuously();
-    });
-    document.addEventListener("touchmove", event => {
-        touchEndX = event.touches[0].clientX;
-        touchEndY = event.touches[0].clientY;
     });
     document.addEventListener("touchend", event => {
-        moving = false;
-        if (moveInterval !== undefined) {
-            clearInterval(moveInterval);
-            moveInterval = undefined;
-        }
+        touchEndX = event.changedTouches[0].clientX;
+        touchEndY = event.changedTouches[0].clientY;
+        handleTouchGesture();
     });
     document.addEventListener("click", event => {
         if (!isGameOver && pieceInPlay) {
             rotatePiece();
         }
     });
-    function movePieceContinuously() {
-        moveInterval = setInterval(() => {
-            if (moving && !isGameOver && pieceInPlay) {
-                const deltaX = touchEndX - touchStartX;
-                if (deltaX > 50) {
-                    movePieceRight();
-                    touchStartX = touchEndX;
-                }
-                else if (deltaX < -50) {
-                    movePieceLeft();
-                    touchStartX = touchEndX;
-                }
+    function handleTouchGesture() {
+        const deltaX = touchEndX - touchStartX;
+        const deltaY = touchEndY - touchStartY;
+        if (Math.abs(deltaX) > Math.abs(deltaY)) {
+            if (deltaX > 50) {
+                movePieceRight();
             }
-        }, 75);
+            else if (deltaX < -50) {
+                movePieceLeft();
+            }
+        }
+        else {
+            if (deltaY > 50) {
+                movePieceDown();
+            }
+            else if (deltaY < -50) {
+                dropPiece();
+            }
+        }
     }
     function movePieceLeft() {
         if (pieceInPlay.canMove(-1, 0)) {
@@ -496,6 +487,12 @@ function addEventListeners() {
             redrawPieceInPlay();
         }
     }
+    function dropPiece() {
+        if (pieceInPlay.canMove(0, 1)) {
+            pieceInPlay.drop();
+            redrawPieceInPlay();
+        }
+    }
     function rotatePiece() {
         for (let i = 0; i < pieceInPlay.squares.length; i++) {
             pieceInPlay.squares[i].svgElement.remove();
@@ -503,17 +500,11 @@ function addEventListeners() {
         pieceInPlay.rotate();
         pieceInPlay.draw(0, 0);
     }
-}
-function dropPiece() {
-    if (pieceInPlay.canMove(0, 1)) {
-        pieceInPlay.drop();
-        redrawPieceInPlay();
+    function redrawPieceInPlay() {
+        for (let i = 0; i < pieceInPlay.squares.length; i++) {
+            pieceInPlay.squares[i].svgElement.remove();
+        }
+        pieceInPlay.draw(0, 0);
     }
-}
-function redrawPieceInPlay() {
-    for (let i = 0; i < pieceInPlay.squares.length; i++) {
-        pieceInPlay.squares[i].svgElement.remove();
-    }
-    pieceInPlay.draw(0, 0);
 }
 //# sourceMappingURL=script.js.map
