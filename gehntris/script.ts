@@ -489,7 +489,6 @@ function tick() {
 }
 
 function addEventListeners() {
-
     const pauseButton: HTMLButtonElement = <HTMLButtonElement><unknown>document.getElementById("pause-button");
     pauseButton.addEventListener("click", (event) => {
         pauseButton.blur();
@@ -515,23 +514,35 @@ function addEventListeners() {
         }
     });
 
-    // Variables to track touch start position
+    // Variables to track touch position and movement
     let touchStartX = 0;
     let touchStartY = 0;
     let touchEndX = 0;
     let touchEndY = 0;
+    let moving = false;
+    let moveInterval: number | undefined;
 
     // Event listener for touch start
     document.addEventListener("touchstart", event => {
         touchStartX = event.touches[0].clientX;
         touchStartY = event.touches[0].clientY;
+        moving = true;
+        movePieceContinuously();
+    });
+
+    // Event listener for touch move
+    document.addEventListener("touchmove", event => {
+        touchEndX = event.touches[0].clientX;
+        touchEndY = event.touches[0].clientY;
     });
 
     // Event listener for touch end
     document.addEventListener("touchend", event => {
-        touchEndX = event.changedTouches[0].clientX;
-        touchEndY = event.changedTouches[0].clientY;
-        handleTouchGesture();
+        moving = false;
+        if (moveInterval !== undefined) {
+            clearInterval(moveInterval);
+            moveInterval = undefined;
+        }
     });
 
     // Event listener for clicks (taps)
@@ -541,26 +552,20 @@ function addEventListeners() {
         }
     });
 
-    function handleTouchGesture() {
-        const deltaX = touchEndX - touchStartX;
-        const deltaY = touchEndY - touchStartY;
+    function movePieceContinuously() {
+        moveInterval = setInterval(() => {
+            if (moving && !isGameOver && pieceInPlay) {
+                const deltaX = touchEndX - touchStartX;
 
-        // Determine if the swipe was primarily horizontal or vertical
-        if (Math.abs(deltaX) > Math.abs(deltaY)) {
-            // Horizontal swipe
-            if (deltaX > 50) {
-                movePieceRight();
-            } else if (deltaX < -50) {
-                movePieceLeft();
+                if (deltaX > 50) {
+                    movePieceRight();
+                    touchStartX = touchEndX; // Update the start position to the current position
+                } else if (deltaX < -50) {
+                    movePieceLeft();
+                    touchStartX = touchEndX; // Update the start position to the current position
+                }
             }
-        } else {
-            // Vertical swipe
-            if (deltaY > 50) {
-                movePieceDown();
-            } else if (deltaY < -50) {
-                dropPiece();
-            }
-        }
+        }, 100); // Adjust the interval time to control the movement speed
     }
 
     function movePieceLeft() {
