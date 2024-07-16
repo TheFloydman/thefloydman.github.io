@@ -89,3 +89,38 @@ button#drop-button {
     width: 100%;
     aspect-ratio: 3 / 1;
 }
+
+div#templates,
+div#templates>div#pause,
+div#templates>div#game-over {
+    display: none;
+}
+
+div#intro {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    padding: 4px;
+    font-size: 3pt;
+}
+
+div#disclaimer {
+    text-align: center;
+    font-style: italic;
+}
+
+div.intro-title {
+    text-align: center;
+    font-weight: bold;
+    text-decoration: underline;
+}
+
+div.intro-entries-container {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+div#riven {
+    text-align: center;
+}
