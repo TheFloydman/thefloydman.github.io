@@ -12,6 +12,7 @@
     <meta name="description" content="">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="style.css">
+    <script>var exports = {};</script>
     <script src="script.js"></script>
 </head>
 
@@ -22,13 +23,50 @@
     <div id="main-container">
         <div id="header">
             <div id="title">Gehn-tris</div>
-            <div id="version">v0.1.1 (10 Jul 2024)</div>
-            <div id="disclaimer">This product contains trademarks and/or copyrighted works of Cyan. All rights reserved
-                by Cyan. This product is not official and is not endorsed by Cyan.</div>
+            <div id="version">v0.1.2 (15 Jul 2024)</div>
         </div>
         <div id="svg-container">
             <div>
-                <svg id="svg-main"></svg>
+                <svg id="svg-main">
+                    <svg id="disclaimer">
+                        <rect width="100%" height="100%" x="0" y="0" fill="#FFFFFF"></rect>
+                        <rect width="100%" height="100%" x="0" y="0" fill="#000000" fill-opacity="10%"></rect>
+                        <foreignObject x="0" y="0" width="100%" height="100%" text-wnchor="middle">
+                            <div id="intro">
+                                <div class="intro-entries-container">
+                                    <div class="intro-title">Fan-Made Content</div>
+                                    <div id="riven">Inspired by <i><a href="https://cyan.com/games/riven/"
+                                                target="_blank">Riven</a></i> (2024).</div>
+                                    <div id="disclaimer">
+                                        This product contains trademarks and/or copyrighted works of Cyan. All rights
+                                        reserved by Cyan. This product is not official and is not endorsed by Cyan.
+                                    </div>
+                                </div>
+                                <div id="instructions">
+                                    <div class="intro-entries-container">
+                                        <div class="intro-title">Instructions</div>
+                                        <div>Clear lines by arranging the tokens of Lord Gehn into complete rows. Your
+                                            level and drop speed increase every five times lines are cleared, regardless
+                                            of the quantity cleared each time.</div>
+                                        <div><b>Left:</b> A, ←, or swipe left.</div>
+                                        <div><b>Right:</b> D, →, or swipe right.</div>
+                                        <div><b>Rotate:</b> W, ↑, tap, or click.</div>
+                                        <div><b>Down:</b> S or ↓.</div>
+                                        <div><b>Drop:</b> Spacebar or swipe up.</div>
+                                    </div>
+                                </div>
+                                <div id="points">
+                                    <div class="intro-entries-container">
+                                        <div class="intro-title">Points</div>
+                                        <div>5 points for every successful landing.</div>
+                                        <div>25 points for every line cleared.</div>
+                                        <div>625 points for five lines cleared at one time.</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </foreignObject>
+                    </svg>
+                </svg>
             </div>
             <div id="info-container">
                 <div id="upcoming-container">
@@ -46,8 +84,19 @@
             </div>
         </div>
         <div id="below">
-            <button id="pause-button" onclick="togglePause();">Pause</button>
+            <button id="pause-button" onclick="togglePause();">Start</button>
         </div>
+    </div>
+    <div id="templates">
+        <svg id="pause">
+            <rect width="100%" height="100%" x="0" y="0" fill="#FFFFFF"></rect>
+            <rect width="100%" height="100%" x="0" y="0" fill="#000000" fill-opacity="10%"></rect>
+            <text class="overlay-text" x="50%" y="50%" text-anchor="middle">Pause</text>
+        </svg>
+        <svg id="game-over">
+            <rect width="100%" height="100%" x="0" y="0" fill="#FFFFFF" fill-opacity="75%"></rect>
+            <text class="overlay-text" x="50%" y="50%" text-anchor="middle">Game Over</text>
+        </svg>
     </div>
 </body>
 
