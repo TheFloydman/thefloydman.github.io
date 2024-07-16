@@ -231,7 +231,7 @@ let okayToAddPiece = true;
 let isGameOver = false;
 let isPaused = true;
 let score = 0;
-let level = 0;
+let levelGlobal = 0;
 let linesCleared = 0;
 function onBodyLoad() {
     setBoardProperties();
@@ -303,14 +303,14 @@ function setScore(score) {
 }
 function increaseLinesCleared(lines) {
     linesCleared += lines;
-    level = Math.floor(linesCleared / 5) + 1;
-    document.getElementById("level-value").innerHTML = level.toString();
-    let tickTime = 1050 - (50 * level);
+    setLevel(Math.floor(linesCleared / 5) + 1);
     clearInterval(tickTimer);
     startTickTimer();
 }
 function setLevel(level) {
+    levelGlobal = level;
     document.getElementById("level-value").innerHTML = level.toString();
+    tickTime = 1000 - (50 * (level + 1));
 }
 function scanForFullLines() {
     for (let i = 0; i < board.state.length; i++) {
@@ -340,7 +340,7 @@ function togglePause() {
         svgMain.innerHTML = "";
         score = 0;
         linesCleared = 0;
-        level = 0;
+        levelGlobal = 0;
         setScore(0);
         setLevel(0);
         isGameOver = false;
