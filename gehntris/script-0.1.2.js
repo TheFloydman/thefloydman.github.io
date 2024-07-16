@@ -514,4 +514,4 @@ function addEventListeners() {
         pieceInPlay.draw(0, 0, board, svgInfo, svgMain);
     }
 }
-//# sourceMappingURL=script.js.map
+//# sourceMappingURL=script-0.1.2.js.map
